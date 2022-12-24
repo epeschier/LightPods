@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lightpods/components/podstate.dart';
+import 'package:lightpods/partials/podstate.dart';
 import 'package:lightpods/models/pod.dart';
-import 'package:lightpods/pod_service.dart';
+import 'package:lightpods/services/pod_service.dart';
 
 class DeviceList extends StatefulWidget {
   const DeviceList({Key? key}) : super(key: key);
@@ -28,8 +28,8 @@ class _DeviceList extends State<DeviceList> {
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.bluetooth_searching),
           onPressed: () {
-            //scanForDevices();
-            _podService.test();
+            _podService.scanForDevices();
+            //_podService.test();
           }),
     );
   }
@@ -45,9 +45,7 @@ class _DeviceList extends State<DeviceList> {
     List<Widget> containers = <Widget>[];
 
     for (BluetoothDevice device in devices) {
-      containers.add(PodState(
-        pod: Pod(id: device.id.toString(), name: device.name),
-      ));
+      containers.add(PodState(pod: Pod(device: device)));
     }
 
     return ListView(

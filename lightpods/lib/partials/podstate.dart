@@ -5,7 +5,7 @@ import '../models/pod.dart';
 class PodState extends StatelessWidget {
   final Pod pod;
 
-  const PodState({super.key, required this.pod});
+  PodState({super.key, required this.pod});
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +14,30 @@ class PodState extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           PodData(pod: pod),
-          const LightToggle(),
-          const BlueToothToggle(),
+          _lightToggle,
+          _bluetoothToggle,
         ]));
+  }
+
+  late final ToggleButton _lightToggle = ToggleButton(
+    icon: Icons.lightbulb,
+    state: true,
+    onClick: _onClickLight,
+  );
+
+  late final ToggleButton _bluetoothToggle = ToggleButton(
+    icon: Icons.bluetooth,
+    state: true,
+    onClick: _onClickConnect,
+  );
+
+  void _onClickLight(bool value) {
+    //pod.setLight(const Color.fromARGB(255, 30, 40, 50));
+    pod.getAllCharacteristics();
+  }
+
+  void _onClickConnect(bool value) {
+    pod.discoverServices();
   }
 }
 
@@ -39,43 +60,5 @@ class PodData extends StatelessWidget {
         Text(pod.id),
       ],
     ));
-  }
-}
-
-class LightToggle extends StatelessWidget {
-  const LightToggle({super.key});
-
-  void _toggleLight(bool value) {
-    print(value);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ToggleButton(
-      icon: Icons.lightbulb,
-      state: true,
-      onClick: (value) {
-        _toggleLight(value);
-      },
-    );
-  }
-}
-
-class BlueToothToggle extends StatelessWidget {
-  const BlueToothToggle({super.key});
-
-  void _connect(bool value) {
-    print(value);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ToggleButton(
-      icon: Icons.bluetooth,
-      state: true,
-      onClick: (value) {
-        _connect(value);
-      },
-    );
   }
 }
