@@ -1,21 +1,12 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class PodService extends ChangeNotifier {
   final List<BluetoothDevice> devices = <BluetoothDevice>[];
 
-  String get something {
-    return 'x';
-  }
-
-  void test() {
-    devices.add(BluetoothDevice.fromId('x'));
-    notifyListeners();
-  }
-
   void scanForDevices() {
-    print('Start device scan');
+    devices.clear();
+    notifyListeners();
 
     FlutterBluePlus flutterBlue = FlutterBluePlus.instance;
 
@@ -34,14 +25,8 @@ class PodService extends ChangeNotifier {
     flutterBlue.startScan();
   }
 
-/* Nordic Led-Button Service (LBS)
- * LBS Service: 00001523-1212-EFDE-1523-785FEABCD123
- * LBS Button : 00001524-1212-EFDE-1523-785FEABCD123
- * LBS LED    : 00001525-1212-EFDE-1523-785FEABCD123
- */
   void _addDeviceTolist(final BluetoothDevice device) {
-    if (!devices.contains(device)) {
-      print('Add device: ${device.toString()}');
+    if (!devices.contains(device) && device.name == 'Lightpod') {
       devices.add(device);
       notifyListeners();
     }

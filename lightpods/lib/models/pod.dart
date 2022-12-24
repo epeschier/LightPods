@@ -14,7 +14,11 @@ class Pod {
   late BluetoothCharacteristic _lightCharacteristic;
   late BluetoothCharacteristic _buttonCharacteristic;
 
-  void discoverServices() async {
+  void initialize() {
+    _discoverServices();
+  }
+
+  void _discoverServices() async {
     print('Run discover services for $id');
 
     FlutterBluePlus flutterBlue = FlutterBluePlus.instance;
@@ -29,10 +33,11 @@ class Pod {
       }
     } finally {
       _services = await device.discoverServices();
+      _getAllCharacteristics();
     }
   }
 
-  void getAllCharacteristics() {
+  void _getAllCharacteristics() {
     for (BluetoothService service in _services) {
       _getCharacteristics(service);
     }
@@ -41,12 +46,30 @@ class Pod {
   void _getCharacteristics(BluetoothService service) {
     print('getCharacteristics for service: ${service.toString()}');
     for (BluetoothCharacteristic characteristic in service.characteristics) {
-      print('-- charactersitic: ${characteristic.toString()}');
+      print('-- characteristic: ${characteristic.toString()}');
+      if (_isLedCharacteristic(characteristic.uuid)) {
+        _lightCharacteristic = characteristic;
+      }
+      if (_isButtonCharacteristic(characteristic.uuid)) {
+        _buttonCharacteristic = characteristic;
+      }
     }
   }
 
+  /* Nordic Led-Button Service (LBS)
+  * LBS Service: 00001523-1212-EFDE-1523-785FEABCD123
+  * LBS Button : 00001524-1212-EFDE-1523-785FEABCD123
+  * LBS LED    : 00001525-1212-EFDE-1523-785FEABCD123
+  */
+  bool _isLedCharacteristic(Guid uuid) =>
+      uuid == Guid('00001525-1212-EFDE-1523-785FEABCD123');
+
+  bool _isButtonCharacteristic(Guid uuid) =>
+      uuid == Guid('00001524-1212-EFDE-1523-785FEABCD123');
+
   void setLight(Color color) {
     Uint8List bytes = _colorToBytes(color);
+    print('Set light for: $id to ${bytes.toString()}');
     _lightCharacteristic.write(bytes);
   }
 

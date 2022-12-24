@@ -13,6 +13,7 @@ Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRBW + NEO_KHZ800);
 #define GREEN pixels.Color(  0, 150,   0)
 #define BLUE pixels.Color(  0,   0, 150)
 #define RED pixels.Color(150,   0,   0)
+#define OFF pixels.Color(0,   0,   0)
 
 /* Nordic Led-Button Service (LBS)
  * LBS Service: 00001523-1212-EFDE-1523-785FEABCD123
@@ -57,8 +58,6 @@ void setup() {
   initializeLed();
 
   setupBluetooth();
-  pixels.setPixelColor(1, BLUE);
-  pixels.show();
 }
 
 void initializeLed() {
@@ -85,6 +84,13 @@ void colorWipe(uint32_t color, int wait) {
   }
 }
 
+void notifyButtonPress() {
+  if (Bluefruit.connected(0) && lsbButton.notifyEnabled(0))
+  {
+    lsbButton.notify8(0, 0x01);
+  }
+}
+
 void setupBluetooth() {
   Serial.println("Lightpod bluetooth BLE");
   Serial.println("------------------\n");
@@ -92,11 +98,13 @@ void setupBluetooth() {
   // Initialize Bluefruit with max concurrent connections as Peripheral = MAX_PRPH_CONNECTION, Central = 0
   Serial.println("Initialise the Bluefruit nRF52 module");
   Bluefruit.begin(1, 0);
-  Bluefruit.setName("Lightpod001");
+  Bluefruit.setName("Lightpod");
   Bluefruit.Periph.setConnectCallback(connect_callback);
   Bluefruit.Periph.setDisconnectCallback(disconnect_callback);
 
   configureLedCharacteristic();
+  configureButtonCharacteristic();
+
   startAdv();
 }
 
@@ -121,8 +129,20 @@ void led_write_callback(uint16_t conn_hdl, BLECharacteristic* chr, uint8_t* data
   (void) chr;
   (void) len; // len should be 4
 
-  // data = RGB + time on
-  pixels.setPixelColor(10, pixels.Color(data[0], data[1], data[3]));    // TODO decode time
+  // data = RGB + nr to turn on
+  pixels.setPixelColor(data[3], pixels.Color(data[0], data[1], data[2]));
+  pixels.show();
+}
+
+void configureButtonCharacteristic() {
+    // Configure Button characteristic
+  // Properties = Read + Notify
+  // Permission = Open to read, cannot write
+  // Fixed Len  = 1 (button state)
+  lsbButton.setProperties(CHR_PROPS_NOTIFY);
+  lsbButton.setPermission(SECMODE_OPEN, SECMODE_NO_ACCESS);
+  lsbButton.setFixedLen(1);
+  lsbButton.begin();
 }
 
 void connect_callback(uint16_t conn_handle)
@@ -135,6 +155,9 @@ void connect_callback(uint16_t conn_handle)
 
   Serial.print("Connected to ");
   Serial.println(central_name);
+
+  pixels.setPixelColor(1, BLUE);
+  pixels.show();
 }
 
 /**
@@ -149,6 +172,9 @@ void disconnect_callback(uint16_t conn_handle, uint8_t reason)
 
   Serial.print("Disconnected, reason = 0x"); 
   Serial.println(reason, HEX);
+
+  pixels.setPixelColor(1, OFF);
+  pixels.show();
 }
 
 void startAdv(void)
