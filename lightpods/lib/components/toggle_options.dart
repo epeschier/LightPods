@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 
 class ToggleOptions extends StatefulWidget {
   final List<String> values;
-  final Function onClick;
+  final Function? onClick;
+  final int selectedItem;
 
-  const ToggleOptions({Key? key, required this.values, required this.onClick})
+  const ToggleOptions(
+      {Key? key,
+      this.onClick,
+      required this.values,
+      required this.selectedItem})
       : super(key: key);
 
   @override
@@ -21,6 +26,7 @@ class _ToggleOptions extends State<ToggleOptions> {
       _text.add(Text(element));
       _selectedItems.add(false);
     }
+    _selectedItems[widget.selectedItem] = true;
 
     super.initState();
   }
@@ -29,7 +35,6 @@ class _ToggleOptions extends State<ToggleOptions> {
   Widget build(BuildContext context) {
     return ToggleButtons(
       direction: Axis.horizontal,
-      //constraints: BoxConstraints(minWidth: 100),
       onPressed: (int index) {
         setState(() {
           // The button that is tapped is set to true, and the others to false.
@@ -37,7 +42,7 @@ class _ToggleOptions extends State<ToggleOptions> {
             _selectedItems[i] = i == index;
           }
         });
-        widget.onClick(index);
+        widget.onClick?.call(index);
       },
       isSelected: _selectedItems,
       children: _text,

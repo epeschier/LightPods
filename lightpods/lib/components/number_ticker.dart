@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:lightpods/theme/theme.dart';
 
 class NumberTicker extends StatefulWidget {
+  final int? minValue;
   final int? maxValue;
-  const NumberTicker({Key? key, this.maxValue}) : super(key: key);
+  const NumberTicker({Key? key, this.maxValue, this.minValue})
+      : super(key: key);
 
   @override
   State createState() => _NumberTicker();
@@ -16,6 +18,12 @@ class _NumberTicker extends State<NumberTicker> {
     setState(() {
       _value = value;
     });
+  }
+
+  @override
+  void initState() {
+    _value = widget.minValue ?? 1;
+    super.initState();
   }
 
   @override
@@ -36,7 +44,7 @@ class _NumberTicker extends State<NumberTicker> {
       ),
       RoundButton(
           icon: const Icon(Icons.remove),
-          enabled: _value > 1,
+          enabled: _value > (widget.minValue ?? 1),
           click: () {
             _updateValue(_value - 1);
           }),

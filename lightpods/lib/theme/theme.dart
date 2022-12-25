@@ -8,15 +8,21 @@ class ThemeColors {
   static Color buttonColor = selectedItemColor;
   static Color buttonIconColor = backgroundColor;
   static Color buttonDisabledIconColor = unselectedItemColor;
+
+  static TextStyle subText = const TextStyle(
+    color: Color.fromARGB(255, 128, 128, 128),
+    letterSpacing: 0.5,
+    fontSize: 14,
+  );
 }
 
 ThemeData appTheme = ThemeData(
-  //primarySwatch: MaterialColor. Color(0xff607D8B);
-  brightness: Brightness.dark,
-  useMaterial3: false,
-  bottomNavigationBarTheme: bottomNavigationBarTheme,
-  toggleButtonsTheme: toggleButtonsThemeData,
-);
+    //primarySwatch: MaterialColor. Color(0xff607D8B);
+    brightness: Brightness.dark,
+    useMaterial3: false,
+    bottomNavigationBarTheme: bottomNavigationBarTheme,
+    toggleButtonsTheme: toggleButtonsThemeData,
+    floatingActionButtonTheme: floatingActionButtonThemeData);
 
 BottomNavigationBarThemeData bottomNavigationBarTheme =
     BottomNavigationBarThemeData(
@@ -42,6 +48,11 @@ ToggleButtonsThemeData toggleButtonsThemeData = ToggleButtonsThemeData(
   color: Colors.white,
   constraints: const BoxConstraints(
     minHeight: 40.0,
-    minWidth: 80.0,
+    minWidth: 75.0,
   ),
+);
+
+FloatingActionButtonThemeData floatingActionButtonThemeData =
+    FloatingActionButtonThemeData(
+  backgroundColor: ThemeColors.selectedItemColor,
 );

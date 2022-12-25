@@ -3,70 +3,67 @@ import 'package:lightpods/components/number_ticker.dart';
 import 'package:lightpods/theme/theme.dart';
 
 import '../components/toggle_options.dart';
+import '../models/activity_enums.dart';
+import '../partials/activity_setting.dart';
 
 class CreateWorkout extends StatefulWidget {
-  CreateWorkout({super.key});
+  const CreateWorkout({super.key});
 
   @override
   State<CreateWorkout> createState() => _CreateWorkoutState();
 }
 
 class _CreateWorkoutState extends State<CreateWorkout> {
-  final ButtonStyle style =
+  final ButtonStyle _nextButtonStyle =
       ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('General Setup'),
+        title: const Text('Create Workout'),
       ),
       body: ListView(children: <Widget>[
-        const GeneralItem(
-          icon: Icons.flag,
-          text: 'Stations',
-          widget: NumberTicker(),
-        ),
-        const GeneralItem(
-          icon: Icons.panorama_fish_eye,
-          text: 'Pods',
-          widget: NumberTicker(),
-        ),
-        const GeneralItem(
-          icon: Icons.person,
-          text: 'Players',
-          subText: 'per Station',
-          widget: NumberTicker(maxValue: 2),
-        ),
-        GeneralItem(
+        _activityPods,
+        _activityDistractingPods,
+        _activityPlayers,
+        _activityStations,
+        _activityCompetitionMode,
+        ActivitySetting(
           icon: Icons.alarm,
           text: 'Activity Duration',
-          subText: 'xxx',
+          subText: ActivityDescription
+              .activityDurationExplanation[_activityDurationIndex],
           widget: ToggleOptions(
             values: const ['Hits', 'Timeout', 'Both'],
-            onClick: _onActivityDurtationToggleClick,
+            selectedItem: 0,
+            onClick: _onActivityDurationToggleClick,
           ),
         ),
-        GeneralItem(
+        ActivitySetting(
           icon: Icons.lightbulb,
           text: 'Lights out',
-          subText: _activityDurationExplanation[_activityDurationIndex],
+          subText: ActivityDescription.lightsOutExplanation[_lightsOutIndex],
           widget: ToggleOptions(
-            values: ['Hit', 'Timeout', 'Both'],
-            onClick: _onActivityDurtationToggleClick,
+            values: const ['Hit', 'Timeout', 'Both'],
+            selectedItem: 0,
+            onClick: _onLightsOutExplanationToggleClick,
           ),
         ),
-        GeneralItem(
+        ActivitySetting(
           icon: Icons.light_mode,
           text: 'Light Delay Time',
-          subText: 'xxx',
+          subText:
+              ActivityDescription.lightDelayTimeExplanation[_lightDelayIndex],
           widget: ToggleOptions(
-            values: ['None', 'Fixed', 'Random'],
-            onClick: _onActivityDurtationToggleClick,
+            values: const ['None', 'Fixed', 'Random'],
+            selectedItem: 0,
+            onClick: _onLightsDelayToggleClick,
           ),
         ),
+        _activityLightupMode,
         ElevatedButton(
-          style: style,
+          style: _nextButtonStyle,
           onPressed: () {},
           child: const Text('Next'),
         ),
@@ -74,80 +71,70 @@ class _CreateWorkoutState extends State<CreateWorkout> {
     );
   }
 
-  static const List<String> _activityDurationExplanation = [
-    'The activity will end after the number of hits you set.',
-    'The activity will end when the time you set runs out.',
-    'Either you reach the number of hits you set or the time you set runs out.'
-  ];
+  final Widget _activityStations = const ActivitySetting(
+    icon: Icons.flag,
+    text: 'Stations',
+    widget: NumberTicker(),
+  );
+
+  final Widget _activityDistractingPods = const ActivitySetting(
+    icon: Icons.alt_route,
+    text: 'Distracting Pods',
+    widget: NumberTicker(
+      minValue: 0,
+    ),
+  );
+
+  final Widget _activityPods = const ActivitySetting(
+    icon: Icons.panorama_fish_eye,
+    text: 'Pods',
+    subText: 'Number of available Pods',
+    widget: NumberTicker(),
+  );
+
+  final Widget _activityPlayers = const ActivitySetting(
+    icon: Icons.person,
+    text: 'Players',
+    subText: 'per Station',
+    widget: NumberTicker(maxValue: 2),
+  );
+
+  final Widget _activityCompetitionMode = const ActivitySetting(
+    icon: Icons.sports_kabaddi,
+    text: 'Competition Mode',
+    widget: ToggleOptions(
+      values: ['Regular', 'First to hit'],
+      selectedItem: 0,
+    ),
+  );
+
+  final Widget _activityLightupMode = const ActivitySetting(
+    icon: Icons.workspaces_filled,
+    text: 'Lightup Mode',
+    widget: ToggleOptions(
+      values: ['Random', 'All at once'],
+      selectedItem: 0,
+    ),
+  );
+
   int _activityDurationIndex = 0;
-  void _onActivityDurtationToggleClick(int index) {
+  void _onActivityDurationToggleClick(int index) {
     setState(() {
       _activityDurationIndex = index;
     });
   }
-}
 
-class GeneralItem extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final String? subText;
-  final Widget widget;
+  int _lightsOutIndex = 0;
+  void _onLightsOutExplanationToggleClick(int index) {
+    setState(() {
+      _lightsOutIndex = index;
+    });
+  }
 
-  const GeneralItem(
-      {super.key,
-      required this.icon,
-      required this.text,
-      required this.widget,
-      this.subText});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        //height: 80,
-        decoration: BoxDecoration(
-          color: ThemeColors.backgroundColor,
-          borderRadius: BorderRadius.circular(4),
-        ),
-        margin: const EdgeInsets.all(8.0),
-        padding: const EdgeInsets.all(8.0),
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Expanded(
-              child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                    size: 40,
-                  )),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    text,
-                    style: const TextStyle(
-                      //color: Colors.black,
-                      letterSpacing: 0.5,
-                      fontSize: 20,
-                    ),
-                  ),
-                  Text(
-                    subText ?? '',
-                    style: const TextStyle(
-                      color: Color.fromARGB(255, 128, 128, 128),
-                      letterSpacing: 0.5,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              )
-            ],
-          )),
-          widget,
-        ]));
+  int _lightDelayIndex = 0;
+  void _onLightsDelayToggleClick(int index) {
+    setState(() {
+      _lightDelayIndex = index;
+    });
   }
 }
