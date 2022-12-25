@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/pages/activity_page.dart';
 
-import '../components/bottom_navbar.dart';
+import '../partials/bottom_navbar.dart';
 import 'general_setup.dart';
 import 'device_list.dart';
 
@@ -13,10 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentPage = 0;
-  List pages = <Widget>[
-    DeviceList(),
-    GeneralSetup(),
-  ];
+  List pages = <Widget>[const DeviceList(), GeneralSetup(), ActivityPage()];
 
   void _updateValue(int value) {
     setState(() {

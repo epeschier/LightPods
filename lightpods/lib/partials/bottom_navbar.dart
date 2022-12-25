@@ -27,16 +27,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
       onTap: (_onItemTapped),
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: 'Settings',
+          icon: Icon(Icons.settings_bluetooth),
+          label: 'Connections',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+          icon: Icon(Icons.fitness_center),
+          label: 'Workout definition',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.accessible_forward),
-          label: 'Activities',
+          icon: Icon(Icons.alarm_on),
+          label: 'Workout',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.stacked_bar_chart),

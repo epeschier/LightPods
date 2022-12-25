@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
@@ -5,6 +6,8 @@ class Pod {
   final BluetoothDevice device;
 
   Pod({required this.device});
+
+  Function? onHit;
 
   String get name => device.name;
 
@@ -73,13 +76,18 @@ class Pod {
     _lightCharacteristic.write(bytes);
   }
 
+  void lightOff() => setLight(Colors.black);
+
   Uint8List _colorToBytes(Color color) {
     return Uint8List.fromList([color.red, color.green, color.blue, 12]);
   }
 
   void listenForButton() {
     _buttonCharacteristic.value.listen((value) {
-      print('button pressed for $id');
+      if (onHit != null) {
+        print('button pressed for $id');
+        onHit!();
+      }
     });
   }
 }

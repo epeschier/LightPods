@@ -6,7 +6,7 @@ import 'package:lightpods/models/pod.dart';
 import 'package:lightpods/services/pod_service.dart';
 
 class DeviceList extends StatefulWidget {
-  const DeviceList({Key? key}) : super(key: key);
+  const DeviceList({super.key});
 
   @override
   State createState() => _DeviceList();

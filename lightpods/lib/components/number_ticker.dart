@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/theme/theme.dart';
 
 class NumberTicker extends StatefulWidget {
   final int? maxValue;
@@ -20,60 +21,52 @@ class _NumberTicker extends State<NumberTicker> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SquareButton(
-            icon: const Icon(Icons.add),
-            enabled: _value < (widget.maxValue ?? 1000),
-            click: () {
-              _updateValue(_value + 1);
-            }),
-      ]),
-      Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text(
-          _value.toString(),
-          style: const TextStyle(
-            color: Colors.black,
-            letterSpacing: 0.5,
-            fontSize: 20,
-          ),
+      RoundButton(
+          icon: const Icon(Icons.add),
+          enabled: _value < (widget.maxValue ?? 1000),
+          click: () {
+            _updateValue(_value + 1);
+          }),
+      Text(
+        _value.toString(),
+        style: const TextStyle(
+          letterSpacing: 0.5,
+          fontSize: 20,
         ),
-      ]),
-      Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SquareButton(
-            icon: const Icon(Icons.remove),
-            enabled: _value > 1,
-            click: () {
-              _updateValue(_value - 1);
-            }),
-      ])
+      ),
+      RoundButton(
+          icon: const Icon(Icons.remove),
+          enabled: _value > 1,
+          click: () {
+            _updateValue(_value - 1);
+          }),
     ]);
   }
 }
 
-class SquareButton extends StatelessWidget {
+class RoundButton extends StatelessWidget {
   final Icon icon;
   final VoidCallback? click;
   final bool? enabled;
-  const SquareButton({super.key, required this.icon, this.click, this.enabled});
+  const RoundButton({super.key, required this.icon, this.click, this.enabled});
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Ink(
-          decoration: const ShapeDecoration(
-            color: Color.fromARGB(255, 3, 95, 138),
-            shape: CircleBorder(),
-          ),
-          child: IconButton(
-            icon: icon,
-            color: Colors.white,
-            onPressed: enabled == true ? click : null,
-          ),
+    return ElevatedButton(
+      onPressed: enabled == true ? click : null,
+      style: toggleButtonStyle.copyWith(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.pressed)) {
+              return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+            } else if (states.contains(MaterialState.disabled)) {
+              return ThemeColors.buttonDisabledIconColor;
+            }
+            return ThemeColors.buttonColor; // Use the component's default.
+          },
         ),
       ),
+      child: icon,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/number_ticker.dart';
+import 'package:lightpods/theme/theme.dart';
 
 class GeneralSetup extends StatelessWidget {
   GeneralSetup({super.key});
@@ -42,14 +43,15 @@ class GeneralItem extends StatelessWidget {
       required this.text,
       this.subText,
       this.maxValue});
-  static const backColor = Color.fromARGB(255, 185, 188, 207);
 
   @override
   Widget build(BuildContext context) {
     return Container(
         height: 80,
         decoration: BoxDecoration(
-            color: backColor, borderRadius: BorderRadius.circular(8)),
+          color: ThemeColors.backgroundColor,
+          borderRadius: BorderRadius.circular(4),
+        ),
         margin: const EdgeInsets.all(8.0),
         padding: const EdgeInsets.all(8.0),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -72,7 +74,7 @@ class GeneralItem extends StatelessWidget {
                   Text(
                     text,
                     style: const TextStyle(
-                      color: Colors.black,
+                      //color: Colors.black,
                       letterSpacing: 0.5,
                       fontSize: 20,
                     ),
@@ -80,7 +82,7 @@ class GeneralItem extends StatelessWidget {
                   Text(
                     subText ?? '',
                     style: const TextStyle(
-                      color: Color.fromARGB(255, 89, 89, 89),
+                      color: Color.fromARGB(255, 128, 128, 128),
                       letterSpacing: 0.5,
                       fontSize: 14,
                     ),

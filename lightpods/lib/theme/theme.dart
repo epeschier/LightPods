@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 
+class ThemeColors {
+  static Color backgroundColor = const Color.fromARGB(255, 34, 44, 49);
+  static Color selectedItemColor = const Color.fromARGB(255, 251, 215, 52);
+  static Color unselectedItemColor = const Color.fromARGB(255, 96, 125, 139);
+
+  static Color buttonColor = selectedItemColor;
+  static Color buttonIconColor = backgroundColor;
+  static Color buttonDisabledIconColor = unselectedItemColor;
+}
+
 ThemeData appTheme = ThemeData(
   //primarySwatch: MaterialColor. Color(0xff607D8B);
   brightness: Brightness.dark,
@@ -8,10 +18,10 @@ ThemeData appTheme = ThemeData(
 );
 
 BottomNavigationBarThemeData bottomNavigationBarTheme =
-    const BottomNavigationBarThemeData(
-  backgroundColor: Color.fromARGB(255, 34, 44, 49),
-  selectedItemColor: Color.fromARGB(255, 251, 215, 52),
-  unselectedItemColor: Color.fromARGB(255, 96, 125, 139),
+    BottomNavigationBarThemeData(
+  backgroundColor: ThemeColors.backgroundColor,
+  selectedItemColor: ThemeColors.selectedItemColor,
+  unselectedItemColor: ThemeColors.unselectedItemColor,
   showSelectedLabels: false,
   showUnselectedLabels: false,
 );

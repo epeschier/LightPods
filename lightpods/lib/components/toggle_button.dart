@@ -31,20 +31,21 @@ class _ToggleButton extends State<ToggleButton> {
     });
   }
 
-  Color getBackgroundColor() =>
+  Color _getBackgroundColor() =>
       (_state) ? selectedBackgroundColor : unSelectedBackgroundColor;
-  Color getIconColor() => (_state) ? selectedColor : unSelectedColor;
+  Color _getIconColor() => (_state) ? selectedColor : unSelectedColor;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: _toggleState,
       style: toggleButtonStyle.copyWith(
-        backgroundColor: MaterialStateProperty.all<Color>(getBackgroundColor()),
+        backgroundColor:
+            MaterialStateProperty.all<Color>(_getBackgroundColor()),
       ),
       child: Icon(
         widget.icon,
-        color: getIconColor(),
+        color: _getIconColor(),
       ),
     );
   }
