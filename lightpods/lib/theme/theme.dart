@@ -15,6 +15,7 @@ ThemeData appTheme = ThemeData(
   brightness: Brightness.dark,
   useMaterial3: false,
   bottomNavigationBarTheme: bottomNavigationBarTheme,
+  toggleButtonsTheme: toggleButtonsThemeData,
 );
 
 BottomNavigationBarThemeData bottomNavigationBarTheme =
@@ -32,3 +33,15 @@ ButtonStyle toggleButtonStyle = ElevatedButton.styleFrom(
     padding: const EdgeInsets.all(20),
     textStyle: TextStyle(
         color: Colors.grey[800], fontWeight: FontWeight.bold, fontSize: 40));
+
+ToggleButtonsThemeData toggleButtonsThemeData = ToggleButtonsThemeData(
+  borderRadius: const BorderRadius.all(Radius.circular(8)),
+  selectedBorderColor: ThemeColors.selectedItemColor,
+  selectedColor: ThemeColors.backgroundColor,
+  fillColor: ThemeColors.selectedItemColor,
+  color: Colors.white,
+  constraints: const BoxConstraints(
+    minHeight: 40.0,
+    minWidth: 80.0,
+  ),
+);

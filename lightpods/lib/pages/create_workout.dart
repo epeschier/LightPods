@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:lightpods/components/number_ticker.dart';
 import 'package:lightpods/theme/theme.dart';
 
-class GeneralSetup extends StatelessWidget {
-  GeneralSetup({super.key});
+import '../components/toggle_options.dart';
 
+class CreateWorkout extends StatefulWidget {
+  CreateWorkout({super.key});
+
+  @override
+  State<CreateWorkout> createState() => _CreateWorkoutState();
+}
+
+class _CreateWorkoutState extends State<CreateWorkout> {
   final ButtonStyle style =
       ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
@@ -15,13 +22,49 @@ class GeneralSetup extends StatelessWidget {
         title: const Text('General Setup'),
       ),
       body: ListView(children: <Widget>[
-        const GeneralItem(icon: Icons.flag, text: 'Stations'),
-        const GeneralItem(icon: Icons.panorama_fish_eye, text: 'Pods'),
         const GeneralItem(
-            icon: Icons.person,
-            text: 'Players',
-            subText: 'per Station',
-            maxValue: 2),
+          icon: Icons.flag,
+          text: 'Stations',
+          widget: NumberTicker(),
+        ),
+        const GeneralItem(
+          icon: Icons.panorama_fish_eye,
+          text: 'Pods',
+          widget: NumberTicker(),
+        ),
+        const GeneralItem(
+          icon: Icons.person,
+          text: 'Players',
+          subText: 'per Station',
+          widget: NumberTicker(maxValue: 2),
+        ),
+        GeneralItem(
+          icon: Icons.alarm,
+          text: 'Activity Duration',
+          subText: 'xxx',
+          widget: ToggleOptions(
+            values: const ['Hits', 'Timeout', 'Both'],
+            onClick: _onActivityDurtationToggleClick,
+          ),
+        ),
+        GeneralItem(
+          icon: Icons.lightbulb,
+          text: 'Lights out',
+          subText: _activityDurationExplanation[_activityDurationIndex],
+          widget: ToggleOptions(
+            values: ['Hit', 'Timeout', 'Both'],
+            onClick: _onActivityDurtationToggleClick,
+          ),
+        ),
+        GeneralItem(
+          icon: Icons.light_mode,
+          text: 'Light Delay Time',
+          subText: 'xxx',
+          widget: ToggleOptions(
+            values: ['None', 'Fixed', 'Random'],
+            onClick: _onActivityDurtationToggleClick,
+          ),
+        ),
         ElevatedButton(
           style: style,
           onPressed: () {},
@@ -30,24 +73,37 @@ class GeneralSetup extends StatelessWidget {
       ]),
     );
   }
+
+  static const List<String> _activityDurationExplanation = [
+    'The activity will end after the number of hits you set.',
+    'The activity will end when the time you set runs out.',
+    'Either you reach the number of hits you set or the time you set runs out.'
+  ];
+  int _activityDurationIndex = 0;
+  void _onActivityDurtationToggleClick(int index) {
+    setState(() {
+      _activityDurationIndex = index;
+    });
+  }
 }
 
 class GeneralItem extends StatelessWidget {
   final IconData icon;
   final String text;
   final String? subText;
-  final int? maxValue;
+  final Widget widget;
+
   const GeneralItem(
       {super.key,
       required this.icon,
       required this.text,
-      this.subText,
-      this.maxValue});
+      required this.widget,
+      this.subText});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 80,
+        //height: 80,
         decoration: BoxDecoration(
           color: ThemeColors.backgroundColor,
           borderRadius: BorderRadius.circular(4),
@@ -91,7 +147,7 @@ class GeneralItem extends StatelessWidget {
               )
             ],
           )),
-          NumberTicker(maxValue: maxValue),
+          widget,
         ]));
   }
 }

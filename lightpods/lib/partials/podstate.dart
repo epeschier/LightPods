@@ -32,11 +32,19 @@ class PodState extends StatelessWidget {
   );
 
   void _onClickLight(bool value) {
-    pod.setLight(const Color.fromARGB(255, 255, 4, 4));
+    if (value) {
+      pod.setLight(const Color.fromARGB(255, 255, 4, 4));
+    } else {
+      pod.lightOff();
+    }
   }
 
   void _onClickConnect(bool value) {
-    pod.initialize();
+    if (value) {
+      pod.initialize();
+    } else {
+      pod.disconnect();
+    }
   }
 }
 

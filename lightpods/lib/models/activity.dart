@@ -8,18 +8,22 @@ class Activity {
   final List<Pod> pods;
   final ActivityDuration activityDuration;
   final LightsOut lightsOut;
-  final LightDelayTime delayTime;
+
+  final LightDelayTime lightDelayTime;
+  final int delayTime;
   final FocusLogic focusLogic;
 
   final Color colorToHit;
 
-  Activity(
-      {required this.activityDuration,
-      required this.pods,
-      required this.focusLogic,
-      required this.colorToHit,
-      required this.lightsOut,
-      required this.delayTime});
+  Activity({
+    required this.activityDuration,
+    required this.pods,
+    required this.focusLogic,
+    required this.colorToHit,
+    required this.lightsOut,
+    required this.lightDelayTime,
+    required this.delayTime,
+  });
 
   late List<ActivityPod> _activityPods;
 

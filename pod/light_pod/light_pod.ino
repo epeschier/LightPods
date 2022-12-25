@@ -4,7 +4,7 @@
 #endif
 #include <bluefruit.h>
 
-#define PIN        6 // On Trinket or Gemma, suggest changing this to 1
+#define PIN        6
 
 #define NUMPIXELS 16 // Popular NeoPixel ring size
 
@@ -45,19 +45,21 @@ BLECharacteristic lsbLED(LBS_UUID_CHR_LED);
 
 #define DELAYVAL 100 // Time (in milliseconds) to pause between pixels
 
+const int knockSensor = A0;  // the piezo is connected to analog pin 0
+const int threshold = 250;   // threshold value to decide when the detected sound is a knock or not
+
+int ledState = LOW;
+const unsigned long debounceTime = 500;
+unsigned long time;
+
 void setup() {
-  // These lines are specifically to support the Adafruit Trinket 5V 16 MHz.
-  // Any other board, you can remove this part (but no harm leaving it):
-#if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
-  clock_prescale_set(clock_div_1);
-#endif
-  // END of Trinket-specific code.
-  
   Serial.begin(115200);
 
   initializeLed();
 
   setupBluetooth();
+
+  time = millis();
 }
 
 void initializeLed() {
@@ -71,9 +73,34 @@ void initializeLed() {
 }
 
 void loop() {
+  readKnock();  
  // colorWipe(pixels.Color(150,   0,   0), 50); // Red
  // colorWipe(pixels.Color(  0, 150,   0), 50); // Green
  // colorWipe(pixels.Color(  0,   0, 150), 50); // Blue
+}
+
+void readKnock() {
+  int sensorReading = analogRead(knockSensor);
+
+  // if the sensor reading is greater than the threshold:
+  if (sensorReading > threshold) {
+    unsigned long currentTime = millis();
+    unsigned long elapsedTime = currentTime - time;
+    if (elapsedTime > debounceTime) {
+      ledState = !ledState;
+      if (ledState) {
+        pixels.setPixelColor(5, RED);
+        pixels.show();
+      }
+      else {
+        pixels.setPixelColor(5, OFF);
+        pixels.show();
+      }
+
+      notifyButtonPress();
+      time = millis();
+    }
+  }
 }
 
 void colorWipe(uint32_t color, int wait) {
@@ -139,7 +166,7 @@ void configureButtonCharacteristic() {
   // Properties = Read + Notify
   // Permission = Open to read, cannot write
   // Fixed Len  = 1 (button state)
-  lsbButton.setProperties(CHR_PROPS_NOTIFY);
+  lsbButton.setProperties(CHR_PROPS_READ | CHR_PROPS_NOTIFY);
   lsbButton.setPermission(SECMODE_OPEN, SECMODE_NO_ACCESS);
   lsbButton.setFixedLen(1);
   lsbButton.begin();

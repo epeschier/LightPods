@@ -21,6 +21,10 @@ class Pod {
     _discoverServices();
   }
 
+  void disconnect() {
+    device.disconnect();
+  }
+
   void _discoverServices() async {
     print('Run discover services for $id');
 
@@ -55,6 +59,7 @@ class Pod {
       }
       if (_isButtonCharacteristic(characteristic.uuid)) {
         _buttonCharacteristic = characteristic;
+        _listenForButton();
       }
     }
   }
@@ -82,12 +87,13 @@ class Pod {
     return Uint8List.fromList([color.red, color.green, color.blue, 12]);
   }
 
-  void listenForButton() {
+  void _listenForButton() {
     _buttonCharacteristic.value.listen((value) {
+      print('button pressed for $id');
       if (onHit != null) {
-        print('button pressed for $id');
         onHit!();
       }
     });
+    _buttonCharacteristic.setNotifyValue(true);
   }
 }
