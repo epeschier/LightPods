@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/components/color_indicator.dart';
 import 'package:lightpods/components/number_ticker.dart';
-import 'package:lightpods/theme/theme.dart';
+import 'package:lightpods/partials/activity_setting/lights_out_setting.dart';
 
 import '../components/toggle_options.dart';
-import '../models/activity_enums.dart';
 import '../partials/activity_setting.dart';
+import '../partials/activity_setting/activity_duration_setting.dart';
+import '../partials/activity_setting/lights_delay_time_setting.dart';
 
 class CreateWorkout extends StatefulWidget {
   const CreateWorkout({super.key});
@@ -24,43 +26,16 @@ class _CreateWorkoutState extends State<CreateWorkout> {
         title: const Text('Create Workout'),
       ),
       body: ListView(children: <Widget>[
-        _activityPods,
-        _activityDistractingPods,
-        _activityPlayers,
         _activityStations,
+        _activityPods,
+        _activityNumberOfPlayers,
+        _activityPlayerColors,
+        _activityColors,
+        _activityDistractingPods,
         _activityCompetitionMode,
-        ActivitySetting(
-          icon: Icons.alarm,
-          text: 'Activity Duration',
-          subText: ActivityDescription
-              .activityDurationExplanation[_activityDurationIndex],
-          widget: ToggleOptions(
-            values: const ['Hits', 'Timeout', 'Both'],
-            selectedItem: 0,
-            onClick: _onActivityDurationToggleClick,
-          ),
-        ),
-        ActivitySetting(
-          icon: Icons.lightbulb,
-          text: 'Lights out',
-          subText: ActivityDescription.lightsOutExplanation[_lightsOutIndex],
-          widget: ToggleOptions(
-            values: const ['Hit', 'Timeout', 'Both'],
-            selectedItem: 0,
-            onClick: _onLightsOutExplanationToggleClick,
-          ),
-        ),
-        ActivitySetting(
-          icon: Icons.light_mode,
-          text: 'Light Delay Time',
-          subText:
-              ActivityDescription.lightDelayTimeExplanation[_lightDelayIndex],
-          widget: ToggleOptions(
-            values: const ['None', 'Fixed', 'Random'],
-            selectedItem: 0,
-            onClick: _onLightsDelayToggleClick,
-          ),
-        ),
+        const ActivityDurationSetting(),
+        const LightsOutSetting(),
+        const LightDelayTimeSetting(),
         _activityLightupMode,
         ElevatedButton(
           style: _nextButtonStyle,
@@ -92,11 +67,18 @@ class _CreateWorkoutState extends State<CreateWorkout> {
     widget: NumberTicker(),
   );
 
-  final Widget _activityPlayers = const ActivitySetting(
+  final Widget _activityNumberOfPlayers = const ActivitySetting(
     icon: Icons.person,
     text: 'Players',
     subText: 'per Station',
     widget: NumberTicker(maxValue: 2),
+  );
+
+  final Widget _activityPlayerColors = const ActivitySetting(
+    icon: Icons.palette,
+    text: 'Colors',
+    subText: 'Per Player',
+    widget: NumberTicker(maxValue: 10),
   );
 
   final Widget _activityCompetitionMode = const ActivitySetting(
@@ -117,24 +99,12 @@ class _CreateWorkoutState extends State<CreateWorkout> {
     ),
   );
 
-  int _activityDurationIndex = 0;
-  void _onActivityDurationToggleClick(int index) {
-    setState(() {
-      _activityDurationIndex = index;
-    });
-  }
-
-  int _lightsOutIndex = 0;
-  void _onLightsOutExplanationToggleClick(int index) {
-    setState(() {
-      _lightsOutIndex = index;
-    });
-  }
-
-  int _lightDelayIndex = 0;
-  void _onLightsDelayToggleClick(int index) {
-    setState(() {
-      _lightDelayIndex = index;
-    });
-  }
+  final Widget _activityColors = const ActivitySetting(
+    icon: Icons.flag,
+    text: 'Player 1',
+    widget: ColorIndicator(
+      playerNumber: 1,
+      numberOfColors: 2,
+    ),
+  );
 }

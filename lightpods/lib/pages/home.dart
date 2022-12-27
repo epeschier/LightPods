@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/pages/activity_page.dart';
+import 'package:lightpods/pages/settings_page.dart';
 
 import '../partials/bottom_navbar.dart';
 import 'create_workout.dart';
@@ -16,8 +17,9 @@ class _HomePageState extends State<HomePage> {
   int _currentPage = 0;
   List pages = <Widget>[
     const DeviceList(),
-    CreateWorkout(),
-    const ActivityPage()
+    const CreateWorkout(),
+    const ActivityPage(),
+    const SettingsPage()
   ];
 
   void _updateValue(int value) {

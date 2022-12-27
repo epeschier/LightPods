@@ -1,6 +1,9 @@
 class ActivityResult {
-  late int durationInSeconds;
-  late int hits;
-  late int misses;
-  late List<int> hitReactionTimeInMs;
+  var elapsedTimeInSeconds = 0;
+  var misses = 0;
+  var hitReactionTimeInMs = <int>[];
+
+  ActivityResult();
+
+  int get hits => hitReactionTimeInMs.length;
 }

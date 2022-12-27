@@ -9,6 +9,16 @@ class ThemeColors {
   static Color buttonIconColor = backgroundColor;
   static Color buttonDisabledIconColor = unselectedItemColor;
 
+  static TextStyle headerText = const TextStyle(
+    letterSpacing: 0.5,
+    fontSize: 20,
+  );
+
+  static TextStyle valueText = const TextStyle(
+    letterSpacing: 0.5,
+    fontSize: 30,
+  );
+
   static TextStyle subText = const TextStyle(
     color: Color.fromARGB(255, 128, 128, 128),
     letterSpacing: 0.5,
@@ -16,13 +26,21 @@ class ThemeColors {
   );
 }
 
+class PodColors {
+  static List<List<Color>> palette = [
+    [Colors.red, Colors.blue, Colors.yellow, Colors.green],
+    [Colors.orange, Colors.purple, Colors.pink, Colors.lime]
+  ];
+}
+
 ThemeData appTheme = ThemeData(
-    //primarySwatch: MaterialColor. Color(0xff607D8B);
+    scaffoldBackgroundColor: ThemeColors.unselectedItemColor,
     brightness: Brightness.dark,
     useMaterial3: false,
     bottomNavigationBarTheme: bottomNavigationBarTheme,
     toggleButtonsTheme: toggleButtonsThemeData,
-    floatingActionButtonTheme: floatingActionButtonThemeData);
+    floatingActionButtonTheme: floatingActionButtonThemeData,
+    appBarTheme: appbarTheme);
 
 BottomNavigationBarThemeData bottomNavigationBarTheme =
     BottomNavigationBarThemeData(
@@ -56,3 +74,6 @@ FloatingActionButtonThemeData floatingActionButtonThemeData =
     FloatingActionButtonThemeData(
   backgroundColor: ThemeColors.selectedItemColor,
 );
+
+AppBarTheme appbarTheme =
+    AppBarTheme(backgroundColor: ThemeColors.backgroundColor);

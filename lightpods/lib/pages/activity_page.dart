@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/models/activity_enums.dart';
+import 'package:lightpods/models/light_out.dart';
 
+import '../models/activity_duration.dart';
 import '../partials/activity_timer.dart';
 import '../models/activity.dart';
 import '../models/pod.dart';
@@ -29,10 +31,11 @@ class ActivityPage extends StatelessWidget {
     Activity activity = Activity(
         pods: pods,
         colorToHit: Colors.blue,
-        activityDuration: ActivityDuration.numberOfHits,
-        lightsOut: LightsOut.hit,
-        lightDelayTime: LightDelayTime.random,
-        delayTime: 0,
+        activityDurationSetting:
+            ActivityDuration(ActivityDurationType.numberOfHits),
+        lightsOut: LightsOut(lightsOutType: LightsOutType.hit),
+        lightDelayTime: LightDelayTimeType.random,
+        delayTimeMin: 0,
         focusLogic: focusLogic);
 
     return activity;

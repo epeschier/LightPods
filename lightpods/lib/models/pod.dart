@@ -13,6 +13,10 @@ class Pod {
 
   String get id => device.id.toString();
 
+  bool _isOn = false;
+
+  bool get isOn => _isOn;
+
   late List<BluetoothService> _services;
   late BluetoothCharacteristic _lightCharacteristic;
   late BluetoothCharacteristic _buttonCharacteristic;
@@ -79,9 +83,14 @@ class Pod {
     Uint8List bytes = _colorToBytes(color);
     print('Set light for: $id to ${bytes.toString()}');
     _lightCharacteristic.write(bytes);
+    _isOn = (color != Colors.black);
   }
 
-  void lightOff() => setLight(Colors.black);
+  void lightOff() {
+    if (_isOn) {
+      setLight(Colors.black);
+    }
+  }
 
   Uint8List _colorToBytes(Color color) {
     return Uint8List.fromList([color.red, color.green, color.blue, 12]);

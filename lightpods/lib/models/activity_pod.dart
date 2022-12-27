@@ -14,20 +14,29 @@ class ActivityPod {
   late Timer _timer;
   bool _isActive = false;
 
-  bool get isActive => _isActive;
-
   activate(Color color, int timeout) {
     _isActive = true;
-    _timer = Timer(Duration(milliseconds: timeout), _handleHit);
+    _timer = Timer(Duration(milliseconds: timeout), _handleTimeout);
     pod.setLight(color);
   }
 
   void _handleHit() {
-    int reactionTime = _timer.tick;
-    _timer.cancel();
-    pod.lightOff();
+    if (_isActive) {
+      int reactionTime = _timer.tick;
+      _timer.cancel();
 
-    onEnd(reactionTime);
+      pod.lightOff();
+
+      onEnd(reactionTime, this);
+    } else {
+      onEnd(-1, this);
+    }
     _isActive = false;
+  }
+
+  void _handleTimeout() {
+    pod.lightOff();
+    _isActive = false;
+    onEnd(-1, this);
   }
 }
