@@ -10,7 +10,7 @@ class Pod {
   Function? onHit;
 
   String get name =>
-      '$device.name ${_numberFromUuid(id).toString().padLeft(3, '0')}';
+      '${device.name} ${_numberFromUuid(id).toString().padLeft(3, '0')}';
 
   String get id => device.id.toString();
 
@@ -82,10 +82,12 @@ class Pod {
 
   void setLight(Color color) {
     Uint8List bytes = _colorToBytes(color);
-    print('Set light for: $id to ${bytes.toString()}');
     _lightCharacteristic.write(bytes);
     _isOn = (color != Colors.black);
   }
+
+  Uint8List _colorToBytes(Color color) =>
+      Uint8List.fromList([color.red, color.green, color.blue, 0]);
 
   void lightOff() {
     if (_isOn) {
@@ -93,8 +95,14 @@ class Pod {
     }
   }
 
-  Uint8List _colorToBytes(Color color) {
-    return Uint8List.fromList([color.red, color.green, color.blue, 12]);
+  void setBrightness(int value) {
+    Uint8List command = Uint8List.fromList([value, 0, 0, 1]);
+    _lightCharacteristic.write(command);
+  }
+
+  void setSensitivity(int value) {
+    Uint8List command = Uint8List.fromList([value & 0xff, value >> 8, 0, 2]);
+    _lightCharacteristic.write(command);
   }
 
   void _listenForButton() {

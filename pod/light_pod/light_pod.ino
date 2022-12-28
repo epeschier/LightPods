@@ -87,16 +87,6 @@ void readKnock() {
     unsigned long currentTime = millis();
     unsigned long elapsedTime = currentTime - time;
     if (elapsedTime > debounceTime) {
-      ledState = !ledState;
-      if (ledState) {
-        pixels.setPixelColor(5, RED);
-        pixels.show();
-      }
-      else {
-        pixels.setPixelColor(5, OFF);
-        pixels.show();
-      }
-
       notifyButtonPress();
       time = millis();
     }
@@ -154,10 +144,28 @@ void led_write_callback(uint16_t conn_hdl, BLECharacteristic* chr, uint8_t* data
 {
   (void) conn_hdl;
   (void) chr;
-  (void) len; // len should be 4
+  (void) len;
 
-  // data = RGB + nr to turn on
-  pixels.setPixelColor(data[3], pixels.Color(data[0], data[1], data[2]));
+  decodePixelCommand(data, len);
+}
+
+void decodePixelCommand(uint8_t* data, uint16_t len) {
+   // len should be 4
+  if (len == 4) {
+    if (data[3] == 0) {
+      setAllPixelsToColor(data[0], data[1], data[2]);
+    }
+    else if (data[3] == 1) {
+      pixels.setBrightness(data[0]);
+      pixels.show();
+    }
+  }
+}
+
+void setAllPixelsToColor(uint8_t r, uint8_t g, uint8_t b) {
+  for(int i = 0; i < pixels.numPixels(); i++) { 
+    pixels.setPixelColor(i, pixels.Color(r, g, b));
+  }
   pixels.show();
 }
 
