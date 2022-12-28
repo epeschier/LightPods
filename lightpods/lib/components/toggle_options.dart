@@ -33,19 +33,28 @@ class _ToggleOptions extends State<ToggleOptions> {
 
   @override
   Widget build(BuildContext context) {
-    return ToggleButtons(
-      direction: Axis.horizontal,
-      onPressed: (int index) {
-        setState(() {
-          // The button that is tapped is set to true, and the others to false.
-          for (int i = 0; i < _selectedItems.length; i++) {
-            _selectedItems[i] = i == index;
-          }
-        });
-        widget.onClick?.call(index);
-      },
-      isSelected: _selectedItems,
-      children: _text,
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return ToggleButtons(
+        direction: Axis.horizontal,
+        constraints: BoxConstraints.expand(
+            height: 40,
+            width: (constraints.maxWidth / widget.values.length) -
+                widget.values.length),
+        onPressed: (int index) {
+          setState(() {
+            _updateButtonState(index);
+          });
+          widget.onClick?.call(index);
+        },
+        isSelected: _selectedItems,
+        children: _text,
+      );
+    });
+  }
+
+  void _updateButtonState(int index) {
+    for (int i = 0; i < _selectedItems.length; i++) {
+      _selectedItems[i] = i == index;
+    }
   }
 }

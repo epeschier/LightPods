@@ -40,7 +40,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.stacked_bar_chart),
-          label: 'Statistics',
+          label: 'Settings',
         ),
       ],
     );

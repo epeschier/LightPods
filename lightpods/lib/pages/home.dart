@@ -3,8 +3,8 @@ import 'package:lightpods/pages/activity_page.dart';
 import 'package:lightpods/pages/settings_page.dart';
 
 import '../partials/bottom_navbar.dart';
-import 'create_workout.dart';
-import 'device_list.dart';
+import 'create_workout_page.dart';
+import 'device_list_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

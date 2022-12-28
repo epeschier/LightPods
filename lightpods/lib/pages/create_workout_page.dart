@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lightpods/components/color_indicator.dart';
 import 'package:lightpods/components/number_ticker.dart';
 import 'package:lightpods/partials/activity_setting/lights_out_setting.dart';
+import 'package:lightpods/partials/multiple_choice.dart';
 
 import '../components/toggle_options.dart';
 import '../partials/activity_setting.dart';
 import '../partials/activity_setting/activity_duration_setting.dart';
 import '../partials/activity_setting/lights_delay_time_setting.dart';
+import '../theme/theme.dart';
 
 class CreateWorkout extends StatefulWidget {
   const CreateWorkout({super.key});
@@ -16,9 +18,6 @@ class CreateWorkout extends StatefulWidget {
 }
 
 class _CreateWorkoutState extends State<CreateWorkout> {
-  final ButtonStyle _nextButtonStyle =
-      ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,19 +31,50 @@ class _CreateWorkoutState extends State<CreateWorkout> {
         _activityPlayerColors,
         _activityColors,
         _activityDistractingPods,
-        _activityCompetitionMode,
+        _getActivityCompetitionMode(),
         const ActivityDurationSetting(),
         const LightsOutSetting(),
         const LightDelayTimeSetting(),
-        _activityLightupMode,
-        ElevatedButton(
-          style: _nextButtonStyle,
-          onPressed: () {},
-          child: const Text('Next'),
-        ),
+        _getActivityLightupMode(),
+        _getNavButtons(),
       ]),
     );
   }
+
+  final _buttonStyle = ElevatedButton.styleFrom(
+    shape: const StadiumBorder(),
+    padding: const EdgeInsets.only(left: 40, right: 40, top: 20, bottom: 20),
+    backgroundColor: ThemeColors.buttonColor,
+    foregroundColor: ThemeColors.backgroundColor,
+    textStyle: const TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 20,
+    ),
+  );
+
+  Widget _getNavButtons() => Padding(
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: ElevatedButton(
+                    style: _buttonStyle,
+                    onPressed: () {},
+                    child: const Text('Back'),
+                  ))),
+          Expanded(
+              child: Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    style: _buttonStyle,
+                    onPressed: () {},
+                    child: const Text('Next'),
+                  ))),
+        ],
+      ));
 
   final Widget _activityStations = const ActivitySetting(
     icon: Icons.flag,
@@ -81,23 +111,21 @@ class _CreateWorkoutState extends State<CreateWorkout> {
     widget: NumberTicker(maxValue: 10),
   );
 
-  final Widget _activityCompetitionMode = const ActivitySetting(
-    icon: Icons.sports_kabaddi,
-    text: 'Competition Mode',
-    widget: ToggleOptions(
-      values: ['Regular', 'First to hit'],
-      selectedItem: 0,
-    ),
-  );
+  Widget _getActivityCompetitionMode() => MultipleChoice(
+        icon: Icons.sports_kabaddi,
+        onItemSelected: _onCompetitionModeSelected,
+        text: 'Competition Mode',
+        values: const ['Regular', 'First to hit'],
+      );
 
-  final Widget _activityLightupMode = const ActivitySetting(
-    icon: Icons.workspaces_filled,
-    text: 'Lightup Mode',
-    widget: ToggleOptions(
-      values: ['Random', 'All at once'],
-      selectedItem: 0,
-    ),
-  );
+  void _onCompetitionModeSelected(int index) {}
+
+  Widget _getActivityLightupMode() => MultipleChoice(
+        icon: Icons.workspaces_filled,
+        onItemSelected: (int index) {},
+        text: 'Lightup Mode',
+        values: const ['Random', 'All at once'],
+      );
 
   final Widget _activityColors = const ActivitySetting(
     icon: Icons.flag,

@@ -9,7 +9,8 @@ class Pod {
 
   Function? onHit;
 
-  String get name => device.name;
+  String get name =>
+      '$device.name ${_numberFromUuid(id).toString().padLeft(3, '0')}';
 
   String get id => device.id.toString();
 
@@ -104,5 +105,42 @@ class Pod {
       }
     });
     _buttonCharacteristic.setNotifyValue(true);
+  }
+
+  int _numberFromUuid(String uuid) {
+    int number = 0;
+    for (int i = 0; i < uuid.length; i++) {
+      var char = uuid[i];
+      if (_isHexChar(char)) {
+        number += int.parse(char, radix: 16);
+      }
+    }
+
+    if (number == 0) {
+      return 0;
+    }
+    return number % 1000;
+  }
+
+  bool _isHexChar(String char) {
+    const validChars = [
+      '0',
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F'
+    ];
+    return validChars.contains(char.toUpperCase());
   }
 }

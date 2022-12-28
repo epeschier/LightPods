@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ThemeColors {
+  static Color darkPrimaryColor = const Color(0xff455A64);
+  static Color lightPrimaryColor = const Color(0xffCFD8DC);
+  static Color primaryColor = const Color(0xff607D8B);
+  static Color textIconColor = const Color(0xffFFFFFF);
+  static Color accentColor = const Color(0xffFFC107);
+  static Color primaryTextColor = const Color(0xff212121);
+  static Color secondaryTextColor = const Color(0xff757575);
+  static Color dividerColor = const Color(0xffDBDBDB);
+
   static Color backgroundColor = const Color.fromARGB(255, 34, 44, 49);
   static Color selectedItemColor = const Color.fromARGB(255, 251, 215, 52);
   static Color unselectedItemColor = const Color.fromARGB(255, 96, 125, 139);

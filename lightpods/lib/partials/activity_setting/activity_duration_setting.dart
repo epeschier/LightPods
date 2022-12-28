@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/slider_input.dart';
+import 'package:lightpods/partials/multiple_choice.dart';
 import '../../components/toggle_options.dart';
 import '../../models/activity_enums.dart';
 import '../activity_setting.dart';
@@ -18,16 +19,13 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
     return _getActivityDuration();
   }
 
-  Widget _getActivityDuration() => ActivitySetting(
+  Widget _getActivityDuration() => MultipleChoice(
         icon: Icons.lightbulb,
         text: 'Activity Duration',
+        onItemSelected: _onLightsOutExplanationToggleClick,
         subText:
             ActivityDescription.activityDurationExplanation[_lightsOutIndex],
-        widget: ToggleOptions(
-          values: const ['Hits', 'Timeout', 'Both'],
-          selectedItem: 0,
-          onClick: _onLightsOutExplanationToggleClick,
-        ),
+        values: const ['Hits', 'Timeout', 'Both'],
         subWidget:
             (_lightsOutIndex > 0) ? SliderInput(max: 5, units: 'min') : null,
       );

@@ -4,6 +4,7 @@ import '../../components/slider_input.dart';
 import '../../components/toggle_options.dart';
 import '../../models/activity_enums.dart';
 import '../activity_setting.dart';
+import '../multiple_choice.dart';
 
 class LightDelayTimeSetting extends StatefulWidget {
   const LightDelayTimeSetting({super.key});
@@ -18,16 +19,13 @@ class _LightDelayTimeSettingState extends State<LightDelayTimeSetting> {
     return _getLightsOut();
   }
 
-  Widget _getLightsOut() => ActivitySetting(
+  Widget _getLightsOut() => MultipleChoice(
         icon: Icons.light_mode,
         text: 'Light Delay Time',
+        onItemSelected: _onLightsDelayToggleClick,
         subText:
             ActivityDescription.lightDelayTimeExplanation[_lightDelayIndex],
-        widget: ToggleOptions(
-          values: const ['None', 'Fixed', 'Random'],
-          selectedItem: 0,
-          onClick: _onLightsDelayToggleClick,
-        ),
+        values: const ['None', 'Fixed', 'Random'],
         subWidget: _getSubwidget(),
       );
 

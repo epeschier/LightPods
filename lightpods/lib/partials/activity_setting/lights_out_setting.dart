@@ -3,6 +3,7 @@ import 'package:lightpods/components/slider_input.dart';
 import '../../components/toggle_options.dart';
 import '../../models/activity_enums.dart';
 import '../activity_setting.dart';
+import '../multiple_choice.dart';
 
 class LightsOutSetting extends StatefulWidget {
   const LightsOutSetting({super.key});
@@ -17,15 +18,12 @@ class _LightsOutSettingState extends State<LightsOutSetting> {
     return _getLightsOut();
   }
 
-  Widget _getLightsOut() => ActivitySetting(
+  Widget _getLightsOut() => MultipleChoice(
         icon: Icons.alarm,
         text: 'Lights out',
+        onItemSelected: _onActivityDurationToggleClick,
         subText: ActivityDescription.lightsOutExplanation[_lightsOutIndex],
-        widget: ToggleOptions(
-          values: const ['Hits', 'Timeout', 'Both'],
-          selectedItem: 0,
-          onClick: _onActivityDurationToggleClick,
-        ),
+        values: const ['Hits', 'Timeout', 'Both'],
         subWidget: (_lightsOutIndex > 0)
             ? SliderInput(max: 5, decimals: 1, units: 'sec')
             : null,

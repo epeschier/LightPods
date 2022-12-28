@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 
+import '../components/toggle_options.dart';
 import '../theme/theme.dart';
 
-class ActivitySetting extends StatelessWidget {
+class MultipleChoice extends StatelessWidget {
   final IconData icon;
   final String text;
   final String? subText;
-  final Widget widget;
+  final List<String> values;
   final Widget? subWidget;
+  final Function onItemSelected;
 
-  const ActivitySetting(
+  const MultipleChoice(
       {super.key,
       required this.icon,
       required this.text,
-      required this.widget,
+      required this.values,
       this.subWidget,
-      this.subText});
+      this.subText,
+      required this.onItemSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,12 @@ class ActivitySetting extends StatelessWidget {
   }
 
   List<Widget> _buildWidgetList() {
-    var list = [_getMainRow()];
+    var list = [
+      _getIconAndLabel(),
+      const SizedBox(height: 10),
+      _getMultipleChoice(),
+      const SizedBox(height: 5),
+    ];
 
     if (subWidget != null) {
       list.add(subWidget!);
@@ -39,24 +47,21 @@ class ActivitySetting extends StatelessWidget {
     return list;
   }
 
-  Widget _getMainRow() {
-    List<Widget> list = [_getIconAndLabel(), widget];
+  Widget _getMultipleChoice() => ToggleOptions(
+        values: values,
+        selectedItem: 0,
+        onClick: onItemSelected,
+      );
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: list,
-    );
-  }
-
-  Widget _getIconAndLabel() => Expanded(
-          child: Row(children: [
+  Widget _getIconAndLabel() => Row(children: [
         Padding(
             padding: const EdgeInsets.only(right: 10),
             child: Icon(
               icon,
               size: 40,
             )),
-        Column(
+        Flexible(
+            child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -69,6 +74,6 @@ class ActivitySetting extends StatelessWidget {
               style: ThemeColors.subText,
             ),
           ],
-        )
-      ]));
+        ))
+      ]);
 }

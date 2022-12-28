@@ -2,14 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/rounded_icon_button.dart';
 
-import '../theme/theme.dart';
-
 class ActivityTimer extends StatefulWidget {
   const ActivityTimer({super.key});
 
   @override
   State<ActivityTimer> createState() => _ActivityTimerState();
 }
+
+// TODO: Wakelock.enable();
 
 class _ActivityTimerState extends State<ActivityTimer> {
   late Timer _timer;
