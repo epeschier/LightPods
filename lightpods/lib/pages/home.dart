@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/pages/activity_page.dart';
+import 'package:lightpods/pages/workout_page.dart';
 import 'package:lightpods/pages/settings_page.dart';
 
 import '../partials/bottom_navbar.dart';
@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   List pages = <Widget>[
     const DeviceList(),
     const CreateWorkout(),
-    const ActivityPage(),
+    ActivityPage(),
     const SettingsPage()
   ];
 

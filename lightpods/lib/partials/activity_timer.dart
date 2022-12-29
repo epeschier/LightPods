@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/rounded_icon_button.dart';
+import 'package:lightpods/theme/theme.dart';
 
 class ActivityTimer extends StatefulWidget {
-  const ActivityTimer({super.key});
+  final Function onStart;
+  final Function onStop;
+  const ActivityTimer({super.key, required this.onStart, required this.onStop});
 
   @override
   State<ActivityTimer> createState() => _ActivityTimerState();
@@ -19,36 +22,39 @@ class _ActivityTimerState extends State<ActivityTimer> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Center(
-          child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                _time,
-                style: const TextStyle(fontSize: 120),
-              ))),
+    return Column(children: [_getTimeDisplay(), _getButtons(), _infoCards()]);
+  }
+
+  Widget _getTimeDisplay() => Center(
+      child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text(
+            _time,
+            style: const TextStyle(fontSize: 120),
+          )));
+
+  Widget _getButtons() =>
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         RoundedIconButton(onClick: _reset, icon: Icons.refresh),
         RoundedIconButton(onClick: _onStartStopPressed, icon: _getIcon()),
-      ]),
-      Padding(
-          padding: const EdgeInsets.only(top: 40),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              info('2', 'Miss'),
-              info('11', 'Hits'),
-              info('717', 'Avg. Reaction')
-            ],
-          ))
-    ]);
-  }
+      ]);
+
+  Widget _infoCards() => Padding(
+      padding: const EdgeInsets.only(top: 40),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          info('2', 'Miss'),
+          info('11', 'Hits'),
+          info('717', 'Avg. Reaction')
+        ],
+      ));
 
   Widget info(String text, String subTitle) {
     return Expanded(
         child: Container(
             margin: const EdgeInsets.all(10),
-            color: Colors.grey[900],
+            color: ThemeColors.darkPrimaryColor,
             padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +62,8 @@ class _ActivityTimerState extends State<ActivityTimer> {
                 Text(text, style: const TextStyle(fontSize: 40)),
                 Text(subTitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, color: Colors.grey[600])),
+                    style: TextStyle(
+                        fontSize: 16, color: ThemeColors.secondaryTextColor)),
               ],
             )));
   }
@@ -85,6 +92,7 @@ class _ActivityTimerState extends State<ActivityTimer> {
     });
 
     _timer = Timer.periodic(const Duration(seconds: 1), _tick);
+    widget.onStart();
   }
 
   void _tick(_) {
@@ -99,6 +107,7 @@ class _ActivityTimerState extends State<ActivityTimer> {
       _running = false;
     });
     _timer.cancel();
+    widget.onStop();
   }
 
   void _reset() {

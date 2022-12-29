@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 
 class SliderInput extends StatefulWidget {
-  final String units;
+  final String? units;
   final double max;
   int? decimals;
-  SliderInput(
-      {super.key, this.decimals, required this.units, required this.max});
+  SliderInput({super.key, this.decimals, this.units, required this.max});
 
   @override
   State createState() => _SliderInput();
@@ -41,10 +40,10 @@ class _SliderInput extends State<SliderInput> {
             width: 20,
           ),
           SizedBox(
-            width: 200,
+            width: 80,
             child: Text(
               textAlign: TextAlign.right,
-              '${_currentSliderValue.toStringAsFixed(widget.decimals ?? 0)} ${widget.units}',
+              _getValueString(),
               style: ThemeColors.valueText,
             ),
           ),
@@ -52,6 +51,10 @@ class _SliderInput extends State<SliderInput> {
       )
     ]);
   }
+
+  String _getValueString() =>
+      '${_currentSliderValue.toStringAsFixed(widget.decimals ?? 0)} ${widget.units ?? ''}'
+          .trimRight();
 
   int _getDivisions() =>
       widget.max.toInt() *

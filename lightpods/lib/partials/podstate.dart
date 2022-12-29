@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/toggle_button.dart';
-import '../models/pod.dart';
+import '../logic/pod.dart';
 
 class PodState extends StatelessWidget {
   final Pod pod;

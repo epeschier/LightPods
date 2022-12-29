@@ -42,7 +42,7 @@ class _RangedSliderInput extends State<RangedSliderInput> {
             width: 20,
           ),
           SizedBox(
-            width: 200,
+            width: 120,
             child: Text(
               textAlign: TextAlign.right,
               '${_currentRangeValues.start.toStringAsFixed(widget.decimals ?? 0)} - ${_currentRangeValues.end.toStringAsFixed(widget.decimals ?? 0)} ${widget.units}',

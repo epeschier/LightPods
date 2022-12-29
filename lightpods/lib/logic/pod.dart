@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
-class Pod {
+import 'pod_base.dart';
+
+class Pod extends PodBase {
   final BluetoothDevice device;
 
   Pod({required this.device});
-
-  Function? onHit;
 
   String get name =>
       '${device.name} ${_numberFromUuid(id).toString().padLeft(3, '0')}';
@@ -80,6 +80,7 @@ class Pod {
   bool _isButtonCharacteristic(Guid uuid) =>
       uuid == Guid('00001524-1212-EFDE-1523-785FEABCD123');
 
+  @override
   void setLight(Color color) {
     Uint8List bytes = _colorToBytes(color);
     _lightCharacteristic.write(bytes);
@@ -89,6 +90,7 @@ class Pod {
   Uint8List _colorToBytes(Color color) =>
       Uint8List.fromList([color.red, color.green, color.blue, 0]);
 
+  @override
   void lightOff() {
     if (_isOn) {
       setLight(Colors.black);

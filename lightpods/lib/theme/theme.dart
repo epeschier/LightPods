@@ -11,11 +11,11 @@ class ThemeColors {
   static Color dividerColor = const Color(0xffDBDBDB);
 
   static Color backgroundColor = const Color.fromARGB(255, 34, 44, 49);
-  static Color selectedItemColor = const Color.fromARGB(255, 251, 215, 52);
+  static Color selectedItemColor = accentColor;
   static Color unselectedItemColor = const Color.fromARGB(255, 96, 125, 139);
 
-  static Color buttonColor = selectedItemColor;
-  static Color buttonIconColor = backgroundColor;
+  static Color buttonColor = accentColor;
+  static Color buttonIconColor = primaryTextColor;
   static Color buttonDisabledIconColor = unselectedItemColor;
 
   static TextStyle headerText = const TextStyle(
@@ -25,7 +25,7 @@ class ThemeColors {
 
   static TextStyle valueText = const TextStyle(
     letterSpacing: 0.5,
-    fontSize: 30,
+    fontSize: 24,
   );
 
   static TextStyle subText = const TextStyle(

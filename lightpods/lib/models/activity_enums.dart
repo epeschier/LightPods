@@ -1,4 +1,4 @@
-enum LightupMode { random, allAtOnce }
+enum LightupModeType { random, allAtOnce }
 
 enum ActivityDurationType {
   numberOfHits, // the activity will end after the number of hits you set.

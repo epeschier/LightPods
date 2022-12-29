@@ -23,9 +23,9 @@ class _LightsOutSettingState extends State<LightsOutSetting> {
         text: 'Lights out',
         onItemSelected: _onActivityDurationToggleClick,
         subText: ActivityDescription.lightsOutExplanation[_lightsOutIndex],
-        values: const ['Hits', 'Timeout', 'Both'],
+        values: const ['Hit', 'Timeout', 'Both'],
         subWidget: (_lightsOutIndex > 0)
-            ? SliderInput(max: 5, decimals: 1, units: 'sec')
+            ? SliderInput(max: 5, decimals: 1, units: 's')
             : null,
       );
 

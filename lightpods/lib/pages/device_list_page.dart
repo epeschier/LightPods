@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lightpods/partials/podstate.dart';
-import 'package:lightpods/models/pod.dart';
+import 'package:lightpods/logic/pod.dart';
 import 'package:lightpods/services/pod_service.dart';
 
 class DeviceList extends StatefulWidget {

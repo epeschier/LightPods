@@ -41,10 +41,10 @@ class _LightDelayTimeSettingState extends State<LightDelayTimeSetting> {
       return null;
     }
     if (_lightDelayIndex == LightDelayTimeType.random.index) {
-      return RangedSliderInput(max: 5, decimals: 1, units: 'sec');
+      return RangedSliderInput(max: 5, decimals: 1, units: 's');
     }
     if (_lightDelayIndex == LightDelayTimeType.fixed.index) {
-      return SliderInput(max: 5, decimals: 1, units: 'sec');
+      return SliderInput(max: 5, decimals: 1, units: 's');
     }
   }
 }
