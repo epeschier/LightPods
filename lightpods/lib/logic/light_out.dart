@@ -1,22 +1,23 @@
+import 'dart:async';
+
 import '../models/activity_enums.dart';
 import '../models/activity_setting.dart';
 import 'activity_pod.dart';
+import 'callback_wait.dart';
 
-abstract class LightsOut {
+abstract class LightsOut extends CallbackWait {
   late List<ActivityPod> _pods;
 
-  void wait();
-
   void _turnOffPods() {
-    for (int i = 0; i < _pods.length; i++) {
-      _pods[i].off();
+    for (var pod in _pods) {
+      pod.off();
     }
   }
 }
 
 class LightsOutHit extends LightsOut {
   @override
-  void wait() {
+  void wait(Function callback) {
     // TODO: subscribe on hit, then turn off
   }
 }
@@ -26,9 +27,10 @@ class LightsOutTimeout extends LightsOut {
   LightsOutTimeout({required this.timeout});
 
   @override
-  void wait() async {
-    await Future.delayed(Duration(milliseconds: timeout), () {
+  void wait(Function callback) {
+    Timer(Duration(milliseconds: timeout), () {
       _turnOffPods();
+      callback();
     });
   }
 }
@@ -45,7 +47,7 @@ class LightsOutTimeoutOrHit extends LightsOut {
   }
 
   @override
-  void wait() {
+  void wait(Function callback) {
     // TODO: implement wait on both
   }
 }

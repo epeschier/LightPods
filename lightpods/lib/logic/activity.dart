@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:lightpods/models/activity_enums.dart';
 import 'activity_lightup_mode.dart';
@@ -10,11 +8,13 @@ import 'activity_duration.dart';
 import '../models/activity_result.dart';
 
 class Activity {
-  late ActivityResult _activityResult;
-  final _random = Random();
+  late Function? _onActivityEnded;
+  Function? onResultChanged;
+
+  ActivityResult _activityResult = ActivityResult();
   late ActivityPod _podToHit;
 
-  late FocusLogic _focusLogic;
+  Activity();
 
   late Color _colorToHit;
   Activity withColorToHit(Color color) {
@@ -88,14 +88,26 @@ class Activity {
     return this;
   }
 
+  set subscribeToActivityEnd(Function callback) {
+    _onActivityEnded = callback;
+  }
+
   /*** End builder methods ***/
+  bool _isRunning = false;
 
   void run() {
+    _isRunning = true;
     _activityResult.clear();
     _clearAllPods();
     _installHitHandlers();
 
     _startCycle();
+  }
+
+  void tick() {
+    print("activity tick");
+    _activityResult.elapsedTimeInSeconds++;
+    _checkForActivityEnd();
   }
 
   void _startCycle() {
@@ -109,7 +121,13 @@ class Activity {
     var podsToTurnOn = _lightupMode.getPodsToTurnOn();
     _turnOnPods(podsToTurnOn);
 
-    _lightsOut.wait();
+    _lightsOut.wait(_lightsOutHandler);
+  }
+
+  void _lightsOutHandler() {
+    print("lights out after timeout");
+    _activityResult.misses++;
+    _checkForActivityEnd();
   }
 
   void _turnOnPods(List<ActivityPod> pods) {
@@ -129,9 +147,11 @@ class Activity {
     print("hit: ${pod.id} in ${reactionTime}");
     if (reactionTime > 0) {
       _activityResult.hitReactionTimeInMs.add(reactionTime);
+      _lightsOut.abort();
     } else {
       _activityResult.misses++;
     }
+    onResultChanged?.call();
     _checkForActivityEnd();
   }
 
@@ -145,7 +165,14 @@ class Activity {
   }
 
   void stop() {
-    // TODO: kill all futures.
+    if (_isRunning) {
+      _isRunning = false;
+
+      _lightsOut.abort();
+      _lightDelay.abort();
+
+      _onActivityEnded?.call();
+    }
   }
 
   void _activateDistractingPods(ActivityPod mainPod) {
@@ -157,14 +184,6 @@ class Activity {
       pod.off();
     }
   }
-
-  // void _onEnd(int reactionTime, ActivityPod pod) {
-  //   if ((pod != _podToHit) || (reactionTime <= 0)) {
-  //     _activityResult.misses++;
-  //   } else {
-  //     _activityResult.hitReactionTimeInMs.add(reactionTime);
-  //   }
-  // }
 }
 
 class FocusLogic {

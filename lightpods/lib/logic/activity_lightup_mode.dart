@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'activity_pod.dart';
 
 import '../models/activity_setting.dart';

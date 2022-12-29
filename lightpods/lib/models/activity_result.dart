@@ -10,4 +10,13 @@ class ActivityResult {
     misses = 0;
     hitReactionTimeInMs = [];
   }
+
+  int getAverageReationTime() {
+    double total = 0;
+    for (var element in hitReactionTimeInMs) {
+      total += element;
+    }
+    var result = (total / hitReactionTimeInMs.length);
+    return result.toInt();
+  }
 }

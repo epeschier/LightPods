@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/slider_input.dart';
 import 'package:lightpods/partials/multiple_choice.dart';
-import '../../components/toggle_options.dart';
 import '../../models/activity_enums.dart';
-import '../activity_setting.dart';
 
 class ActivityDurationSetting extends StatefulWidget {
   const ActivityDurationSetting({super.key});

@@ -6,15 +6,18 @@ import 'package:lightpods/theme/theme.dart';
 class ActivityTimer extends StatefulWidget {
   final Function onStart;
   final Function onStop;
-  const ActivityTimer({super.key, required this.onStart, required this.onStop});
+  late Function? tick;
+
+  ActivityTimer(
+      {super.key, required this.onStart, required this.onStop, this.tick});
 
   @override
-  State<ActivityTimer> createState() => _ActivityTimerState();
+  State<ActivityTimer> createState() => ActivityTimerState();
 }
 
 // TODO: Wakelock.enable();
 
-class _ActivityTimerState extends State<ActivityTimer> {
+class ActivityTimerState extends State<ActivityTimer> {
   late Timer _timer;
   String _time = '00 : 00';
   bool _running = false;
@@ -22,7 +25,7 @@ class _ActivityTimerState extends State<ActivityTimer> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [_getTimeDisplay(), _getButtons(), _infoCards()]);
+    return Column(children: [_getTimeDisplay(), _getButtons()]);
   }
 
   Widget _getTimeDisplay() => Center(
@@ -39,35 +42,6 @@ class _ActivityTimerState extends State<ActivityTimer> {
         RoundedIconButton(onClick: _onStartStopPressed, icon: _getIcon()),
       ]);
 
-  Widget _infoCards() => Padding(
-      padding: const EdgeInsets.only(top: 40),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          info('2', 'Miss'),
-          info('11', 'Hits'),
-          info('717', 'Avg. Reaction')
-        ],
-      ));
-
-  Widget info(String text, String subTitle) {
-    return Expanded(
-        child: Container(
-            margin: const EdgeInsets.all(10),
-            color: ThemeColors.darkPrimaryColor,
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(text, style: const TextStyle(fontSize: 40)),
-                Text(subTitle,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 16, color: ThemeColors.secondaryTextColor)),
-              ],
-            )));
-  }
-
   IconData _getIcon() {
     return _running ? Icons.pause : Icons.play_arrow;
   }
@@ -80,7 +54,7 @@ class _ActivityTimerState extends State<ActivityTimer> {
 
   void _onStartStopPressed() {
     if (_running) {
-      _stop();
+      stop();
     } else {
       _start();
     }
@@ -100,9 +74,10 @@ class _ActivityTimerState extends State<ActivityTimer> {
     setState(() {
       _time = _getTime();
     });
+    widget.tick?.call();
   }
 
-  void _stop() {
+  void stop() {
     setState(() {
       _running = false;
     });

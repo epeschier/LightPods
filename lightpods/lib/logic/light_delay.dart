@@ -1,21 +1,19 @@
+import 'dart:async';
 import 'dart:math';
+import 'package:lightpods/logic/callback_wait.dart';
+
 import '../models/activity_enums.dart';
 import '../models/activity_setting.dart';
 
-abstract class LightDelay {
+abstract class LightDelay extends CallbackWait {
   LightDelay();
-
-  Future wait(Function callback);
 }
 
 class LightDelayNone extends LightDelay {
   LightDelayNone();
 
   @override
-  Future wait(Function callback) =>
-      Future.delayed(const Duration(seconds: 0), () {
-        callback();
-      });
+  wait(Function callback) => callback();
 }
 
 class LightDelayFixed extends LightDelay {
@@ -24,10 +22,11 @@ class LightDelayFixed extends LightDelay {
   LightDelayFixed(this.delayTime);
 
   @override
-  Future wait(Function callback) =>
-      Future.delayed(Duration(milliseconds: delayTime), () {
-        callback();
-      });
+  void wait(Function callback) {
+    timer = Timer(Duration(milliseconds: delayTime), () {
+      callback();
+    });
+  }
 }
 
 class LightDelayRandom extends LightDelay {
@@ -42,9 +41,9 @@ class LightDelayRandom extends LightDelay {
   final Random _random = Random();
 
   @override
-  Future wait(Function callback) {
+  void wait(Function callback) {
     var time = delayTimeMin + _random.nextInt(delayTimeMax);
-    return Future.delayed(Duration(seconds: time), () {
+    timer = Timer(Duration(seconds: time), () {
       callback();
     });
   }
