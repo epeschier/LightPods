@@ -6,10 +6,15 @@ import 'package:lightpods/theme/theme.dart';
 class ActivityTimer extends StatefulWidget {
   final Function onStart;
   final Function onStop;
+  final Function? onReset;
   late Function? tick;
 
   ActivityTimer(
-      {super.key, required this.onStart, required this.onStop, this.tick});
+      {super.key,
+      required this.onStart,
+      required this.onStop,
+      this.tick,
+      this.onReset});
 
   @override
   State<ActivityTimer> createState() => ActivityTimerState();
@@ -86,9 +91,10 @@ class ActivityTimerState extends State<ActivityTimer> {
   }
 
   void _reset() {
+    _value = 0;
     setState(() {
-      _value = 0;
+      _time = _getTime();
     });
-    _timer.cancel();
+    widget.onReset?.call();
   }
 }

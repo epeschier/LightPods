@@ -10,10 +10,9 @@ class ActivityPod {
 
   String get id => _pod.id;
 
-  late Function _onEnd;
-  set callbackOnHit(Function fn) {
-    _onEnd = fn;
-  }
+  bool get isActive => _isActive;
+
+  Function? onHitOrTimeout;
 
   final Stopwatch _stopwatch = Stopwatch();
   bool _isActive = false;
@@ -34,10 +33,11 @@ class ActivityPod {
   void _handleHit() {
     if (_isActive) {
       off();
-      _onEnd(_stopwatch.elapsedMilliseconds, this);
+      _isActive = false;
+      onHitOrTimeout?.call(_stopwatch.elapsedMilliseconds, this);
     } else {
-      _onEnd(-1, this);
+      _isActive = false;
+      onHitOrTimeout?.call(-1, this);
     }
-    _isActive = false;
   }
 }

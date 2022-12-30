@@ -38,6 +38,7 @@ class _ActivityPageState extends State<ActivityPage> {
   ActivityTimer _getActivityTimer() => ActivityTimer(
         onStart: _onStart,
         onStop: _onStop,
+        onReset: _onReset,
         tick: _onTick,
         key: _activityTimerState,
       );
@@ -79,13 +80,21 @@ class _ActivityPageState extends State<ActivityPage> {
 
   void _onStart() {
     _activity = _createActivity();
-    _activity.subscribeToActivityEnd = _onActivityEnded;
+    _activity.onActivityEnded = _onActivityEnded;
     _activity.onResultChanged = _onResultChanged;
     _activity.run();
   }
 
   void _onStop() {
     _activity.stop();
+  }
+
+  void _onReset() {
+    setState(() {
+      _miss = 0;
+      _hits = 0;
+      _avg = 0;
+    });
   }
 
   void _onTick() {
@@ -130,8 +139,8 @@ class _ActivityPageState extends State<ActivityPage> {
     var setting = ActivitySetting();
     setting.numberOfPods = 2;
     setting.activityDuration = ActivityDurationType.timeout;
-    setting.durationNumberOfHits = 3;
-    setting.durationTimeout = 5;
+    setting.durationNumberOfHits = 5;
+    setting.durationTimeout = 10;
     setting.lightsOut = LightsOutType.hit;
     setting.lightDelayTime = LightDelayTimeType.fixed;
     setting.lightDelayFixedTime = 2000;
@@ -169,7 +178,7 @@ class FakePod extends PodBase {
 
   @override
   void setLight(Color color) {
-    print("lighton ");
+    print("lighton $color");
   }
 
   void initiateClickCallback() {

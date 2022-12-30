@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/components/color_indicator.dart';
-import 'package:lightpods/components/number_ticker.dart';
-import 'package:lightpods/partials/activity_setting/lights_out_setting.dart';
-import 'package:lightpods/partials/multiple_choice.dart';
-
-import '../components/toggle_options.dart';
+import '../components/color_indicator.dart';
+import '../components/number_ticker.dart';
+import '../partials/activity_setting/lights_out_setting.dart';
+import '../partials/multiple_choice.dart';
 import '../partials/activity_setting.dart';
 import '../partials/activity_setting/activity_duration_setting.dart';
 import '../partials/activity_setting/lights_delay_time_setting.dart';

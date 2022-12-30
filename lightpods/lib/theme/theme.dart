@@ -77,6 +77,7 @@ ToggleButtonsThemeData toggleButtonsThemeData = ToggleButtonsThemeData(
     minHeight: 40.0,
     minWidth: 75.0,
   ),
+  textStyle: const TextStyle(letterSpacing: 0.5, fontSize: 16),
 );
 
 FloatingActionButtonThemeData floatingActionButtonThemeData =

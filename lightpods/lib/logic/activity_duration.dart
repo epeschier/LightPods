@@ -15,7 +15,7 @@ class ActivityDurationHits extends ActivityDuration {
       _hasMaxHits(activityResult.hits);
 
   bool _hasMaxHits(int hits) {
-    return hits > (maxHits);
+    return hits >= (maxHits);
   }
 }
 
@@ -28,7 +28,7 @@ class ActivityDurationTimeout extends ActivityDuration {
       _hasMaxTime(activityResult.elapsedTimeInSeconds);
 
   bool _hasMaxTime(int time) {
-    return time > (maxDuration);
+    return time >= (maxDuration);
   }
 }
 

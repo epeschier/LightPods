@@ -1,0 +1,27 @@
+Workout: fixed timeout, light out on hit, fixed time before next pod active
+ActivityDurationType.timeout	(10 sec)
+LightsOutType.hit
+LightDelayTimeType.fixed
+
+Expected result:
+1. startCycle	
+2000ms
+2. activate pods
+3a. hit pod
+3b. miss pod
+10 sec
+4. activity ended
+
+---
+
+ActivityDurationType.numberOfHits	(5)
+LightsOutType.hit
+LightDelayTimeType.none
+
+Expected result:
+1. startCycle
+2. activate pods
+3a. hit pod
+3b. miss pod
+10 hits
+4. activity ended

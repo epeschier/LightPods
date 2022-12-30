@@ -42,7 +42,7 @@ class LightDelayRandom extends LightDelay {
 
   @override
   void wait(Function callback) {
-    var time = delayTimeMin + _random.nextInt(delayTimeMax);
+    var time = delayTimeMin + _random.nextInt(delayTimeMax - delayTimeMin);
     timer = Timer(Duration(seconds: time), () {
       callback();
     });

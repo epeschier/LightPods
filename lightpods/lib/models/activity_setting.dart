@@ -23,3 +23,9 @@ class ActivitySetting {
 
   late LightupModeType lightupMode;
 }
+
+/*
+Add some validation as some settings do not make sense:
+- number of pods <= 2 & LightDelayTimeType.none
+
+*/

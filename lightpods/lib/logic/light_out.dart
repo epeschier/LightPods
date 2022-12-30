@@ -2,18 +2,9 @@ import 'dart:async';
 
 import '../models/activity_enums.dart';
 import '../models/activity_setting.dart';
-import 'activity_pod.dart';
 import 'callback_wait.dart';
 
-abstract class LightsOut extends CallbackWait {
-  late List<ActivityPod> _pods;
-
-  void _turnOffPods() {
-    for (var pod in _pods) {
-      pod.off();
-    }
-  }
-}
+abstract class LightsOut extends CallbackWait {}
 
 class LightsOutHit extends LightsOut {
   @override
@@ -29,7 +20,6 @@ class LightsOutTimeout extends LightsOut {
   @override
   void wait(Function callback) {
     Timer(Duration(milliseconds: timeout), () {
-      _turnOffPods();
       callback();
     });
   }
