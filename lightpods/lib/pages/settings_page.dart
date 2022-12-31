@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/components/toggle_button.dart';
 import 'package:lightpods/theme/theme.dart';
 
 import '../components/toggle_options.dart';
@@ -21,6 +22,7 @@ class _SettingsPage extends State<SettingsPage> {
     );
   }
 
+  var _test = true;
   Widget _getSettingsList() => ListView(
         children: [
           _getContainer(
@@ -28,9 +30,28 @@ class _SettingsPage extends State<SettingsPage> {
             const Text('hello'),
           ),
           _getContainer(
-            ThemeColors.secondaryTextColor,
-            const Text('world'),
-          ),
+              ThemeColors.backgroundColor,
+              Row(children: [
+                ToggleButton(
+                    icon: Icons.abc,
+                    state: true,
+                    enabled: true,
+                    onClick: (state) {
+                      setState(() {
+                        _test = !_test;
+                      });
+                    }),
+                ToggleButton(
+                    icon: Icons.abc,
+                    state: false,
+                    enabled: true,
+                    onClick: (state) {}),
+                ToggleButton(
+                    icon: Icons.abc,
+                    state: true,
+                    enabled: _test,
+                    onClick: (state) {}),
+              ])),
           _getContainer(
             ThemeColors.primaryColor,
             const ToggleOptions(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lightpods/partials/podstate.dart';
+import 'package:lightpods/partials/pod_state.dart';
 import 'package:lightpods/logic/pod.dart';
 import 'package:lightpods/services/pod_service.dart';
 
@@ -24,7 +24,7 @@ class _DeviceList extends State<DeviceList> {
       appBar: AppBar(
         title: const Text('Device List'),
       ),
-      body: getDeviceList(devices),
+      body: _getDeviceList(devices),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.bluetooth_searching),
           onPressed: () {
@@ -41,7 +41,7 @@ class _DeviceList extends State<DeviceList> {
     //scanForDevices();
   }
 
-  ListView getDeviceList(List<BluetoothDevice> devices) {
+  ListView _getDeviceList(List<BluetoothDevice> devices) {
     List<Widget> containers = <Widget>[];
 
     for (BluetoothDevice device in devices) {

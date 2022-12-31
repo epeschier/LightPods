@@ -5,9 +5,11 @@ class ToggleButton extends StatefulWidget {
   final bool state;
   final IconData icon;
   final Function onClick;
+  bool? enabled;
 
-  const ToggleButton({
+  ToggleButton({
     Key? key,
+    this.enabled,
     required this.icon,
     required this.state,
     required this.onClick,
@@ -18,10 +20,13 @@ class ToggleButton extends StatefulWidget {
 }
 
 class _ToggleButton extends State<ToggleButton> {
-  static Color selectedBackgroundColor = Colors.blueGrey[200]!;
-  static Color unSelectedBackgroundColor = Colors.blueGrey[900]!;
-  static Color selectedColor = Colors.blueGrey[600]!;
-  static Color unSelectedColor = Colors.blueGrey[200]!;
+  Color selectedBackgroundColor = ThemeColors.accentColor;
+  Color unSelectedBackgroundColor = ThemeColors.primaryColor;
+  Color disabledBackgroundColor = ThemeColors.darkPrimaryColor;
+
+  Color selectedColor = ThemeColors.primaryTextColor;
+  Color unSelectedColor = ThemeColors.textIconColor;
+  Color disabledColor = ThemeColors.primaryColor;
 
   bool _state = false;
   void _toggleState() {
@@ -31,14 +36,24 @@ class _ToggleButton extends State<ToggleButton> {
     });
   }
 
-  Color _getBackgroundColor() =>
-      (_state) ? selectedBackgroundColor : unSelectedBackgroundColor;
-  Color _getIconColor() => (_state) ? selectedColor : unSelectedColor;
+  Color _getBackgroundColor() {
+    if (widget.enabled == false) {
+      return disabledBackgroundColor;
+    }
+    return (_state) ? selectedBackgroundColor : unSelectedBackgroundColor;
+  }
+
+  Color _getIconColor() {
+    if (widget.enabled == false) {
+      return disabledColor;
+    }
+    return (_state) ? selectedColor : unSelectedColor;
+  }
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: _toggleState,
+      onPressed: (widget.enabled == false) ? null : _toggleState,
       style: toggleButtonStyle.copyWith(
         backgroundColor:
             MaterialStateProperty.all<Color>(_getBackgroundColor()),

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/components/value_widget.dart';
 import 'package:lightpods/theme/theme.dart';
 
-class NumberTicker extends StatefulWidget {
+class NumberTicker extends ValueWidget<int> {
+  //StatefulWidget {
   final int? minValue;
   final int? maxValue;
-  const NumberTicker({Key? key, this.maxValue, this.minValue})
-      : super(key: key);
+
+  const NumberTicker({super.key, onValueChanged, this.maxValue, this.minValue})
+      : super(onValueChanged);
 
   @override
   State createState() => _NumberTicker();
@@ -18,6 +21,7 @@ class _NumberTicker extends State<NumberTicker> {
     setState(() {
       _value = value;
     });
+    widget.notifyValueChange(value);
   }
 
   @override

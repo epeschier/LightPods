@@ -109,7 +109,6 @@ class Pod extends PodBase {
 
   void _listenForButton() {
     _buttonCharacteristic.value.listen((value) {
-      print('button pressed for $id');
       if (onHit != null) {
         onHit!();
       }

@@ -43,7 +43,7 @@ class PodColors {
 }
 
 ThemeData appTheme = ThemeData(
-    scaffoldBackgroundColor: ThemeColors.unselectedItemColor,
+    scaffoldBackgroundColor: ThemeColors.darkPrimaryColor,
     brightness: Brightness.dark,
     useMaterial3: false,
     bottomNavigationBarTheme: bottomNavigationBarTheme,

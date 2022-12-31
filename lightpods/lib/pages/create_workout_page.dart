@@ -22,21 +22,31 @@ class _CreateWorkoutState extends State<CreateWorkout> {
       appBar: AppBar(
         title: const Text('Create Workout'),
       ),
-      body: ListView(children: <Widget>[
-        _activityStations,
-        _activityPods,
-        _activityNumberOfPlayers,
-        _getActivityCompetitionMode(),
-        _activityPlayerColors,
-        _activityColors,
-        _activityDistractingPods,
-        const ActivityDurationSetting(),
-        const LightsOutSetting(),
-        const LightDelayTimeSetting(),
-        _getActivityLightupMode(),
-        _getNavButtons(),
-      ]),
+      body: ListView(children: _getActivityList()),
     );
+  }
+
+  List<Widget> _getActivityList() {
+    List<Widget> list = [
+      _activityStations,
+      _activityPods,
+      _getActivityNumberOfPlayers(),
+      _activityPlayerColors,
+      _activityColors,
+      _getActivityDistractingPods(),
+      const ActivityDurationSetting(),
+      const LightsOutSetting(),
+      const LightDelayTimeSetting(),
+      _getActivityLightupMode(),
+      _getNavButtons(),
+    ];
+
+    if (_showCompetitionMode) {
+      var element = _getActivityCompetitionMode();
+      list.insert(3, element);
+    }
+
+    return list;
   }
 
   final _buttonStyle = ElevatedButton.styleFrom(
@@ -77,36 +87,49 @@ class _CreateWorkoutState extends State<CreateWorkout> {
   final Widget _activityStations = const ActivitySetting(
     icon: Icons.flag,
     text: 'Stations',
-    widget: NumberTicker(),
-  );
-
-  final Widget _activityDistractingPods = const ActivitySetting(
-    icon: Icons.alt_route,
-    text: 'Distracting Pods',
     widget: NumberTicker(
-      minValue: 0,
+      minValue: 1,
     ),
   );
+
+  Widget _getActivityDistractingPods() => const ActivitySetting(
+        icon: Icons.alt_route,
+        text: 'Distracting Pods',
+        widget: NumberTicker(
+          minValue: 0,
+        ),
+      );
 
   final Widget _activityPods = const ActivitySetting(
     icon: Icons.panorama_fish_eye,
     text: 'Pods',
     subText: 'Number of available Pods',
-    widget: NumberTicker(),
+    widget: NumberTicker(
+      minValue: 1,
+    ),
   );
 
-  final Widget _activityNumberOfPlayers = const ActivitySetting(
-    icon: Icons.person,
-    text: 'Players',
-    subText: 'per Station',
-    widget: NumberTicker(maxValue: 2),
-  );
+  Widget _getActivityNumberOfPlayers() => ActivitySetting(
+        icon: Icons.person,
+        text: 'Players',
+        subText: 'per Station',
+        widget: NumberTicker(
+          minValue: 1,
+          maxValue: 2,
+          onValueChanged: _checkCompetitionMode,
+        ),
+      );
+
+  bool _showCompetitionMode = false;
+  void _checkCompetitionMode(int value) => setState(() {
+        _showCompetitionMode = value > 1;
+      });
 
   final Widget _activityPlayerColors = const ActivitySetting(
     icon: Icons.palette,
     text: 'Colors',
     subText: 'Per Player',
-    widget: NumberTicker(maxValue: 10),
+    widget: NumberTicker(minValue: 1, maxValue: 4),
   );
 
   Widget _getActivityCompetitionMode() => MultipleChoice(

@@ -71,7 +71,7 @@ class _ActivityPageState extends State<ActivityPage> {
                 Text(subTitle,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontSize: 16, color: ThemeColors.primaryTextColor)),
+                        fontSize: 16, color: ThemeColors.lightPrimaryColor)),
               ],
             )));
   }

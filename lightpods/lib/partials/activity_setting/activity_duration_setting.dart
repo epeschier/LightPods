@@ -36,10 +36,6 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
         //    (_lightsOutIndex > 0) ? SliderInput(max: 5, units: 'min') : null,
       );
 
-  Column _getValueSliders() => Column(
-        children: _getSubWidget(),
-      );
-
   List<Widget> _getSubWidget() {
     List<Widget> sliders = [];
     if (_lightsOutIndex != 1) {
@@ -59,4 +55,8 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
       _valueSliders = _getValueSliders();
     });
   }
+
+  Column _getValueSliders() => Column(
+        children: _getSubWidget(),
+      );
 }
