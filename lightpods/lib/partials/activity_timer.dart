@@ -38,7 +38,7 @@ class ActivityTimerState extends State<ActivityTimer> {
           padding: const EdgeInsets.all(20),
           child: Text(
             _time,
-            style: const TextStyle(fontSize: 120),
+            style: const TextStyle(fontSize: 80),
           )));
 
   Widget _getButtons() =>

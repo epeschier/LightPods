@@ -42,6 +42,7 @@ const uint8_t LBS_UUID_CHR_LED[] =
 BLEService        lbs(LBS_UUID_SERVICE);
 BLECharacteristic lsbButton(LBS_UUID_CHR_BUTTON);
 BLECharacteristic lsbLED(LBS_UUID_CHR_LED);
+//BLECharacteristic batteryLevelChar("2A19", BLERead);
 
 #define DELAYVAL 100 // Time (in milliseconds) to pause between pixels
 
@@ -51,6 +52,9 @@ const int threshold = 250;   // threshold value to decide when the detected soun
 int ledState = LOW;
 const unsigned long debounceTime = 500;
 unsigned long time;
+
+bool playGameEnd = false;
+uint32_t gameEndColor;
 
 void setup() {
   Serial.begin(115200);
@@ -70,10 +74,15 @@ void initializeLed() {
 
   pixels.setPixelColor(0, GREEN);
   pixels.show();
+  delay(500);
 }
 
 void loop() {
-  readKnock();  
+  readKnock();
+
+  if (playGameEnd == true) {
+    colorRotate(gameEndColor, 500);
+  }
  // colorWipe(pixels.Color(150,   0,   0), 50); // Red
  // colorWipe(pixels.Color(  0, 150,   0), 50); // Green
  // colorWipe(pixels.Color(  0,   0, 150), 50); // Blue
@@ -101,6 +110,17 @@ void colorWipe(uint32_t color, int wait) {
   }
 }
 
+void colorRotate(uint32_t color, int wait) {
+  for (int offset = 0; offset < 2; offset++) {
+    for(int i = offset; i < pixels.numPixels(); i += 2) { 
+      pixels.setPixelColor(i, color);
+      pixels.setPixelColor((i + 1) & 0x0f, pixels.Color(0, 0, 0));
+    }
+    pixels.show();
+    delay(wait);
+  }
+}
+
 void notifyButtonPress() {
   if (Bluefruit.connected(0) && lsbButton.notifyEnabled(0))
   {
@@ -122,7 +142,9 @@ void setupBluetooth() {
   configureLedCharacteristic();
   configureButtonCharacteristic();
 
-  startAdv();
+  //configureBatteryCharacteristic();
+
+  startAdvertising();
 }
 
 void configureLedCharacteristic() {
@@ -158,8 +180,21 @@ void decodePixelCommand(uint8_t* data, uint16_t len) {
     else if (data[3] == 1) {
       pixels.setBrightness(data[0]);
       pixels.show();
+    } 
+    
+    if (data[3] == 2) {
+      gameEndColor = pixels.Color(data[0], data[1], data[2]);
+      playGameEnd = true;
+    } 
+    else {
+      playGameEnd = false;
     }
   }
+}
+
+void turnAllPixelsOff() {
+  setAllPixelsToColor(0, 0, 0);
+  pixels.show();
 }
 
 void setAllPixelsToColor(uint8_t r, uint8_t g, uint8_t b) {
@@ -170,15 +205,25 @@ void setAllPixelsToColor(uint8_t r, uint8_t g, uint8_t b) {
 }
 
 void configureButtonCharacteristic() {
-    // Configure Button characteristic
-  // Properties = Read + Notify
-  // Permission = Open to read, cannot write
-  // Fixed Len  = 1 (button state)
   lsbButton.setProperties(CHR_PROPS_READ | CHR_PROPS_NOTIFY);
   lsbButton.setPermission(SECMODE_OPEN, SECMODE_NO_ACCESS);
   lsbButton.setFixedLen(1);
   lsbButton.begin();
 }
+
+/*
+void configureBatteryCharacteristic() {
+  Serial.println("Configuring the Battery Service");
+  
+  batteryLevelChar.begin();
+  batteryLevelChar.setWriteCallback(getBatteryLevel_callback);
+}
+
+void getBatteryLevel_callback() {
+  int batteryLevel = 23;
+  batteryLevelChar.writeValue(batteryLevel);
+}
+*/
 
 void connect_callback(uint16_t conn_handle)
 {
@@ -208,11 +253,11 @@ void disconnect_callback(uint16_t conn_handle, uint8_t reason)
   Serial.print("Disconnected, reason = 0x"); 
   Serial.println(reason, HEX);
 
-  pixels.setPixelColor(1, OFF);
-  pixels.show();
+  playGameEnd = false;
+  turnAllPixelsOff();
 }
 
-void startAdv(void)
+void startAdvertising(void)
 {
   Serial.println("Setting up the advertising");
 

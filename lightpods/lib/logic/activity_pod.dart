@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pod_base.dart';
+import 'pod/pod_base.dart';
 
 class ActivityPod {
   final PodBase _pod;

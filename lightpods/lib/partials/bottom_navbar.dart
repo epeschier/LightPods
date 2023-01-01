@@ -22,7 +22,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      iconSize: 40,
+      iconSize: 30,
       currentIndex: _index,
       onTap: (_onItemTapped),
       items: const <BottomNavigationBarItem>[
@@ -39,7 +39,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           label: 'Workout',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.stacked_bar_chart),
+          icon: Icon(Icons.settings),
           label: 'Settings',
         ),
       ],

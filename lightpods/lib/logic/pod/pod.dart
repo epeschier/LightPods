@@ -9,9 +9,11 @@ class Pod extends PodBase {
 
   Pod({required this.device});
 
+  @override
   String get name =>
       '${device.name} ${_numberFromUuid(id).toString().padLeft(3, '0')}';
 
+  @override
   String get id => device.id.toString();
 
   bool _isOn = false;
@@ -22,16 +24,18 @@ class Pod extends PodBase {
   late BluetoothCharacteristic _lightCharacteristic;
   late BluetoothCharacteristic _buttonCharacteristic;
 
-  void initialize() {
+  @override
+  void connect() {
     _discoverServices();
   }
 
+  @override
   void disconnect() {
     device.disconnect();
   }
 
   void _discoverServices() async {
-    print('Run discover services for $id');
+    //   print('Run discover services for $id');
 
     FlutterBluePlus flutterBlue = FlutterBluePlus.instance;
     flutterBlue.stopScan();
@@ -56,9 +60,9 @@ class Pod extends PodBase {
   }
 
   void _getCharacteristics(BluetoothService service) {
-    print('getCharacteristics for service: ${service.toString()}');
+//    print('getCharacteristics for service: ${service.toString()}');
     for (BluetoothCharacteristic characteristic in service.characteristics) {
-      print('-- characteristic: ${characteristic.toString()}');
+//      print('-- characteristic: ${characteristic.toString()}');
       if (_isLedCharacteristic(characteristic.uuid)) {
         _lightCharacteristic = characteristic;
       }
@@ -97,14 +101,29 @@ class Pod extends PodBase {
     }
   }
 
+  static const _brightnessCommand = 0x01;
+  static const _endGameCommand = 0x02;
+  static const _sensitivityCommand = 0x03;
+
+  @override
   void setBrightness(int value) {
-    Uint8List command = Uint8List.fromList([value, 0, 0, 1]);
+    Uint8List command = Uint8List.fromList([value, 0, 0, _brightnessCommand]);
     _lightCharacteristic.write(command);
   }
 
+  @override
   void setSensitivity(int value) {
-    Uint8List command = Uint8List.fromList([value & 0xff, value >> 8, 0, 2]);
+    Uint8List command =
+        Uint8List.fromList([value & 0xff, value >> 8, 0, _sensitivityCommand]);
     _lightCharacteristic.write(command);
+  }
+
+  @override
+  void playEndGame(Color color) {
+    var command = _colorToBytes(color);
+    command[3] = _endGameCommand;
+    print(command);
+    //_lightCharacteristic.write(command);
   }
 
   void _listenForButton() {

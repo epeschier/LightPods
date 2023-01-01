@@ -18,7 +18,7 @@ class RoundedIconButton extends StatelessWidget {
         backgroundColor: ThemeColors.buttonColor,
         foregroundColor: ThemeColors.backgroundColor,
       ),
-      child: Icon(icon, size: 70),
+      child: Icon(icon, size: 50),
     );
   }
 }

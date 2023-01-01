@@ -1,34 +1,17 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import '../logic/pod/pod_base.dart';
 
-class PodService extends ChangeNotifier {
-  final List<BluetoothDevice> devices = <BluetoothDevice>[];
+class PodService {
+  late List<PodBase> _pods = [];
 
-  void scanForDevices() {
-    devices.clear();
-    notifyListeners();
+  List<PodBase> getPods() => _pods;
 
-    FlutterBluePlus flutterBlue = FlutterBluePlus.instance;
-
-    flutterBlue.connectedDevices
-        .asStream()
-        .listen((List<BluetoothDevice> devices) {
-      for (BluetoothDevice device in devices) {
-        _addDeviceTolist(device);
-      }
-    });
-    flutterBlue.scanResults.listen((List<ScanResult> results) {
-      for (ScanResult result in results) {
-        _addDeviceTolist(result.device);
-      }
-    });
-    flutterBlue.startScan();
+  void addPod(PodBase pod) {
+    _pods.add(pod);
   }
 
-  void _addDeviceTolist(final BluetoothDevice device) {
-    if (!devices.contains(device) && device.name == 'Lightpod') {
-      devices.add(device);
-      notifyListeners();
-    }
+  void removePod(PodBase pod) {
+    _pods.removeWhere((element) => element.id == pod.id);
   }
+
+  PodBase getPod(String id) => _pods.firstWhere((element) => element.id == id);
 }

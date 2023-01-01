@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lightpods/components/pod_button.dart';
 import 'package:lightpods/components/rounded_icon_button.dart';
 import 'package:lightpods/models/activity_result.dart';
-import '../logic/pod_base.dart';
+import '../logic/pod/fake_pod.dart';
+import '../logic/pod/pod_base.dart';
 import '../models/activity_enums.dart';
 import '../logic/activity_factory.dart';
 import '../models/activity_setting.dart';
 import '../partials/activity_timer.dart';
 import '../logic/activity.dart';
+import '../services/bluetooth_device_service.dart';
 import '../services/pod_service.dart';
 import '../theme/theme.dart';
 
@@ -31,7 +34,7 @@ class _ActivityPageState extends State<ActivityPage> {
         body: Column(children: [
           _getActivityTimer(),
           _infoCards(),
-          _getDummyPodButtons()
+          //  _getDummyPodButtons()
         ]));
   }
 
@@ -61,17 +64,17 @@ class _ActivityPageState extends State<ActivityPage> {
   Widget _info(String text, String subTitle) {
     return Expanded(
         child: Container(
-            margin: const EdgeInsets.all(10),
-            color: ThemeColors.darkPrimaryColor,
-            padding: const EdgeInsets.all(20),
+            margin: const EdgeInsets.all(8),
+            color: ThemeColors.primaryColor,
+            padding: const EdgeInsets.all(10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(text, style: const TextStyle(fontSize: 40)),
+                Text(text, style: const TextStyle(fontSize: 30)),
                 Text(subTitle,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontSize: 16, color: ThemeColors.lightPrimaryColor)),
+                        fontSize: 12, color: ThemeColors.lightPrimaryColor)),
               ],
             )));
   }
@@ -125,20 +128,28 @@ class _ActivityPageState extends State<ActivityPage> {
               icon: Icons.done,
               onClick: () {
                 _clickFake('2');
-              })
+              }),
+          PodButton(
+              onClick: (String id) {
+                print("xx $id");
+              },
+              color: Colors.red,
+              id: "1")
         ],
       );
 
-  late List<FakePod> _podList;
+  late List<PodBase> _podList;
 
   Activity _createActivity() {
-    // final PodService _podService = GetIt.I.get<PodService>();
+    final PodService _podService = GetIt.I.get<PodService>();
+    _podList = _podService.getPods();
 
-    _podList = _createFakes(); // = _podService.
+    print("Create activity with ${_podList.length} pods");
+    //_podList = _createFakes(); // = _podService.
 
     var setting = ActivitySetting();
     setting.numberOfPods = 2;
-    setting.activityDuration = ActivityDurationType.timeout;
+    setting.activityDuration = ActivityDurationType.numberOfHits;
     setting.durationNumberOfHits = 5;
     setting.durationTimeout = 10;
     setting.lightsOut = LightsOutType.hit;
@@ -147,12 +158,13 @@ class _ActivityPageState extends State<ActivityPage> {
     setting.lightupMode = LightupModeType.random;
 
     Activity activity = ActivityFactory.create(setting, _podList);
+
     return activity;
   }
 
   void _clickFake(String id) {
     var pod = _podList.firstWhere((x) => x.id == id);
-    pod.initiateClickCallback();
+    //  pod.initiateClickCallback();
   }
 
   List<FakePod> _createFakes() {
@@ -162,26 +174,5 @@ class _ActivityPageState extends State<ActivityPage> {
     list.add(FakePod('2'));
 
     return list;
-  }
-}
-
-class FakePod extends PodBase {
-  final String _id;
-
-  FakePod(this._id);
-
-  @override
-  String get id => _id;
-
-  @override
-  void lightOff() {}
-
-  @override
-  void setLight(Color color) {
-    print("lighton $color");
-  }
-
-  void initiateClickCallback() {
-    onHit!();
   }
 }

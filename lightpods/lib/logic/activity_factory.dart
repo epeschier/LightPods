@@ -7,7 +7,7 @@ import 'activity_pod.dart';
 import '../models/activity_setting.dart';
 import 'light_delay.dart';
 import 'light_out.dart';
-import 'pod_base.dart';
+import 'pod/pod_base.dart';
 
 abstract class ActivityFactory {
   static Activity create(ActivitySetting setting, List<PodBase> podList) {
