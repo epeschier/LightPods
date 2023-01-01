@@ -32,7 +32,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.fitness_center),
-          label: 'Workout definition',
+          label: 'Activity list',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.alarm_on),
