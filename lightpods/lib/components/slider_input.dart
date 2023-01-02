@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
+import '../components/value_widget.dart';
 
 import '../theme/theme.dart';
 
-class SliderInput extends StatefulWidget {
+class SliderInput extends ValueWidget<double> {
   final String? units;
   final double max;
   int? decimals;
-  SliderInput({super.key, this.decimals, this.units, required this.max});
+  final double? value;
+
+  SliderInput(
+      {super.key,
+      onValueChanged,
+      this.decimals,
+      this.units,
+      required this.max,
+      this.value})
+      : super(onValueChanged);
 
   @override
   State createState() => _SliderInput();
@@ -14,6 +24,12 @@ class SliderInput extends StatefulWidget {
 
 class _SliderInput extends State<SliderInput> {
   double _currentSliderValue = 1;
+
+  @override
+  void initState() {
+    _currentSliderValue = widget.value ?? 1;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +49,7 @@ class _SliderInput extends State<SliderInput> {
                 setState(() {
                   _currentSliderValue = value;
                 });
+                widget.onValueChanged?.call(value);
               },
             ),
           ),

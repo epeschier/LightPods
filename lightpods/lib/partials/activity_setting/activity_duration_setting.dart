@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:lightpods/components/slider_input.dart';
 import 'package:lightpods/partials/multiple_choice.dart';
 import '../../models/activity_enums.dart';
+import '../../models/activity_setting.dart';
 
 class ActivityDurationSetting extends StatefulWidget {
-  const ActivityDurationSetting({super.key});
+  final DurationSetting durationSetting;
+
+  const ActivityDurationSetting({super.key, required this.durationSetting});
 
   @override
   State<ActivityDurationSetting> createState() =>
@@ -12,11 +15,11 @@ class ActivityDurationSetting extends StatefulWidget {
 }
 
 class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
-  late Column _valueSliders;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
-    _valueSliders = _getValueSliders();
+    _selectedIndex = widget.durationSetting.durationType.index;
     super.initState();
   }
 
@@ -26,37 +29,40 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
   }
 
   Widget _getActivityDuration() => MultipleChoice(
-        icon: Icons.lightbulb,
+        icon: Icons.schedule,
         text: 'Activity Duration',
+        selectedItem: _selectedIndex,
         onItemSelected: _onLightsOutExplanationToggleClick,
         subText:
-            ActivityDescription.activityDurationExplanation[_lightsOutIndex],
+            ActivityDescription.activityDurationExplanation[_selectedIndex],
         values: const ['Hits', 'Timeout', 'Both'],
-        subWidget: _valueSliders,
-        //    (_lightsOutIndex > 0) ? SliderInput(max: 5, units: 'min') : null,
+        subWidget: _getValueSliders(),
       );
-
-  List<Widget> _getSubWidget() {
-    List<Widget> sliders = [];
-    if (_lightsOutIndex != 1) {
-      sliders.add(SliderInput(max: 100, units: 'hits'));
-    }
-    if (_lightsOutIndex > 0) {
-      sliders.add(SliderInput(max: 5, units: 'min'));
-    }
-    return sliders;
-  }
-
-  int _lightsOutIndex = 0;
 
   void _onLightsOutExplanationToggleClick(int index) {
     setState(() {
-      _lightsOutIndex = index;
-      _valueSliders = _getValueSliders();
+      _selectedIndex = index;
     });
   }
 
   Column _getValueSliders() => Column(
-        children: _getSubWidget(),
+        children: [
+          Visibility(
+            visible: _selectedIndex != 1,
+            child: SliderInput(
+                onValueChanged: (value) {
+                  //widget.durationHits = value;
+                  // TODO change value
+                },
+                value: widget.durationSetting.numberOfHits,
+                max: 100,
+                units: 'hits'),
+          ),
+          Visibility(
+            visible: _selectedIndex > 0,
+            child: SliderInput(
+                value: widget.durationSetting.timeout, max: 10, units: 'min'),
+          ),
+        ],
       );
 }

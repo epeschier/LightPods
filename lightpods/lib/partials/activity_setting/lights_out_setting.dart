@@ -1,37 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/slider_input.dart';
+import 'package:lightpods/models/activity_setting.dart';
 import '../../models/activity_enums.dart';
 import '../multiple_choice.dart';
 
-class LightsOutSetting extends StatefulWidget {
-  const LightsOutSetting({super.key});
+class LightsOutWidget extends StatefulWidget {
+  final LightsOutSetting selectedItem;
+
+  const LightsOutWidget({super.key, required this.selectedItem});
 
   @override
-  State<LightsOutSetting> createState() => _LightsOutSettingState();
+  State<LightsOutWidget> createState() => _LightsOutWidgetState();
 }
 
-class _LightsOutSettingState extends State<LightsOutSetting> {
+class _LightsOutWidgetState extends State<LightsOutWidget> {
+  int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    _selectedIndex = widget.selectedItem.lightsOut.index;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return _getLightsOut();
   }
 
   Widget _getLightsOut() => MultipleChoice(
-        icon: Icons.alarm,
+        icon: Icons.highlight,
         text: 'Lights out',
-        onItemSelected: _onActivityDurationToggleClick,
-        subText: ActivityDescription.lightsOutExplanation[_lightsOutIndex],
+        selectedItem: _selectedIndex,
+        onItemSelected: _onMultipleChoiceChanged,
+        subText: ActivityDescription.lightsOutExplanation[_selectedIndex],
         values: const ['Hit', 'Timeout', 'Both'],
-        subWidget: (_lightsOutIndex > 0)
+        subWidget: (_selectedIndex > 0)
             ? SliderInput(max: 5, decimals: 1, units: 's')
             : null,
       );
 
-  int _lightsOutIndex = 0;
-
-  void _onActivityDurationToggleClick(int index) {
+  void _onMultipleChoiceChanged(int index) {
     setState(() {
-      _lightsOutIndex = index;
+      _selectedIndex = index;
     });
   }
 }

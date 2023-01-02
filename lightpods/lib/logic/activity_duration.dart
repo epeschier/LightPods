@@ -7,7 +7,7 @@ abstract class ActivityDuration {
 }
 
 class ActivityDurationHits extends ActivityDuration {
-  final int maxHits;
+  final double maxHits;
   ActivityDurationHits(this.maxHits);
 
   @override
@@ -20,7 +20,7 @@ class ActivityDurationHits extends ActivityDuration {
 }
 
 class ActivityDurationTimeout extends ActivityDuration {
-  final int maxDuration;
+  final double maxDuration;
   ActivityDurationTimeout(this.maxDuration);
 
   @override
@@ -33,8 +33,8 @@ class ActivityDurationTimeout extends ActivityDuration {
 }
 
 class ActivityDurationHitsOrTimeout extends ActivityDuration {
-  final int maxHits;
-  final int maxDuration;
+  final double maxHits;
+  final double maxDuration;
 
   late ActivityDurationHits _activityDurationHits;
   late ActivityDurationTimeout _activityDurationTimeout;
@@ -51,15 +51,15 @@ class ActivityDurationHitsOrTimeout extends ActivityDuration {
 }
 
 abstract class ActivityDurationFactory {
-  static ActivityDuration getActivityDuration(ActivitySetting setting) {
-    switch (setting.activityDuration) {
+  static ActivityDuration getActivityDuration(DurationSetting setting) {
+    switch (setting.durationType) {
       case ActivityDurationType.numberOfHits:
-        return ActivityDurationHits(setting.durationNumberOfHits);
+        return ActivityDurationHits(setting.numberOfHits);
       case ActivityDurationType.timeout:
-        return ActivityDurationTimeout(setting.durationTimeout);
-      case ActivityDurationType.hitTimeout:
+        return ActivityDurationTimeout(setting.timeout);
+      case ActivityDurationType.hitsAndTimeout:
         return ActivityDurationHitsOrTimeout(
-            setting.durationNumberOfHits, setting.durationTimeout);
+            setting.numberOfHits, setting.timeout);
     }
   }
 }

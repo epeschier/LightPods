@@ -43,14 +43,14 @@ class LightsOutTimeoutOrHit extends LightsOut {
 }
 
 abstract class LightsOutFactory {
-  static LightsOut getLightsOut(ActivitySetting setting) {
+  static LightsOut getLightsOut(LightsOutSetting setting) {
     switch (setting.lightsOut) {
       case LightsOutType.hit:
         return LightsOutHit();
       case LightsOutType.timeout:
-        return LightsOutTimeout(timeout: setting.lightsOutTimeout);
+        return LightsOutTimeout(timeout: setting.timeout);
       case LightsOutType.hitTimeout:
-        return LightsOutTimeoutOrHit(timeout: setting.lightsOutTimeout);
+        return LightsOutTimeoutOrHit(timeout: setting.timeout);
     }
   }
 }

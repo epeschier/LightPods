@@ -19,10 +19,10 @@ abstract class ActivityFactory {
         .withNumberOfPlayers(setting.numberOfPlayers)
         .withNumberOfColorsPerPlayer(setting.numberOfColorsPerPlayer)
         .withNumberOfDistractingPods(setting.numberOfDistractingPods)
-        .withActivityDuration(
-            ActivityDurationFactory.getActivityDuration(setting))
-        .withLightsOut(LightsOutFactory.getLightsOut(setting))
-        .withLightDelay(LightDelayFactory.getLightDelay(setting))
+        .withActivityDuration(ActivityDurationFactory.getActivityDuration(
+            setting.activityDuration))
+        .withLightsOut(LightsOutFactory.getLightsOut(setting.lightsOut))
+        .withLightDelay(LightDelayFactory.getLightDelay(setting.lightDelayTime))
         .withLightupMode(
             LightupModeFactory.getLightupMode(setting, activityPods))
         .withActivityPods(activityPods)

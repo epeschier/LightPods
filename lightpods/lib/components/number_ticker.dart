@@ -6,8 +6,10 @@ class NumberTicker extends ValueWidget<int> {
   //StatefulWidget {
   final int? minValue;
   final int? maxValue;
+  final int? value;
 
-  const NumberTicker({super.key, onValueChanged, this.maxValue, this.minValue})
+  const NumberTicker(
+      {super.key, onValueChanged, this.value, this.maxValue, this.minValue})
       : super(onValueChanged);
 
   @override
@@ -26,7 +28,7 @@ class _NumberTicker extends State<NumberTicker> {
 
   @override
   void initState() {
-    _value = widget.minValue ?? 1;
+    _value = widget.value ?? widget.minValue ?? 1;
     super.initState();
   }
 

@@ -50,16 +50,16 @@ class LightDelayRandom extends LightDelay {
 }
 
 abstract class LightDelayFactory {
-  static LightDelay getLightDelay(ActivitySetting setting) {
-    switch (setting.lightDelayTime) {
+  static LightDelay getLightDelay(LightDelayTimeSetting setting) {
+    switch (setting.delayTimeType) {
       case LightDelayTimeType.none:
         return LightDelayNone();
       case LightDelayTimeType.fixed:
-        return LightDelayFixed(setting.lightDelayFixedTime);
+        return LightDelayFixed(setting.fixedTime);
       case LightDelayTimeType.random:
         return LightDelayRandom(
-            delayTimeMin: setting.lightDelayRandomTimeMin,
-            delayTimeMax: setting.lightDelayRandomTimeMax);
+            delayTimeMin: setting.randomTimeMin,
+            delayTimeMax: setting.randomTimeMax);
     }
   }
 }

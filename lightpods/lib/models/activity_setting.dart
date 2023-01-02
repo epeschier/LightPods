@@ -1,6 +1,8 @@
 import 'package:lightpods/models/activity_enums.dart';
 
 class ActivitySetting {
+  late String name = "Workout";
+
   late int numberOfStations = 1;
   late int numberOfPods;
   late int numberOfPlayers = 1;
@@ -9,19 +11,31 @@ class ActivitySetting {
 
   late CompetitionType competitionMode;
 
-  late ActivityDurationType activityDuration;
-  late int durationNumberOfHits;
-  late int durationTimeout;
+  late DurationSetting activityDuration;
 
-  late LightsOutType lightsOut;
-  late int lightsOutTimeout;
+  late LightsOutSetting lightsOut;
 
-  late LightDelayTimeType lightDelayTime;
-  late int lightDelayFixedTime;
-  late int lightDelayRandomTimeMin;
-  late int lightDelayRandomTimeMax;
+  late LightDelayTimeSetting lightDelayTime;
 
   late LightupModeType lightupMode;
+}
+
+class DurationSetting {
+  late ActivityDurationType durationType;
+  late double numberOfHits;
+  late double timeout;
+}
+
+class LightDelayTimeSetting {
+  late LightDelayTimeType delayTimeType;
+  late int fixedTime;
+  late int randomTimeMin;
+  late int randomTimeMax;
+}
+
+class LightsOutSetting {
+  late LightsOutType lightsOut;
+  late int timeout;
 }
 
 /*

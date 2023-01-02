@@ -26,7 +26,7 @@ class _ColorIndicatorState extends State<ColorIndicator> {
         padding: const EdgeInsets.all(10),
         child: Icon(
           Icons.circle,
-          size: 20,
+          size: 24,
           color: color,
         ));
   }

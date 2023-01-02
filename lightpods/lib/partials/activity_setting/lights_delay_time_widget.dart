@@ -1,25 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/components/ranged_slider_input.dart';
+import 'package:lightpods/models/activity_setting.dart';
+import '../../components/ranged_slider_input.dart';
 import '../../components/slider_input.dart';
 import '../../models/activity_enums.dart';
 import '../multiple_choice.dart';
 
-class LightDelayTimeSetting extends StatefulWidget {
-  const LightDelayTimeSetting({super.key});
+class LightDelayTimeWidget extends StatefulWidget {
+  final LightDelayTimeSetting setting;
+
+  const LightDelayTimeWidget({super.key, required this.setting});
 
   @override
-  State<LightDelayTimeSetting> createState() => _LightDelayTimeSettingState();
+  State<LightDelayTimeWidget> createState() => _LightDelayTimeWidgetState();
 }
 
-class _LightDelayTimeSettingState extends State<LightDelayTimeSetting> {
+class _LightDelayTimeWidgetState extends State<LightDelayTimeWidget> {
+  int _lightDelayIndex = 0;
+
+  @override
+  void initState() {
+    _lightDelayIndex = widget.setting.delayTimeType.index;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return _getLightsOut();
   }
 
   Widget _getLightsOut() => MultipleChoice(
-        icon: Icons.light_mode,
+        icon: Icons.hourglass_empty,
         text: 'Light Delay Time',
+        selectedItem: _lightDelayIndex,
         onItemSelected: _onLightsDelayToggleClick,
         subText:
             ActivityDescription.lightDelayTimeExplanation[_lightDelayIndex],
@@ -27,7 +39,6 @@ class _LightDelayTimeSettingState extends State<LightDelayTimeSetting> {
         subWidget: _getSubwidget(),
       );
 
-  int _lightDelayIndex = 0;
   void _onLightsDelayToggleClick(int index) {
     setState(() {
       _lightDelayIndex = index;
@@ -35,14 +46,12 @@ class _LightDelayTimeSettingState extends State<LightDelayTimeSetting> {
   }
 
   Widget? _getSubwidget() {
-    if (_lightDelayIndex == LightDelayTimeType.none.index) {
-      return null;
-    }
     if (_lightDelayIndex == LightDelayTimeType.random.index) {
       return RangedSliderInput(max: 5, decimals: 1, units: 's');
     }
     if (_lightDelayIndex == LightDelayTimeType.fixed.index) {
       return SliderInput(max: 5, decimals: 1, units: 's');
     }
+    return null;
   }
 }

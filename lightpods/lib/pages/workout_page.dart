@@ -148,13 +148,24 @@ class _ActivityPageState extends State<ActivityPage> {
     //_podList = _createFakes(); // = _podService.
 
     var setting = ActivitySetting();
+    setting.numberOfPlayers = 1;
     setting.numberOfPods = 2;
-    setting.activityDuration = ActivityDurationType.numberOfHits;
-    setting.durationNumberOfHits = 5;
-    setting.durationTimeout = 10;
-    setting.lightsOut = LightsOutType.hit;
-    setting.lightDelayTime = LightDelayTimeType.fixed;
-    setting.lightDelayFixedTime = 2000;
+    setting.numberOfStations = 1;
+    setting.numberOfColorsPerPlayer = 1;
+    setting.numberOfDistractingPods = 0;
+
+    setting.activityDuration = DurationSetting();
+    setting.activityDuration.durationType = ActivityDurationType.hitsAndTimeout;
+    setting.activityDuration.timeout = 4;
+    setting.activityDuration.numberOfHits = 10;
+
+    setting.lightsOut = LightsOutSetting();
+    setting.lightsOut.lightsOut = LightsOutType.hit;
+
+    setting.lightDelayTime = LightDelayTimeSetting();
+    setting.lightDelayTime.delayTimeType = LightDelayTimeType.fixed;
+    setting.lightDelayTime.fixedTime = 2000;
+
     setting.lightupMode = LightupModeType.random;
 
     Activity activity = ActivityFactory.create(setting, _podList);

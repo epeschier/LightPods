@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../theme/theme.dart';
 
-class ActivitySetting extends StatelessWidget {
+class ActivitySettingContainer extends StatelessWidget {
   final IconData icon;
   final String text;
   final String? subText;
   final Widget widget;
   final Widget? subWidget;
 
-  const ActivitySetting(
+  const ActivitySettingContainer(
       {super.key,
       required this.icon,
       required this.text,
