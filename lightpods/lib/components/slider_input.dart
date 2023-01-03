@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../components/value_widget.dart';
-
 import '../theme/theme.dart';
 
 class SliderInput extends ValueWidget<double> {

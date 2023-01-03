@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/logic/light_out.dart';
-import '../logic/activity_duration.dart';
 import '../models/activity_setting.dart';
-import '../pages/create_workout_page.dart';
+import 'edit_workout_page.dart';
 import '../partials/activity_info.dart';
 import '../models/activity_enums.dart';
 
-class ActivityListPage extends StatelessWidget {
+class ActivityListPage extends StatefulWidget {
   const ActivityListPage({super.key});
+
+  @override
+  State<ActivityListPage> createState() => _ActivityListPageState();
+}
+
+class _ActivityListPageState extends State<ActivityListPage> {
+  List<ActivitySetting> _list = [];
+
+  @override
+  void initState() {
+    // TODO: get from stored activities
+    _list.add(_getActivitySetting());
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,38 +29,61 @@ class ActivityListPage extends StatelessWidget {
         title: const Text('Activities'),
       ),
       body: _getActivityList(),
-      floatingActionButton: FloatingActionButton(
-          tooltip: "Create activity",
-          onPressed: () {
-            _navigateToCreateActivity(context);
-          },
-          child: const Icon(Icons.add)),
+      floatingActionButton: _getActionButton(),
     );
   }
 
   ListView _getActivityList() {
-    // TODO: get from stored activities
     List<Widget> containers = <Widget>[];
-    var setting = _getActivitySetting();
-    containers.add(ActivityInfo(
-      setting: setting,
-    ));
+
+    for (var setting in _list) {
+      containers.add(ActivityInfo(
+        onEdit: () {
+          _navigateToEditActivity(context, setting);
+        },
+        setting: setting,
+      ));
+    }
 
     return ListView(
       children: containers,
     );
   }
 
-  void _navigateToCreateActivity(BuildContext context) {
-    Navigator.push(
+  FloatingActionButton _getActionButton() => FloatingActionButton(
+      tooltip: "Create activity",
+      onPressed: () {
+        var activity = ActivitySetting();
+        _navigateToEditActivity(context, activity);
+      },
+      child: const Icon(Icons.add));
+
+  void _navigateToEditActivity(
+      BuildContext context, ActivitySetting setting) async {
+    var data = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
-        var activitySetting = _getActivitySetting();
-        return CreateWorkout(
-          activitySetting: activitySetting,
+        return EditWorkout(
+          activitySetting: ActivitySetting().copyWith(setting),
         );
       }),
-    );
+    ) as ActivitySetting?;
+    if (data != null) {
+      _updateActivity(data);
+    }
+  }
+
+  void _updateActivity(ActivitySetting activity) {
+    setState(() {
+      if (activity.id > 0) {
+        var item = _list.firstWhere((element) => element.id == activity.id);
+        item.copyWith(activity);
+      } else {
+        // TODO: use service for list and id.
+        activity.id = 10;
+        _list.add(activity);
+      }
+    });
   }
 
 // TEMP
@@ -58,7 +94,7 @@ class ActivityListPage extends StatelessWidget {
     duration.timeout = 4;
 
     var lightDelay = LightDelayTimeSetting();
-    lightDelay.fixedTime = 2000;
+    lightDelay.fixedTime = 2;
     lightDelay.delayTimeType = LightDelayTimeType.fixed;
     lightDelay.randomTimeMin = 1;
     lightDelay.randomTimeMax = 2;
@@ -69,6 +105,7 @@ class ActivityListPage extends StatelessWidget {
 
     var setting = ActivitySetting();
     setting.name = "My Workout";
+    setting.id = 1;
     setting.numberOfPlayers = 1;
     setting.numberOfPods = 2;
     setting.numberOfDistractingPods = 0;

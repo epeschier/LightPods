@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/components/value_widget.dart';
-import 'package:lightpods/theme/theme.dart';
+import 'value_widget.dart';
+import 'round_button.dart';
 
 class NumberTicker extends ValueWidget<int> {
   //StatefulWidget {
   final int? minValue;
   final int? maxValue;
-  final int? value;
+  final int value;
 
   const NumberTicker(
-      {super.key, onValueChanged, this.value, this.maxValue, this.minValue})
+      {super.key,
+      onValueChanged,
+      required this.value,
+      this.maxValue,
+      this.minValue})
       : super(onValueChanged);
 
   @override
@@ -17,7 +21,7 @@ class NumberTicker extends ValueWidget<int> {
 }
 
 class _NumberTicker extends State<NumberTicker> {
-  int _value = 1;
+  late int _value;
 
   void _updateValue(int value) {
     setState(() {
@@ -28,7 +32,7 @@ class _NumberTicker extends State<NumberTicker> {
 
   @override
   void initState() {
-    _value = widget.value ?? widget.minValue ?? 1;
+    _value = widget.value;
     super.initState();
   }
 
@@ -55,32 +59,5 @@ class _NumberTicker extends State<NumberTicker> {
             _updateValue(_value - 1);
           }),
     ]);
-  }
-}
-
-class RoundButton extends StatelessWidget {
-  final Icon icon;
-  final VoidCallback? click;
-  final bool? enabled;
-  const RoundButton({super.key, required this.icon, this.click, this.enabled});
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: enabled == true ? click : null,
-      style: toggleButtonStyle.copyWith(
-        backgroundColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.pressed)) {
-              return Theme.of(context).colorScheme.primary.withOpacity(0.5);
-            } else if (states.contains(MaterialState.disabled)) {
-              return ThemeColors.buttonDisabledIconColor;
-            }
-            return ThemeColors.buttonColor; // Use the component's default.
-          },
-        ),
-      ),
-      child: icon,
-    );
   }
 }

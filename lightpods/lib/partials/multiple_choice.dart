@@ -10,16 +10,16 @@ class MultipleChoice extends StatelessWidget {
   final List<String> values;
   final Widget? subWidget;
   final Function onItemSelected;
-  final int? selectedItem;
+  int selectedItem;
 
-  const MultipleChoice(
+  MultipleChoice(
       {super.key,
       required this.icon,
       required this.text,
       required this.values,
       this.subWidget,
       this.subText,
-      this.selectedItem,
+      required this.selectedItem,
       required this.onItemSelected});
 
   @override
@@ -51,7 +51,7 @@ class MultipleChoice extends StatelessWidget {
 
   Widget _getMultipleChoice() => ToggleOptions(
         values: values,
-        selectedItem: selectedItem ?? 0,
+        selectedItem: selectedItem,
         onClick: onItemSelected,
       );
 

@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/components/value_widget.dart';
 
 import '../theme/theme.dart';
 
-class RangedSliderInput extends StatefulWidget {
+class RangedSliderInput extends ValueWidget<RangeValues> {
   final String units;
   final double max;
   int? decimals;
+  RangeValues valueRange;
+
   RangedSliderInput(
-      {super.key, this.decimals, required this.units, required this.max});
+      {super.key,
+      this.decimals,
+      onValueChanged,
+      required this.units,
+      required this.max,
+      required this.valueRange})
+      : super(onValueChanged);
 
   @override
   State createState() => _RangedSliderInput();
 }
 
 class _RangedSliderInput extends State<RangedSliderInput> {
-  RangeValues _currentRangeValues = const RangeValues(1, 2);
-
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -26,26 +33,27 @@ class _RangedSliderInput extends State<RangedSliderInput> {
         children: [
           Expanded(
               child: RangeSlider(
-                  values: _currentRangeValues,
+                  values: widget.valueRange,
                   max: widget.max,
                   divisions: _getDivisions(),
                   labels: RangeLabels(
-                    _currentRangeValues.start.round().toString(),
-                    _currentRangeValues.end.round().toString(),
+                    widget.valueRange.start.round().toString(),
+                    widget.valueRange.end.round().toString(),
                   ),
                   onChanged: (RangeValues values) {
                     setState(() {
-                      _currentRangeValues = values;
+                      widget.valueRange = values;
+                      widget.onValueChanged?.call(values);
                     });
                   })),
           const SizedBox(
             width: 20,
           ),
           SizedBox(
-            width: 120,
+            width: 100,
             child: Text(
               textAlign: TextAlign.right,
-              '${_currentRangeValues.start.toStringAsFixed(widget.decimals ?? 0)} - ${_currentRangeValues.end.toStringAsFixed(widget.decimals ?? 0)} ${widget.units}',
+              '${widget.valueRange.start.toStringAsFixed(widget.decimals ?? 0)}-${widget.valueRange.end.toStringAsFixed(widget.decimals ?? 0)} ${widget.units}',
               style: ThemeColors.valueText,
             ),
           ),

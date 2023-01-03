@@ -17,33 +17,34 @@ class LightDelayNone extends LightDelay {
 }
 
 class LightDelayFixed extends LightDelay {
-  final int delayTime;
+  final int delayTimeMs;
 
-  LightDelayFixed(this.delayTime);
+  LightDelayFixed(this.delayTimeMs);
 
   @override
   void wait(Function callback) {
-    timer = Timer(Duration(milliseconds: delayTime), () {
+    timer = Timer(Duration(milliseconds: delayTimeMs), () {
       callback();
     });
   }
 }
 
 class LightDelayRandom extends LightDelay {
-  final int delayTimeMin;
-  final int delayTimeMax;
+  final int delayTimeMsMin;
+  final int delayTimeMsMax;
 
   LightDelayRandom({
-    required this.delayTimeMax,
-    required this.delayTimeMin,
+    required this.delayTimeMsMax,
+    required this.delayTimeMsMin,
   });
 
   final Random _random = Random();
 
   @override
   void wait(Function callback) {
-    var time = delayTimeMin + _random.nextInt(delayTimeMax - delayTimeMin);
-    timer = Timer(Duration(seconds: time), () {
+    var time =
+        delayTimeMsMin + _random.nextInt(delayTimeMsMax - delayTimeMsMin);
+    timer = Timer(Duration(milliseconds: time), () {
       callback();
     });
   }
@@ -55,11 +56,13 @@ abstract class LightDelayFactory {
       case LightDelayTimeType.none:
         return LightDelayNone();
       case LightDelayTimeType.fixed:
-        return LightDelayFixed(setting.fixedTime);
+        return LightDelayFixed(_secToMs(setting.fixedTime));
       case LightDelayTimeType.random:
         return LightDelayRandom(
-            delayTimeMin: setting.randomTimeMin,
-            delayTimeMax: setting.randomTimeMax);
+            delayTimeMsMin: _secToMs(setting.randomTimeMin),
+            delayTimeMsMax: _secToMs(setting.randomTimeMax));
     }
   }
+
+  static int _secToMs(double sec) => (sec * 1000).toInt();
 }

@@ -54,9 +54,10 @@ class ActivitySettingContainer extends StatelessWidget {
             padding: const EdgeInsets.only(right: 10),
             child: Icon(
               icon,
-              size: 40,
+              size: 26,
             )),
-        Column(
+        Flexible(
+            child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -69,6 +70,6 @@ class ActivitySettingContainer extends StatelessWidget {
               style: ThemeColors.subText,
             ),
           ],
-        )
+        ))
       ]));
 }

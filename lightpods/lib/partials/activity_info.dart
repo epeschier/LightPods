@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/logic/activity_lightup_mode.dart';
-import 'package:lightpods/models/activity_enums.dart';
-import 'package:lightpods/partials/activity_setting/activity_duration_setting.dart';
+import '../models/activity_enums.dart';
 import '../models/activity_setting.dart';
 import '../theme/theme.dart';
 
 class ActivityInfo extends StatelessWidget {
   final ActivitySetting setting;
+  final Function? onEdit;
 
-  const ActivityInfo({super.key, required this.setting});
+  const ActivityInfo({super.key, required this.setting, this.onEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +29,24 @@ class ActivityInfo extends StatelessWidget {
     );
   }
 
-  Widget _getName() => Text(
-        setting.name,
-        style: ThemeColors.headerText,
+  Widget _getName() => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            setting.name,
+            style: ThemeColors.headerText,
+          ),
+          InkWell(
+            splashColor: ThemeColors.primaryColor,
+            onTap: () {
+              onEdit?.call();
+            },
+            child: Icon(
+              Icons.edit,
+              color: ThemeColors.accentColor,
+            ),
+          )
+        ],
       );
 
   Widget _getDescription() => Row(
@@ -98,7 +112,7 @@ class ActivityInfo extends StatelessWidget {
       if (text.isNotEmpty) {
         text += ' or ';
       }
-      text += '${setting.timeout} s';
+      text += '${setting.timeout.toStringAsFixed(1)} s';
     }
 
     return text;
@@ -112,11 +126,12 @@ class ActivityInfo extends StatelessWidget {
     }
 
     if (setting.delayTimeType == LightDelayTimeType.fixed) {
-      text = '${setting.fixedTime} s';
+      text = '${setting.fixedTime.toStringAsFixed(1)} s';
     }
 
     if (setting.delayTimeType == LightDelayTimeType.random) {
-      text = '${setting.randomTimeMin} - ${setting.randomTimeMax} s';
+      text =
+          '${setting.randomTimeMin.toStringAsFixed(1)} - ${setting.randomTimeMax.toStringAsFixed(1)} s';
     }
 
     return text;

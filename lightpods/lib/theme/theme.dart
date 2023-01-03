@@ -20,7 +20,7 @@ class ThemeColors {
 
   static TextStyle headerText = const TextStyle(
     letterSpacing: 0.5,
-    fontSize: 20,
+    fontSize: 18,
   );
 
   static TextStyle valueText = const TextStyle(
@@ -31,7 +31,7 @@ class ThemeColors {
   static TextStyle subText = const TextStyle(
     color: Color.fromARGB(255, 128, 128, 128),
     letterSpacing: 0.5,
-    fontSize: 14,
+    fontSize: 12,
   );
 }
 
@@ -63,7 +63,7 @@ BottomNavigationBarThemeData bottomNavigationBarTheme =
 ButtonStyle toggleButtonStyle = ElevatedButton.styleFrom(
     backgroundColor: Colors.lightBlue[800],
     shape: const CircleBorder(),
-    padding: const EdgeInsets.all(20),
+    padding: const EdgeInsets.all(16),
     textStyle: TextStyle(
         color: Colors.grey[800], fontWeight: FontWeight.bold, fontSize: 40));
 

@@ -14,26 +14,26 @@ class LightsOutHit extends LightsOut {
 }
 
 class LightsOutTimeout extends LightsOut {
-  final int timeout;
-  LightsOutTimeout({required this.timeout});
+  final int timeoutMs;
+  LightsOutTimeout({required this.timeoutMs});
 
   @override
   void wait(Function callback) {
-    Timer(Duration(milliseconds: timeout), () {
+    Timer(Duration(milliseconds: timeoutMs), () {
       callback();
     });
   }
 }
 
 class LightsOutTimeoutOrHit extends LightsOut {
-  final int timeout;
+  final int timeoutMs;
 
   late LightsOutHit _lightsOutHit;
   late LightsOutTimeout _lightsOutTimeout;
 
-  LightsOutTimeoutOrHit({required this.timeout}) {
+  LightsOutTimeoutOrHit({required this.timeoutMs}) {
     _lightsOutHit = LightsOutHit();
-    _lightsOutTimeout = LightsOutTimeout(timeout: timeout);
+    _lightsOutTimeout = LightsOutTimeout(timeoutMs: timeoutMs);
   }
 
   @override
@@ -48,9 +48,11 @@ abstract class LightsOutFactory {
       case LightsOutType.hit:
         return LightsOutHit();
       case LightsOutType.timeout:
-        return LightsOutTimeout(timeout: setting.timeout);
+        return LightsOutTimeout(timeoutMs: _secToMs(setting.timeout));
       case LightsOutType.hitTimeout:
-        return LightsOutTimeoutOrHit(timeout: setting.timeout);
+        return LightsOutTimeoutOrHit(timeoutMs: _secToMs(setting.timeout));
     }
   }
+
+  static int _secToMs(double sec) => (sec * 1000).toInt();
 }
