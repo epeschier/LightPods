@@ -14,14 +14,16 @@ import '../services/bluetooth_device_service.dart';
 import '../services/pod_service.dart';
 import '../theme/theme.dart';
 
-class ActivityPage extends StatefulWidget {
-  ActivityPage({super.key});
+class WorkoutPage extends StatefulWidget {
+  final ActivitySetting setting;
+
+  const WorkoutPage({super.key, required this.setting});
 
   @override
-  State<ActivityPage> createState() => _ActivityPageState();
+  State<WorkoutPage> createState() => _WorkoutPageState();
 }
 
-class _ActivityPageState extends State<ActivityPage> {
+class _WorkoutPageState extends State<WorkoutPage> {
   final GlobalKey<ActivityTimerState> _activityTimerState =
       GlobalKey<ActivityTimerState>();
 
@@ -29,7 +31,7 @@ class _ActivityPageState extends State<ActivityPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Activity'),
+          title: Text(widget.setting.name),
         ),
         body: Column(children: [
           _getActivityTimer(),

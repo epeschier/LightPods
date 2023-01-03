@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/pages/workout_page.dart';
 import '../models/activity_enums.dart';
 import '../models/activity_setting.dart';
 import '../theme/theme.dart';
@@ -11,20 +12,19 @@ class ActivityInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _getCard();
-  }
-
-  Widget _getCard() {
     return Container(
-      margin: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        color: ThemeColors.backgroundColor,
+        color: ThemeColors.primaryColor,
         borderRadius: BorderRadius.circular(6),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [_getName(), _getDescription()],
+        children: [
+          _getName(),
+          _getDescription(context),
+        ],
       ),
     );
   }
@@ -49,7 +49,11 @@ class ActivityInfo extends StatelessWidget {
         ],
       );
 
-  Widget _getDescription() => Row(
+  Widget _getDescription(BuildContext context) => InkWell(
+      onTap: () {
+        _navigateToWorkout(context);
+      },
+      child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
           Flexible(
@@ -76,7 +80,13 @@ class ActivityInfo extends StatelessWidget {
                     _getLightupModeText(setting.lightupMode)),
               ]))
         ],
-      );
+      ));
+
+  void _navigateToWorkout(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return WorkoutPage(setting: setting);
+    }));
+  }
 
   Widget _getInfoPart(IconData icon, String text) => Container(
       padding: const EdgeInsets.all(8.0),

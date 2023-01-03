@@ -5,7 +5,7 @@ import '../components/number_ticker.dart';
 import '../models/activity_setting.dart';
 import '../partials/activity_setting/lights_out_setting.dart';
 import '../partials/multiple_choice.dart';
-import '../partials/activity_setting_container.dart';
+import '../partials/activity_setting/activity_setting_container.dart';
 import '../partials/activity_setting/activity_duration_setting.dart';
 import '../partials/activity_setting/lights_delay_time_widget.dart';
 import '../theme/theme.dart';
@@ -55,9 +55,7 @@ class _EditWorkoutState extends State<EditWorkout> {
         child: _getActivityCompetitionMode(setting.competitionMode.index),
       ),
       _getActivityDistractingPods(setting.numberOfDistractingPods),
-      ActivityDurationSetting(
-        value: setting.activityDuration,
-      ),
+      ActivityDurationSetting(value: setting.activityDuration),
       LightsOutWidget(
         value: setting.lightsOut,
       ),
@@ -113,9 +111,12 @@ class _EditWorkoutState extends State<EditWorkout> {
             minValue: 1,
             maxValue: 4,
             onValueChanged: (int value) {
-              widget.activitySetting.numberOfColorsPerPlayer = value;
+              setState(() {
+                widget.activitySetting.numberOfColorsPerPlayer = value;
+              });
             }),
-        subWidget: _getActivityColors(playerNumber, numberOfColors),
+        subWidget: _getActivityColors(
+            playerNumber, widget.activitySetting.numberOfColorsPerPlayer),
       );
 
   Widget _getActivityColors(int numberOfPlayers, int numberOfColors) {

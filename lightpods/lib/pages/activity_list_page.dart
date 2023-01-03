@@ -17,7 +17,14 @@ class _ActivityListPageState extends State<ActivityListPage> {
   @override
   void initState() {
     // TODO: get from stored activities
-    _list.add(_getActivitySetting());
+    var setting = _getActivitySetting();
+    _list.add(setting);
+
+    var secondSetting = ActivitySetting().copyWith(setting);
+    secondSetting.name = "Workout 2";
+    secondSetting.numberOfPods = 4;
+
+    _list.add(secondSetting);
 
     super.initState();
   }
@@ -33,7 +40,7 @@ class _ActivityListPageState extends State<ActivityListPage> {
     );
   }
 
-  ListView _getActivityList() {
+  Widget _getActivityList() {
     List<Widget> containers = <Widget>[];
 
     for (var setting in _list) {
