@@ -47,6 +47,7 @@ class _EditWorkoutState extends State<EditWorkout> {
     List<Widget> list = [
       _getActivityNumberOfPlayers(setting.numberOfPlayers),
       _getNumberOfPods(setting.numberOfPods),
+      _getActivePodsToLightUp(setting.numberOfSimultaneousActivePods),
       _getActivityStations(setting.numberOfStations),
       _getActivityPlayerColors(
           setting.numberOfPlayers, setting.numberOfColorsPerPlayer),
@@ -89,7 +90,7 @@ class _EditWorkoutState extends State<EditWorkout> {
   }
 
   Widget _getNumberOfPods(int numberOfPods) => ActivitySettingContainer(
-        icon: Icons.panorama_fish_eye,
+        icon: Icons.wb_twighlight,
         text: 'Pods',
         subText: 'Number of available Pods',
         widget: NumberTicker(
@@ -191,14 +192,21 @@ class _EditWorkoutState extends State<EditWorkout> {
         values: const ['Random', 'All at once'],
       );
 
-  final _buttonStyle = ElevatedButton.styleFrom(
-    shape: const StadiumBorder(),
-    padding: const EdgeInsets.only(left: 40, right: 40, top: 20, bottom: 20),
-    backgroundColor: ThemeColors.buttonColor,
-    foregroundColor: ThemeColors.backgroundColor,
-    textStyle: const TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 20,
-    ),
-  );
+  Widget _getActivePodsToLightUp(int value) => ActivitySettingContainer(
+        icon: Icons.share,
+        text: 'Active Pods',
+        subText: 'Number of pods that will light up simultaneously',
+        widget: NumberTicker(
+          value: value,
+          minValue: 1,
+          maxValue: 4, // TODO: max available pods
+          onValueChanged: _onActivePodsToLightUpChanged,
+        ),
+      );
+
+  void _onActivePodsToLightUpChanged(int value) {
+    setState(() {
+      widget.activitySetting.numberOfSimultaneousActivePods = value;
+    });
+  }
 }

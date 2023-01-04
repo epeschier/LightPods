@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
 
-import 'pod_base.dart';
+import '../logic/pod/pod_base.dart';
 
 class FakePod extends PodBase {
   final String _id;
 
   FakePod(this._id);
 
+  Function? onColorUpdated;
+
   @override
   String get id => _id;
 
   @override
-  void lightOff() {}
+  void lightOff() {
+    onColorUpdated?.call(Colors.grey);
+  }
 
   @override
   void setLight(Color color) {
+    onColorUpdated?.call(color);
     print("lighton $color");
   }
 
   void initiateClickCallback() {
-    onHit!();
+    onHit?.call();
   }
 
   @override
@@ -38,7 +43,7 @@ class FakePod extends PodBase {
   }
 
   @override
-  String get name => "dummy";
+  String get name => "dummy $id";
 
   @override
   void connect() {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/models/activity_enums.dart';
 
 import '../components/toggle_options.dart';
 import '../theme/theme.dart';
+import 'activity_setting/activity_description_heading.dart';
 
 class MultipleChoice extends StatelessWidget {
   final IconData icon;
@@ -10,6 +12,7 @@ class MultipleChoice extends StatelessWidget {
   final List<String> values;
   final Widget? subWidget;
   final Function onItemSelected;
+  final String? valueDescription;
   int selectedItem;
 
   MultipleChoice(
@@ -19,6 +22,7 @@ class MultipleChoice extends StatelessWidget {
       required this.values,
       this.subWidget,
       this.subText,
+      this.valueDescription,
       required this.selectedItem,
       required this.onItemSelected});
 
@@ -37,7 +41,12 @@ class MultipleChoice extends StatelessWidget {
 
   List<Widget> _buildWidgetList() {
     var list = [
-      _getIconAndLabel(),
+      ActivityDescriptionHeading(
+        value: valueDescription,
+        icon: icon,
+        text: text,
+        subText: subText,
+      ),
       const SizedBox(height: 10),
       _getMultipleChoice(),
       const SizedBox(height: 5),
@@ -54,28 +63,4 @@ class MultipleChoice extends StatelessWidget {
         selectedItem: selectedItem,
         onClick: onItemSelected,
       );
-
-  Widget _getIconAndLabel() => Row(children: [
-        Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Icon(
-              icon,
-              size: 40,
-            )),
-        Flexible(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              text,
-              style: ThemeColors.headerText,
-            ),
-            Text(
-              subText ?? '',
-              style: ThemeColors.subText,
-            ),
-          ],
-        ))
-      ]);
 }

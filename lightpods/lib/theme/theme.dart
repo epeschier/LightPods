@@ -23,9 +23,20 @@ class ThemeColors {
     fontSize: 18,
   );
 
+  static TextStyle headerValueText = TextStyle(
+    color: ThemeColors.lightPrimaryColor,
+    letterSpacing: 0.5,
+    fontSize: 14,
+  );
+
   static TextStyle valueText = const TextStyle(
     letterSpacing: 0.5,
     fontSize: 24,
+  );
+
+  static TextStyle sliderHeaderText = const TextStyle(
+    letterSpacing: 0.5,
+    fontSize: 16,
   );
 
   static TextStyle subText = const TextStyle(
@@ -49,6 +60,7 @@ ThemeData appTheme = ThemeData(
     bottomNavigationBarTheme: bottomNavigationBarTheme,
     toggleButtonsTheme: toggleButtonsThemeData,
     floatingActionButtonTheme: floatingActionButtonThemeData,
+    sliderTheme: sliderTheme,
     appBarTheme: appbarTheme);
 
 BottomNavigationBarThemeData bottomNavigationBarTheme =
@@ -68,13 +80,13 @@ ButtonStyle toggleButtonStyle = ElevatedButton.styleFrom(
         color: Colors.grey[800], fontWeight: FontWeight.bold, fontSize: 40));
 
 ToggleButtonsThemeData toggleButtonsThemeData = ToggleButtonsThemeData(
-  borderRadius: const BorderRadius.all(Radius.circular(8)),
+  borderRadius: const BorderRadius.all(Radius.circular(4)),
   selectedBorderColor: ThemeColors.selectedItemColor,
   selectedColor: ThemeColors.backgroundColor,
   fillColor: ThemeColors.selectedItemColor,
   color: Colors.white,
   constraints: const BoxConstraints(
-    minHeight: 40.0,
+    minHeight: 36.0,
     minWidth: 75.0,
   ),
   textStyle: const TextStyle(letterSpacing: 0.5, fontSize: 16),
@@ -87,3 +99,10 @@ FloatingActionButtonThemeData floatingActionButtonThemeData =
 
 AppBarTheme appbarTheme =
     AppBarTheme(backgroundColor: ThemeColors.backgroundColor);
+
+SliderThemeData sliderTheme = SliderThemeData(
+    thumbColor: ThemeColors.accentColor,
+    activeTrackColor: ThemeColors.primaryColor,
+    inactiveTrackColor: ThemeColors.darkPrimaryColor,
+    activeTickMarkColor: ThemeColors.backgroundColor,
+    inactiveTickMarkColor: ThemeColors.backgroundColor);

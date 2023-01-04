@@ -5,7 +5,7 @@ import 'package:lightpods/partials/pod_state.dart';
 import 'package:lightpods/logic/pod/pod.dart';
 import 'package:lightpods/services/bluetooth_device_service.dart';
 
-import '../logic/pod/fake_pod.dart';
+import '../test/fake_pod.dart';
 
 class DeviceList extends StatefulWidget {
   const DeviceList({super.key});

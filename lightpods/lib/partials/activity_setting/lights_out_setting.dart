@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/slider_input.dart';
-import '../../models/activity_setting.dart';
 import '../../models/activity_enums.dart';
+import '../../models/lights_out_setting.dart';
 import '../multiple_choice.dart';
 
 class LightsOutWidget extends StatefulWidget {
@@ -30,18 +30,22 @@ class _LightsOutWidgetState extends State<LightsOutWidget> {
   Widget _getLightsOut() => MultipleChoice(
         icon: Icons.highlight,
         text: 'Lights out',
+        valueDescription: _getValueText(),
         selectedItem: _selectedIndex,
         onItemSelected: _onMultipleChoiceChanged,
         subText: ActivityDescription.lightsOutExplanation[_selectedIndex],
         values: const ['Hit', 'Timeout', 'Both'],
         subWidget: (_selectedIndex > 0)
             ? SliderInput(
+                description: 'Lights out',
                 value: widget.value.timeout,
                 max: 5,
                 decimals: 1,
                 units: 's',
                 onValueChanged: (double value) {
-                  widget.value.timeout = value;
+                  setState(() {
+                    widget.value.timeout = value;
+                  });
                 },
               )
             : null,
@@ -53,4 +57,8 @@ class _LightsOutWidgetState extends State<LightsOutWidget> {
       _selectedIndex = index;
     });
   }
+
+  String? _getValueText() => (_selectedIndex > 0)
+      ? '${widget.value.timeout.toStringAsFixed(1)} sec.'
+      : null;
 }

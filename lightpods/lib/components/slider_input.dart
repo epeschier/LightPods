@@ -3,6 +3,7 @@ import '../components/value_widget.dart';
 import '../theme/theme.dart';
 
 class SliderInput extends ValueWidget<double> {
+  final String description;
   final String? units;
   final double max;
   int? decimals;
@@ -13,6 +14,7 @@ class SliderInput extends ValueWidget<double> {
       onValueChanged,
       this.decimals,
       this.units,
+      required this.description,
       required this.max,
       this.value})
       : super(onValueChanged);
@@ -32,45 +34,34 @@ class _SliderInput extends State<SliderInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const SizedBox(
-        height: 10,
+        height: 6,
       ),
-      Row(
-        children: [
-          Expanded(
-            child: Slider(
-              value: _currentSliderValue,
-              max: widget.max,
-              divisions: _getDivisions(),
-              label: _currentSliderValue.round().toString(),
-              onChanged: (double value) {
-                setState(() {
-                  _currentSliderValue = value;
-                });
-                widget.onValueChanged?.call(value);
-              },
-            ),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          SizedBox(
-            width: 80,
-            child: Text(
-              textAlign: TextAlign.right,
-              _getValueString(),
-              style: ThemeColors.valueText,
-            ),
-          ),
-        ],
-      )
+      _getSliderHeader(),
+      _getSlider(),
     ]);
   }
 
-  String _getValueString() =>
-      '${_currentSliderValue.toStringAsFixed(widget.decimals ?? 0)} ${widget.units ?? ''}'
-          .trimRight();
+  Widget _getSliderHeader() => Padding(
+      padding: const EdgeInsets.only(left: 12),
+      child: Text(
+        widget.description,
+        style: ThemeColors.sliderHeaderText,
+      ));
+
+  Widget _getSlider() => Slider(
+        value: _currentSliderValue,
+        max: widget.max,
+        divisions: _getDivisions(),
+        label: _currentSliderValue.round().toString(),
+        onChanged: (double value) {
+          setState(() {
+            _currentSliderValue = value;
+          });
+          widget.onValueChanged?.call(value);
+        },
+      );
 
   int _getDivisions() =>
       widget.max.toInt() *

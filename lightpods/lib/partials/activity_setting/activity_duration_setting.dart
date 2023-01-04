@@ -3,6 +3,7 @@ import 'package:lightpods/components/slider_input.dart';
 import 'package:lightpods/partials/multiple_choice.dart';
 import '../../models/activity_enums.dart';
 import '../../models/activity_setting.dart';
+import '../../models/duration_setting.dart';
 
 class ActivityDurationSetting extends StatefulWidget {
   final DurationSetting value;
@@ -23,6 +24,7 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
   Widget _getActivityDuration() => MultipleChoice(
         icon: Icons.schedule,
         text: 'Activity Duration',
+        valueDescription: _getValueText(),
         selectedItem: widget.value.durationType.index,
         onItemSelected: _onLightsOutExplanationToggleClick,
         subText: ActivityDescription
@@ -43,6 +45,7 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
           Visibility(
             visible: widget.value.durationType != ActivityDurationType.timeout,
             child: SliderInput(
+                description: 'Hits',
                 onValueChanged: _onNumberOfHitsChanged,
                 value: widget.value.numberOfHits,
                 max: 100,
@@ -51,6 +54,7 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
           Visibility(
             visible: widget.value.durationType.index > 0,
             child: SliderInput(
+                description: 'Timeout',
                 onValueChanged: _onTimeoutChanged,
                 value: widget.value.timeout,
                 max: 10,
@@ -60,10 +64,31 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
       );
 
   void _onNumberOfHitsChanged(double value) {
-    widget.value.numberOfHits = value;
+    setState(() {
+      widget.value.numberOfHits = value;
+    });
   }
 
   void _onTimeoutChanged(double value) {
-    widget.value.timeout = value;
+    setState(() {
+      widget.value.timeout = value;
+    });
+  }
+
+  String _getValueText() {
+    String description = '';
+    if (widget.value.durationType != ActivityDurationType.timeout) {
+      description += '${widget.value.numberOfHits.toInt()} hits';
+    }
+
+    if (widget.value.durationType == ActivityDurationType.hitsAndTimeout) {
+      description += ' / ';
+    }
+
+    if (widget.value.durationType != ActivityDurationType.numberOfHits) {
+      description += '${widget.value.timeout.toStringAsFixed(1)} sec.';
+    }
+
+    return description;
   }
 }

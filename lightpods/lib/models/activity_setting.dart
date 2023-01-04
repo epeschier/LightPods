@@ -1,6 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:lightpods/models/activity_enums.dart';
 
+import 'duration_setting.dart';
+import 'light_delay_time_setting.dart';
+import 'lights_out_setting.dart';
+
 class ActivitySettingList extends ChangeNotifier {
   final List<ActivitySetting> _list = [];
 
@@ -17,6 +21,7 @@ class ActivitySetting {
 
   late int numberOfStations = 1;
   late int numberOfPods = 2;
+  late int numberOfSimultaneousActivePods = 1;
   late int numberOfPlayers = 1;
   late int numberOfColorsPerPlayer = 1;
   late int numberOfDistractingPods = 0;
@@ -35,6 +40,7 @@ class ActivitySetting {
     id = obj.id;
     numberOfStations = obj.numberOfStations;
     numberOfPods = obj.numberOfPods;
+    numberOfSimultaneousActivePods = obj.numberOfSimultaneousActivePods;
     numberOfPlayers = obj.numberOfPlayers;
     numberOfColorsPerPlayer = obj.numberOfColorsPerPlayer;
     numberOfDistractingPods = obj.numberOfDistractingPods;
@@ -48,50 +54,20 @@ class ActivitySetting {
   }
 }
 
-class DurationSetting {
-  late ActivityDurationType durationType = ActivityDurationType.timeout;
-  late double numberOfHits = 10;
-  late double timeout = 2;
 
-  DurationSetting copyWith(DurationSetting obj) {
-    durationType = obj.durationType;
-    numberOfHits = obj.numberOfHits;
-    timeout = obj.timeout;
 
-    return this;
-  }
-}
 
-class LightDelayTimeSetting {
-  late LightDelayTimeType delayTimeType = LightDelayTimeType.random;
-  late double fixedTime = 2;
-  late double randomTimeMin = 1;
-  late double randomTimeMax = 2;
 
-  LightDelayTimeSetting copyWith(LightDelayTimeSetting obj) {
-    delayTimeType = obj.delayTimeType;
-    fixedTime = obj.fixedTime;
-    randomTimeMin = obj.randomTimeMin;
-    randomTimeMax = obj.randomTimeMax;
 
-    return this;
-  }
-}
-
-class LightsOutSetting {
-  late LightsOutType lightsOut = LightsOutType.hit;
-  late double timeout = 2;
-
-  LightsOutSetting copyWith(LightsOutSetting value) {
-    lightsOut = value.lightsOut;
-    timeout = value.timeout;
-
-    return this;
-  }
-}
 
 /*
 Add some validation as some settings do not make sense:
 - number of pods <= 2 & LightDelayTimeType.none
+
+Home base Pod color will determine the color the Home Base Pod will light up each time.
+
+Distracting Pods
+Colors
+Strike Out, if chosen, will determine the number of strikes (false hits) until the activity will stop.
 
 */

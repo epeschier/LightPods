@@ -4,6 +4,7 @@ import 'package:lightpods/components/value_widget.dart';
 import '../theme/theme.dart';
 
 class RangedSliderInput extends ValueWidget<RangeValues> {
+  final String description;
   final String units;
   final double max;
   int? decimals;
@@ -13,6 +14,7 @@ class RangedSliderInput extends ValueWidget<RangeValues> {
       {super.key,
       this.decimals,
       onValueChanged,
+      required this.description,
       required this.units,
       required this.max,
       required this.valueRange})
@@ -25,42 +27,36 @@ class RangedSliderInput extends ValueWidget<RangeValues> {
 class _RangedSliderInput extends State<RangedSliderInput> {
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const SizedBox(
-        height: 10,
+        height: 6,
       ),
-      Row(
-        children: [
-          Expanded(
-              child: RangeSlider(
-                  values: widget.valueRange,
-                  max: widget.max,
-                  divisions: _getDivisions(),
-                  labels: RangeLabels(
-                    widget.valueRange.start.round().toString(),
-                    widget.valueRange.end.round().toString(),
-                  ),
-                  onChanged: (RangeValues values) {
-                    setState(() {
-                      widget.valueRange = values;
-                      widget.onValueChanged?.call(values);
-                    });
-                  })),
-          const SizedBox(
-            width: 20,
-          ),
-          SizedBox(
-            width: 100,
-            child: Text(
-              textAlign: TextAlign.right,
-              '${widget.valueRange.start.toStringAsFixed(widget.decimals ?? 0)}-${widget.valueRange.end.toStringAsFixed(widget.decimals ?? 0)} ${widget.units}',
-              style: ThemeColors.valueText,
-            ),
-          ),
-        ],
-      )
+      _getSliderHeader(),
+      _getSlider(),
     ]);
   }
+
+  Widget _getSliderHeader() => Padding(
+      padding: EdgeInsets.only(left: 12),
+      child: Text(
+        widget.description,
+        style: ThemeColors.sliderHeaderText,
+      ));
+
+  Widget _getSlider() => RangeSlider(
+      values: widget.valueRange,
+      max: widget.max,
+      divisions: _getDivisions(),
+      labels: RangeLabels(
+        widget.valueRange.start.round().toString(),
+        widget.valueRange.end.round().toString(),
+      ),
+      onChanged: (RangeValues values) {
+        setState(() {
+          widget.valueRange = values;
+          widget.onValueChanged?.call(values);
+        });
+      });
 
   int _getDivisions() =>
       widget.max.toInt() *

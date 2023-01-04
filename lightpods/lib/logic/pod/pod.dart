@@ -128,9 +128,7 @@ class Pod extends PodBase {
 
   void _listenForButton() {
     _buttonCharacteristic.value.listen((value) {
-      if (onHit != null) {
-        onHit!();
-      }
+      onHit?.call();
     });
     _buttonCharacteristic.setNotifyValue(true);
   }

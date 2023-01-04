@@ -10,6 +10,7 @@ void main() {
   GetIt.I.registerLazySingleton<BluetoothDeviceService>(
       () => BluetoothDeviceService());
   GetIt.I.registerLazySingleton<PodService>(() => PodService());
+
   runApp(const MyApp());
 }
 

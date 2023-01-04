@@ -4,6 +4,7 @@ import 'package:lightpods/logic/callback_wait.dart';
 
 import '../models/activity_enums.dart';
 import '../models/activity_setting.dart';
+import '../models/light_delay_time_setting.dart';
 
 abstract class LightDelay extends CallbackWait {
   LightDelay();

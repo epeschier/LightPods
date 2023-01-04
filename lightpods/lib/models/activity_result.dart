@@ -12,6 +12,10 @@ class ActivityResult {
   }
 
   int getAverageReationTime() {
+    if (hitReactionTimeInMs.isEmpty) {
+      return 0;
+    }
+
     double total = 0;
     for (var element in hitReactionTimeInMs) {
       total += element;

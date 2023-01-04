@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lightpods/components/pod_button.dart';
-import 'package:lightpods/components/rounded_icon_button.dart';
+import 'package:lightpods/test/pod_button.dart';
 import 'package:lightpods/models/activity_result.dart';
-import '../logic/pod/fake_pod.dart';
+import '../test/fake_pod.dart';
 import '../logic/pod/pod_base.dart';
-import '../models/activity_enums.dart';
 import '../logic/activity_factory.dart';
 import '../models/activity_setting.dart';
 import '../partials/activity_timer.dart';
@@ -36,7 +34,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
         body: Column(children: [
           _getActivityTimer(),
           _infoCards(),
-          //  _getDummyPodButtons()
+          _getDummyPodButtons(widget.setting)
         ]));
   }
 
@@ -107,7 +105,6 @@ class _WorkoutPageState extends State<WorkoutPage> {
   }
 
   void _onActivityEnded() {
-    print("activity ended");
     _activityTimerState.currentState!.stop();
   }
 
@@ -119,73 +116,31 @@ class _WorkoutPageState extends State<WorkoutPage> {
     });
   }
 
-  Widget _getDummyPodButtons() => Row(
-        children: [
-          RoundedIconButton(
-              icon: Icons.access_alarm,
-              onClick: () {
-                _clickFake('1');
-              }),
-          RoundedIconButton(
-              icon: Icons.done,
-              onClick: () {
-                _clickFake('2');
-              }),
-          PodButton(
-              onClick: (String id) {
-                print("xx $id");
-              },
-              color: Colors.red,
-              id: "1")
-        ],
-      );
+  final List<FakePod> _podList = [];
 
-  late List<PodBase> _podList;
+  Widget _getDummyPodButtons(ActivitySetting setting) {
+    List<PodButton> buttons = [];
+    for (int i = 0; i < setting.numberOfPods; i++) {
+      var fakePod = FakePod(i.toString());
+      _podList.add(fakePod);
+
+      buttons.add(PodButton(
+        pod: fakePod,
+      ));
+    }
+    return Row(
+      children: buttons,
+    );
+  }
+
+  //late List<PodBase> _podList;
 
   Activity _createActivity() {
-    final PodService _podService = GetIt.I.get<PodService>();
-    _podList = _podService.getPods();
+    //final PodService _podService = GetIt.I.get<PodService>();
+    //_podList = _podService.getPods();
 
-    print("Create activity with ${_podList.length} pods");
-    //_podList = _createFakes(); // = _podService.
-
-    var setting = ActivitySetting();
-    setting.numberOfPlayers = 1;
-    setting.numberOfPods = 2;
-    setting.numberOfStations = 1;
-    setting.numberOfColorsPerPlayer = 1;
-    setting.numberOfDistractingPods = 0;
-
-    setting.activityDuration = DurationSetting();
-    setting.activityDuration.durationType = ActivityDurationType.hitsAndTimeout;
-    setting.activityDuration.timeout = 4;
-    setting.activityDuration.numberOfHits = 10;
-
-    setting.lightsOut = LightsOutSetting();
-    setting.lightsOut.lightsOut = LightsOutType.hit;
-
-    setting.lightDelayTime = LightDelayTimeSetting();
-    setting.lightDelayTime.delayTimeType = LightDelayTimeType.fixed;
-    setting.lightDelayTime.fixedTime = 2000;
-
-    setting.lightupMode = LightupModeType.random;
-
-    Activity activity = ActivityFactory.create(setting, _podList);
+    Activity activity = ActivityFactory.create(widget.setting, _podList);
 
     return activity;
-  }
-
-  void _clickFake(String id) {
-    var pod = _podList.firstWhere((x) => x.id == id);
-    //  pod.initiateClickCallback();
-  }
-
-  List<FakePod> _createFakes() {
-    List<FakePod> list = [];
-
-    list.add(FakePod('1'));
-    list.add(FakePod('2'));
-
-    return list;
   }
 }

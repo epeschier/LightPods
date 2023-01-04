@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'activity_description_heading.dart';
 
 import '../../theme/theme.dart';
 
@@ -49,27 +50,9 @@ class ActivitySettingContainer extends StatelessWidget {
   }
 
   Widget _getIconAndLabel() => Expanded(
-          child: Row(children: [
-        Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Icon(
-              icon,
-              size: 26,
-            )),
-        Flexible(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              text,
-              style: ThemeColors.headerText,
-            ),
-            Text(
-              subText ?? '',
-              style: ThemeColors.subText,
-            ),
-          ],
-        ))
-      ]));
+          child: ActivityDescriptionHeading(
+        icon: icon,
+        text: text,
+        subText: subText,
+      ));
 }

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lightpods/pages/workout_page.dart';
 import '../models/activity_enums.dart';
 import '../models/activity_setting.dart';
+import '../models/duration_setting.dart';
+import '../models/light_delay_time_setting.dart';
+import '../models/lights_out_setting.dart';
 import '../theme/theme.dart';
 
 class ActivityInfo extends StatelessWidget {
@@ -61,7 +64,7 @@ class ActivityInfo extends StatelessWidget {
               child: Column(children: [
                 _getInfoPart(Icons.person, "${setting.numberOfPlayers} player"),
                 _getInfoPart(
-                    Icons.panorama_fish_eye, "${setting.numberOfPods} pods"),
+                    Icons.wb_twighlight, "${setting.numberOfPods} pods"),
                 _getInfoPart(
                     Icons.palette, "${setting.numberOfColorsPerPlayer} color"),
                 _getInfoPart(

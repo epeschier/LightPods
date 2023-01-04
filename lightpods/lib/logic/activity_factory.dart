@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/logic/activity_lightup_mode.dart';
-
+import 'activity_lightup_mode.dart';
 import 'activity.dart';
 import 'activity_duration.dart';
 import 'activity_pod.dart';

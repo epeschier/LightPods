@@ -3,6 +3,7 @@ import '../../models/activity_setting.dart';
 import '../../components/ranged_slider_input.dart';
 import '../../components/slider_input.dart';
 import '../../models/activity_enums.dart';
+import '../../models/light_delay_time_setting.dart';
 import '../multiple_choice.dart';
 
 class LightDelayTimeWidget extends StatefulWidget {
@@ -28,6 +29,7 @@ class _LightDelayTimeWidgetState extends State<LightDelayTimeWidget> {
   Widget _getLightsOut() => MultipleChoice(
         icon: Icons.hourglass_empty,
         text: 'Light Delay Time',
+        valueDescription: _getValueText(),
         selectedItem: widget.value.delayTimeType.index,
         onItemSelected: _onLightsDelayToggleClick,
         subText: ActivityDescription
@@ -45,28 +47,48 @@ class _LightDelayTimeWidgetState extends State<LightDelayTimeWidget> {
   Widget? _getSubwidget() {
     if (widget.value.delayTimeType == LightDelayTimeType.random) {
       return RangedSliderInput(
+        description: 'Timeout',
         valueRange:
             RangeValues(widget.value.randomTimeMin, widget.value.randomTimeMax),
         max: 5,
         decimals: 1,
         units: 's',
         onValueChanged: (RangeValues value) {
-          widget.value.randomTimeMin = value.start;
-          widget.value.randomTimeMax = value.end;
+          setState(() {
+            widget.value.randomTimeMin = value.start;
+            widget.value.randomTimeMax = value.end;
+          });
         },
       );
     }
     if (widget.value.delayTimeType == LightDelayTimeType.fixed) {
       return SliderInput(
+        description: 'Timeout',
         value: widget.value.fixedTime,
         max: 5,
         decimals: 1,
         units: 's',
         onValueChanged: (double value) {
-          widget.value.fixedTime = value;
+          setState(() {
+            widget.value.fixedTime = value;
+          });
         },
       );
     }
     return null;
   }
+
+  String? _getValueText() {
+    if (widget.value.delayTimeType == LightDelayTimeType.fixed) {
+      return _getFixedValueText();
+    } else if (widget.value.delayTimeType == LightDelayTimeType.random) {
+      return _getRandomValueText();
+    }
+    return null;
+  }
+
+  String _getFixedValueText() =>
+      '${widget.value.fixedTime.toStringAsFixed(1)} sec.';
+  String _getRandomValueText() =>
+      '${widget.value.randomTimeMin.toStringAsFixed(1)}-${widget.value.randomTimeMax.toStringAsFixed(1)} sec.';
 }

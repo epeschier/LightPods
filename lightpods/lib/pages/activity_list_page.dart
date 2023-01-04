@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/activity_setting.dart';
+import '../models/duration_setting.dart';
+import '../models/light_delay_time_setting.dart';
+import '../models/lights_out_setting.dart';
 import 'edit_workout_page.dart';
 import '../partials/activity_info.dart';
 import '../models/activity_enums.dart';
@@ -122,7 +125,7 @@ class _ActivityListPageState extends State<ActivityListPage> {
     setting.competitionMode = CompetitionType.regular;
     setting.lightsOut = lightsOut;
     setting.lightDelayTime = lightDelay;
-    setting.lightupMode = LightupModeType.allAtOnce;
+    setting.lightupMode = LightupModeType.random;
 
     return setting;
   }

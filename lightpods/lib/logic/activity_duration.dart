@@ -2,6 +2,8 @@ import 'package:lightpods/models/activity_enums.dart';
 import 'package:lightpods/models/activity_result.dart';
 import 'package:lightpods/models/activity_setting.dart';
 
+import '../models/duration_setting.dart';
+
 abstract class ActivityDuration {
   bool isDone(ActivityResult activityResult);
 }
@@ -11,25 +13,16 @@ class ActivityDurationHits extends ActivityDuration {
   ActivityDurationHits(this.maxHits);
 
   @override
-  bool isDone(ActivityResult activityResult) =>
-      _hasMaxHits(activityResult.hits);
-
-  bool _hasMaxHits(int hits) {
-    return hits >= (maxHits);
-  }
+  bool isDone(ActivityResult activityResult) => activityResult.hits >= maxHits;
 }
 
 class ActivityDurationTimeout extends ActivityDuration {
-  final double maxDuration;
-  ActivityDurationTimeout(this.maxDuration);
+  final double maxDurationSec;
+  ActivityDurationTimeout(this.maxDurationSec);
 
   @override
   bool isDone(ActivityResult activityResult) =>
-      _hasMaxTime(activityResult.elapsedTimeInSeconds);
-
-  bool _hasMaxTime(int time) {
-    return time >= (maxDuration);
-  }
+      activityResult.elapsedTimeInSeconds >= maxDurationSec * 60;
 }
 
 class ActivityDurationHitsOrTimeout extends ActivityDuration {
