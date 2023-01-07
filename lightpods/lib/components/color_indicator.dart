@@ -16,7 +16,7 @@ class _ColorIndicatorState extends State<ColorIndicator> {
   List<Widget> getColorBullets(int number) {
     List<Widget> list = [];
     for (var i = 0; i < widget.numberOfColors; i++) {
-      list.add(_colorBullet(PodColors.palette[widget.playerNumber][i]));
+      list.add(_colorBullet(PodColors.palette[(widget.playerNumber * 4) + i]));
     }
     return list;
   }

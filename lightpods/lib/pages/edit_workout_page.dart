@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/models/activity_enums.dart';
+import 'package:lightpods/partials/activity_setting/strike_out_setting.dart';
 import '../components/color_indicator.dart';
 import '../components/number_ticker.dart';
 import '../models/activity_setting.dart';
@@ -19,13 +20,21 @@ class EditWorkout extends StatefulWidget {
 }
 
 class _EditWorkoutState extends State<EditWorkout> {
+  late bool _inTextEditMode = false;
+  final TextEditingController _controller = TextEditingController();
   bool _showCompetitionMode = false;
+
+  @override
+  void initState() {
+    _addListenerForUpdatingName();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Workout'),
+        title: _getWorkoutName(widget.activitySetting.name),
         actions: [
           Padding(
               padding: const EdgeInsets.only(right: 20.0),
@@ -45,17 +54,17 @@ class _EditWorkoutState extends State<EditWorkout> {
     var setting = widget.activitySetting;
 
     List<Widget> list = [
-      _getActivityNumberOfPlayers(setting.numberOfPlayers),
+      _getNumberOfPlayers(setting.numberOfPlayers),
       _getNumberOfPods(setting.numberOfPods),
       _getActivePodsToLightUp(setting.numberOfSimultaneousActivePods),
-      _getActivityStations(setting.numberOfStations),
-      _getActivityPlayerColors(
+      _getNumberOfStations(setting.numberOfStations),
+      _getPlayerColors(
           setting.numberOfPlayers, setting.numberOfColorsPerPlayer),
       Visibility(
         visible: _showCompetitionMode,
-        child: _getActivityCompetitionMode(setting.competitionMode.index),
+        child: _getCompetitionMode(setting.competitionMode.index),
       ),
-      _getActivityDistractingPods(setting.numberOfDistractingPods),
+      _getNumberOfDistractingPods(setting.numberOfDistractingPods),
       ActivityDurationSetting(value: setting.activityDuration),
       LightsOutWidget(
         value: setting.lightsOut,
@@ -63,14 +72,39 @@ class _EditWorkoutState extends State<EditWorkout> {
       LightDelayTimeWidget(
         value: setting.lightDelayTime,
       ),
-      _getActivityLightupMode(setting.lightupMode.index),
+      StrikeOutSetting(value: setting.strikeOut),
     ];
 
     return list;
   }
 
-  Widget _getActivityNumberOfPlayers(int numberOfPlayers) =>
-      ActivitySettingContainer(
+  void _addListenerForUpdatingName() {
+    _controller.addListener(() {
+      widget.activitySetting.name = _controller.text;
+    });
+  }
+
+  Widget _getWorkoutName(String name) =>
+      (_inTextEditMode) ? _getEditName(name) : _getName(name);
+
+  Widget _getName(String name) => InkWell(
+        child: Text(name),
+        onTap: () {
+          setState(() {
+            _inTextEditMode = true;
+          });
+        },
+      );
+
+  Widget _getEditName(String name) {
+    _controller.text = name;
+
+    return TextField(
+        controller: _controller,
+        decoration: const InputDecoration(border: UnderlineInputBorder()));
+  }
+
+  Widget _getNumberOfPlayers(int numberOfPlayers) => ActivitySettingContainer(
         icon: Icons.person,
         text: 'Players',
         subText: 'per Station',
@@ -102,7 +136,7 @@ class _EditWorkoutState extends State<EditWorkout> {
         ),
       );
 
-  Widget _getActivityPlayerColors(int playerNumber, int numberOfColors) =>
+  Widget _getPlayerColors(int playerNumber, int numberOfColors) =>
       ActivitySettingContainer(
         icon: Icons.palette,
         text: 'Colors',
@@ -146,7 +180,7 @@ class _EditWorkoutState extends State<EditWorkout> {
         ],
       );
 
-  Widget _getActivityDistractingPods(int numberOfDistractingPods) =>
+  Widget _getNumberOfDistractingPods(int numberOfDistractingPods) =>
       ActivitySettingContainer(
         icon: Icons.alt_route,
         text: 'Distracting Pods',
@@ -159,19 +193,20 @@ class _EditWorkoutState extends State<EditWorkout> {
         ),
       );
 
-  Widget _getActivityStations(int numberOfStations) => ActivitySettingContainer(
+  Widget _getNumberOfStations(int numberOfStations) => ActivitySettingContainer(
         icon: Icons.flag,
         text: 'Stations',
         widget: NumberTicker(
           value: numberOfStations,
           minValue: 1,
+          maxValue: 2,
           onValueChanged: (int value) {
             widget.activitySetting.numberOfStations = value;
           },
         ),
       );
 
-  Widget _getActivityCompetitionMode(int competitionMode) => MultipleChoice(
+  Widget _getCompetitionMode(int competitionMode) => MultipleChoice(
         icon: Icons.sports_kabaddi,
         selectedItem: competitionMode,
         onItemSelected: (int index) {
@@ -180,16 +215,6 @@ class _EditWorkoutState extends State<EditWorkout> {
         },
         text: 'Competition Mode',
         values: const ['Regular', 'First to hit'],
-      );
-
-  Widget _getActivityLightupMode(int lightupMode) => MultipleChoice(
-        icon: Icons.workspaces_filled,
-        selectedItem: lightupMode,
-        onItemSelected: (int index) {
-          widget.activitySetting.lightupMode = LightupModeType.values[index];
-        },
-        text: 'Lightup Mode',
-        values: const ['Random', 'All at once'],
       );
 
   Widget _getActivePodsToLightUp(int value) => ActivitySettingContainer(

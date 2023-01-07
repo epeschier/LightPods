@@ -1,7 +1,7 @@
 import '../logic/pod/pod_base.dart';
 
 class PodService {
-  late List<PodBase> _pods = [];
+  final List<PodBase> _pods = [];
 
   List<PodBase> getPods() => _pods;
 

@@ -14,10 +14,11 @@ class RoundedIconButton extends StatelessWidget {
       onPressed: onClick,
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
+        padding: const EdgeInsets.all(14),
         backgroundColor: ThemeColors.buttonColor,
         foregroundColor: ThemeColors.backgroundColor,
       ),
-      child: Icon(icon, size: 50),
+      child: Icon(icon, size: 40),
     );
   }
 }

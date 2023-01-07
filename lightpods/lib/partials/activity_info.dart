@@ -79,8 +79,10 @@ class ActivityInfo extends StatelessWidget {
                     Icons.highlight, _getLightsOutText(setting.lightsOut)),
                 _getInfoPart(Icons.hourglass_empty,
                     _getLightsDelaytimeText(setting.lightDelayTime)),
-                _getInfoPart(Icons.workspaces_filled,
-                    _getLightupModeText(setting.lightupMode)),
+                Visibility(
+                    visible: setting.strikeOut.value,
+                    child: _getInfoPart(Icons.logout,
+                        setting.strikeOut.count.toStringAsFixed(0))),
               ]))
         ],
       ));
@@ -148,9 +150,5 @@ class ActivityInfo extends StatelessWidget {
     }
 
     return text;
-  }
-
-  String _getLightupModeText(LightupModeType setting) {
-    return (setting == LightupModeType.random) ? 'random' : 'all';
   }
 }

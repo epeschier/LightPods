@@ -26,6 +26,8 @@ class ActivitySetting {
   late int numberOfColorsPerPlayer = 1;
   late int numberOfDistractingPods = 0;
 
+  late StrikeOut strikeOut = StrikeOut();
+
   late CompetitionType competitionMode = CompetitionType.regular;
 
   late DurationSetting activityDuration = DurationSetting();
@@ -34,31 +36,35 @@ class ActivitySetting {
 
   late LightDelayTimeSetting lightDelayTime = LightDelayTimeSetting();
 
-  late LightupModeType lightupMode = LightupModeType.random;
-
   ActivitySetting copyWith(ActivitySetting obj) {
     id = obj.id;
+    name = obj.name;
     numberOfStations = obj.numberOfStations;
     numberOfPods = obj.numberOfPods;
     numberOfSimultaneousActivePods = obj.numberOfSimultaneousActivePods;
     numberOfPlayers = obj.numberOfPlayers;
     numberOfColorsPerPlayer = obj.numberOfColorsPerPlayer;
     numberOfDistractingPods = obj.numberOfDistractingPods;
+    strikeOut = StrikeOut().copyWith(obj.strikeOut);
     competitionMode = obj.competitionMode;
     activityDuration = DurationSetting().copyWith(obj.activityDuration);
     lightsOut = LightsOutSetting().copyWith(obj.lightsOut);
     lightDelayTime = LightDelayTimeSetting().copyWith(obj.lightDelayTime);
-    lightupMode = obj.lightupMode;
 
     return this;
   }
 }
 
+class StrikeOut {
+  late bool value = false;
+  late int count = 1;
 
-
-
-
-
+  StrikeOut copyWith(StrikeOut obj) {
+    value = obj.value;
+    count = obj.count;
+    return this;
+  }
+}
 
 /*
 Add some validation as some settings do not make sense:
@@ -68,6 +74,5 @@ Home base Pod color will determine the color the Home Base Pod will light up eac
 
 Distracting Pods
 Colors
-Strike Out, if chosen, will determine the number of strikes (false hits) until the activity will stop.
 
 */

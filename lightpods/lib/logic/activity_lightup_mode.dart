@@ -1,52 +1,53 @@
-import 'dart:math';
-
 import 'activity_pod.dart';
 
-import '../models/activity_setting.dart';
-import '../models/activity_enums.dart';
+class PodsToActivate {
+  late List<ActivityPod> podsToHit = [];
+  late List<ActivityPod> distractingPods = [];
+}
 
-abstract class LightupMode {
+class LightupMode {
   final List<ActivityPod> pods;
+  final int numberOfDistractingPods;
+  final int numberOfActivePods;
 
-  LightupMode(this.pods);
+  LightupMode(this.pods, this.numberOfDistractingPods, this.numberOfActivePods);
 
-  List<ActivityPod> getPodsToTurnOn();
-}
+  late PodsToActivate _podsToActivate;
 
-class LightupModeRandom extends LightupMode {
-  LightupModeRandom(super.pods);
+  PodsToActivate getPods() {
+    pods.shuffle();
 
-  @override
-  List<ActivityPod> getPodsToTurnOn() {
-    var pod = _getRandomPod();
-    return [pod];
+    _podsToActivate = PodsToActivate();
+    _podsToActivate.podsToHit = pods.take(numberOfActivePods).toList();
+    _podsToActivate.distractingPods =
+        pods.skip(numberOfActivePods).take(numberOfDistractingPods).toList();
+
+    return _podsToActivate;
   }
 
-  final _random = Random();
+  bool isDistractingPod(ActivityPod pod) =>
+      _podsToActivate.distractingPods.contains(pod);
 
-  ActivityPod _getRandomPod() {
-    var index = _random.nextInt(pods.length);
-    return pods[index];
+  bool isPodToHit(ActivityPod pod) => _podsToActivate.podsToHit.contains(pod);
+
+  bool allPodsToHitAreHit() =>
+      !_podsToActivate.podsToHit.any((element) => element.isActive);
+
+  void turnOffAllPods() {
+    for (var p in pods) {
+      p.off();
+    }
   }
-}
 
-class LightupModeAllAtOnce extends LightupMode {
-  LightupModeAllAtOnce(super.pods);
-
-  @override
-  List<ActivityPod> getPodsToTurnOn() {
-    return pods;
+  void installHitHandlers(Function handler) {
+    for (var p in pods) {
+      p.onHitOrTimeout = handler;
+    }
   }
-}
 
-abstract class LightupModeFactory {
-  static LightupMode getLightupMode(
-      ActivitySetting setting, List<ActivityPod> pods) {
-    switch (setting.lightupMode) {
-      case LightupModeType.random:
-        return LightupModeRandom(pods);
-      case LightupModeType.allAtOnce:
-        return LightupModeAllAtOnce(pods);
+  void uninstallHitHandlers() {
+    for (var p in pods) {
+      p.onHitOrTimeout = null;
     }
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/pages/activity_list_page.dart';
-import 'package:lightpods/pages/workout_page.dart';
 import 'package:lightpods/pages/settings_page.dart';
 
 import '../partials/bottom_navbar.dart';

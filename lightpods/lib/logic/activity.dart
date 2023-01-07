@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/models/activity_enums.dart';
+import 'package:lightpods/models/activity_setting.dart';
 import 'activity_lightup_mode.dart';
 import 'activity_pod.dart';
 import 'light_delay.dart';
@@ -8,22 +9,37 @@ import 'activity_duration.dart';
 import '../models/activity_result.dart';
 
 class Activity {
+  final ActivitySetting setting;
+  final List<ActivityPod> activityPods;
   Function? onActivityEnded;
   Function? onResultChanged;
 
   final ActivityResult _activityResult = ActivityResult();
 
-  Activity();
+  late ActivityDuration _duration;
+  late LightsOut _lightsOut;
+  late LightDelay _lightDelay;
+  late LightupMode _lightupMode;
 
-  List<ActivityPod> _podsToHit = [];
+  Activity(this.setting, this.activityPods) {
+    _duration =
+        ActivityDurationFactory.getActivityDuration(setting.activityDuration);
+
+    _lightsOut = LightsOutFactory.getLightsOut(setting.lightsOut);
+    _lightDelay = LightDelayFactory.getLightDelay(setting.lightDelayTime);
+    _lightupMode = LightupMode(
+        activityPods, setting.numberOfDistractingPods, setting.numberOfPods);
+  }
+
+  late PodsToActivate _activatedPods;
 
   bool _isRunning = false;
 
   void run() {
     _isRunning = true;
     _activityResult.clear();
-    _turnOffAllPods();
-    _installHitHandlers();
+
+    _lightupMode.installHitHandlers(_hitHandler);
 
     _startCycle();
   }
@@ -35,20 +51,31 @@ class Activity {
 
   void _startCycle() {
     print("Start Cycle: wait for next light to turn on");
-    _lightDelay.wait(_activatePods);
+    _lightDelay.wait(_onLightDelayDone);
   }
 
-  void _activatePods() {
-    _podsToHit = _lightupMode.getPodsToTurnOn();
-    _turnOnPods(_podsToHit);
+  void _onLightDelayDone() {
+    _activatedPods = _lightupMode.getPods();
+    _turnOnPods(_activatedPods);
 
     _lightsOut.wait(_lightsOutHandler);
   }
 
+  void _turnOnPods(PodsToActivate pods) {
+    for (var p in pods.podsToHit) {
+      p.activate(_getHitColor());
+    }
+
+    for (var p in pods.distractingPods) {
+      p.activate(_getDistractingColor());
+    }
+  }
+
   void _lightsOutHandler() {
     print("lights out after timeout");
-    _registerMissedPods(_podsToHit);
-    _turnOffAllPods();
+    _registerMissedPods(_activatedPods.podsToHit);
+    _lightupMode.turnOffAllPods();
+
     _checkForActivityEnd();
   }
 
@@ -60,43 +87,51 @@ class Activity {
     }
   }
 
-  void _turnOnPods(List<ActivityPod> pods) {
-    for (var p in pods) {
-      p.activate(_colorToHit);
-    }
-    //_activateDistractingPods(_podToHit);
+// TODO: get random colors for hit and distraction.
+  Color _getHitColor() {
+    return Colors.red;
+  }
+
+  Color _getDistractingColor() {
+    return Colors.yellow;
   }
 
   void _hitHandler(int reactionTime, ActivityPod pod) {
     print("hit: ${pod.id} in ${reactionTime}");
-    if (reactionTime > 0) {
-      _activityResult.hitReactionTimeInMs.add(reactionTime);
-      if (_allActivePodsHit()) {
-        _lightsOut.abort();
-        _startCycle();
-      }
-    } else {
+
+    if (_lightupMode.isDistractingPod(pod)) {
       _activityResult.misses++;
+    } else {
+      if (reactionTime > 0) {
+        _activityResult.hitReactionTimeInMs.add(reactionTime);
+      } else {
+        _activityResult.misses++;
+      }
     }
     onResultChanged?.call(_activityResult);
+    _checkEndCycle();
     _checkForActivityEnd();
   }
 
-  bool _allActivePodsHit() {
-    // TODO: don't include distracting pods.
-    bool anyPodActivated = false;
-    for (var pod in _activityPods) {
-      anyPodActivated |= pod.isActive;
+  void _checkEndCycle() {
+    if (_lightupMode.allPodsToHitAreHit()) {
+      _lightsOut.abort();
+      _lightupMode.turnOffAllPods();
+
+      _startCycle();
     }
-    return !anyPodActivated;
   }
 
   void _checkForActivityEnd() {
-    if (_activityDuration.isDone(_activityResult)) {
+    if (_isStrikeOut() || _duration.isDone(_activityResult)) {
       stop();
-      _turnOffAllPods();
+      _lightupMode.turnOffAllPods();
     }
   }
+
+  bool _isStrikeOut() =>
+      setting.strikeOut.value &&
+      (_activityResult.misses >= setting.strikeOut.count);
 
   void stop() {
     if (_isRunning) {
@@ -105,110 +140,12 @@ class Activity {
 
       _lightsOut.abort();
       _lightDelay.abort();
-      _uninstallHitHandlers();
-      _turnOffAllPods();
+      _lightupMode.uninstallHitHandlers();
+      _lightupMode.turnOffAllPods();
 
       onActivityEnded?.call();
     }
   }
-
-  void _activateDistractingPods(ActivityPod mainPod) {
-    // TODO: activate a number of distracting pods that are not the mainPod.
-  }
-
-  void _turnOffAllPods() {
-    for (var p in _activityPods) {
-      p.off();
-    }
-  }
-
-  void _installHitHandlers() {
-    for (var pod in _activityPods) {
-      pod.onHitOrTimeout = _hitHandler;
-    }
-  }
-
-  void _uninstallHitHandlers() {
-    for (var pod in _activityPods) {
-      pod.onHitOrTimeout = null;
-    }
-  }
-
-  /*** Builder ***/
-  late Color _colorToHit;
-  Activity withColorToHit(Color color) {
-    _colorToHit = color;
-    return this;
-  }
-
-  late List<ActivityPod> _activityPods;
-  Activity withActivityPods(List<ActivityPod> pods) {
-    _activityPods = pods;
-    return this;
-  }
-
-  late int _numberOfStations;
-  Activity withStations(int stations) {
-    _numberOfStations = stations;
-    return this;
-  }
-
-  late int _numberOfPods;
-  Activity withNumberOfPods(int numberOfPods) {
-    _numberOfPods = numberOfPods;
-    return this;
-  }
-
-  late int _numberOfPlayers;
-  Activity withNumberOfPlayers(int numberOfPlayers) {
-    _numberOfPlayers = numberOfPlayers;
-    return this;
-  }
-
-  late int _numberOfColorsPerPlayer;
-  Activity withNumberOfColorsPerPlayer(int numberOfColorsPerPlayer) {
-    _numberOfColorsPerPlayer = numberOfColorsPerPlayer;
-    return this;
-  }
-
-  late int _numberOfDistractingPods;
-  Activity withNumberOfDistractingPods(int numberOfDistractingPods) {
-    _numberOfDistractingPods = numberOfDistractingPods;
-    return this;
-  }
-
-  late CompetitionType _competitionType;
-  Activity withCompetitionMode(CompetitionType type) {
-    _competitionType = type;
-    return this;
-  }
-
-  late ActivityDuration _activityDuration;
-  Activity withActivityDuration(ActivityDuration activityDuration) {
-    _activityDuration = activityDuration;
-    return this;
-  }
-
-  late LightsOut _lightsOut;
-  Activity withLightsOut(LightsOut lightsOut) {
-    _lightsOut = lightsOut;
-    return this;
-  }
-
-  late LightDelay _lightDelay;
-  Activity withLightDelay(LightDelay lightDelay) {
-    _lightDelay = lightDelay;
-    return this;
-  }
-
-  late LightupMode _lightupMode;
-  Activity withLightupMode(LightupMode lightupMode) {
-    _lightupMode = lightupMode;
-    return this;
-  }
-
-  /*** End builder methods ***/
-
 }
 
 class FocusLogic {

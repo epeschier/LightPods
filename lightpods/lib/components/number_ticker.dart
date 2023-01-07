@@ -40,10 +40,10 @@ class _NumberTicker extends State<NumberTicker> {
   Widget build(BuildContext context) {
     return Row(children: [
       RoundButton(
-          icon: const Icon(Icons.add),
-          enabled: _value < (widget.maxValue ?? 1000),
+          icon: const Icon(Icons.remove),
+          enabled: _value > (widget.minValue ?? 1),
           click: () {
-            _updateValue(_value + 1);
+            _updateValue(_value - 1);
           }),
       Text(
         _value.toString(),
@@ -53,10 +53,10 @@ class _NumberTicker extends State<NumberTicker> {
         ),
       ),
       RoundButton(
-          icon: const Icon(Icons.remove),
-          enabled: _value > (widget.minValue ?? 1),
+          icon: const Icon(Icons.add),
+          enabled: _value < (widget.maxValue ?? 1000),
           click: () {
-            _updateValue(_value - 1);
+            _updateValue(_value + 1);
           }),
     ]);
   }

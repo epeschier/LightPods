@@ -32,6 +32,7 @@ class ActivityPod {
 
   void _handleHit() {
     if (_isActive) {
+      // TODO: check if keep on
       off();
       _isActive = false;
       onHitOrTimeout?.call(_stopwatch.elapsedMilliseconds, this);

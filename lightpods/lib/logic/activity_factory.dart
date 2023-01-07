@@ -1,37 +1,13 @@
-import 'package:flutter/material.dart';
-import 'activity_lightup_mode.dart';
 import 'activity.dart';
-import 'activity_duration.dart';
 import 'activity_pod.dart';
 import '../models/activity_setting.dart';
-import 'light_delay.dart';
-import 'light_out.dart';
 import 'pod/pod_base.dart';
 
 abstract class ActivityFactory {
   static Activity create(ActivitySetting setting, List<PodBase> podList) {
     List<ActivityPod> activityPods = _getActivityPods(podList);
 
-    var activity = Activity()
-        .withStations(setting.numberOfStations)
-        .withNumberOfPods(setting.numberOfPods)
-        .withNumberOfPlayers(setting.numberOfPlayers)
-        .withNumberOfColorsPerPlayer(setting.numberOfColorsPerPlayer)
-        .withNumberOfDistractingPods(setting.numberOfDistractingPods)
-        .withActivityDuration(ActivityDurationFactory.getActivityDuration(
-            setting.activityDuration))
-        .withLightsOut(LightsOutFactory.getLightsOut(setting.lightsOut))
-        .withLightDelay(LightDelayFactory.getLightDelay(setting.lightDelayTime))
-        .withLightupMode(
-            LightupModeFactory.getLightupMode(setting, activityPods))
-        .withActivityPods(activityPods)
-        .withColorToHit(Colors.red);
-
-    if (setting.numberOfPlayers > 1) {
-      activity.withCompetitionMode(setting.competitionMode);
-    }
-
-    return activity;
+    return Activity(setting, activityPods);
   }
 
   static List<ActivityPod> _getActivityPods(List<PodBase> podList) {

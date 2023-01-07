@@ -1,6 +1,5 @@
 import 'package:lightpods/models/activity_enums.dart';
 import 'package:lightpods/models/activity_result.dart';
-import 'package:lightpods/models/activity_setting.dart';
 
 import '../models/duration_setting.dart';
 

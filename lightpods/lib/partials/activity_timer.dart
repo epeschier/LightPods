@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/rounded_icon_button.dart';
-import 'package:lightpods/theme/theme.dart';
 
 class ActivityTimer extends StatefulWidget {
   final Function onStart;

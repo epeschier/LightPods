@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/models/activity_enums.dart';
 
 import '../components/toggle_options.dart';
 import '../theme/theme.dart';

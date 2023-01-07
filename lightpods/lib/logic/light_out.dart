@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import '../models/activity_enums.dart';
-import '../models/activity_setting.dart';
 import '../models/lights_out_setting.dart';
 import 'callback_wait.dart';
 

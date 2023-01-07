@@ -125,7 +125,6 @@ class _ActivityListPageState extends State<ActivityListPage> {
     setting.competitionMode = CompetitionType.regular;
     setting.lightsOut = lightsOut;
     setting.lightDelayTime = lightDelay;
-    setting.lightupMode = LightupModeType.random;
 
     return setting;
   }

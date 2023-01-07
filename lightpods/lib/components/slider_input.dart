@@ -3,7 +3,7 @@ import '../components/value_widget.dart';
 import '../theme/theme.dart';
 
 class SliderInput extends ValueWidget<double> {
-  final String description;
+  final String? description;
   final String? units;
   final double max;
   int? decimals;
@@ -14,7 +14,7 @@ class SliderInput extends ValueWidget<double> {
       onValueChanged,
       this.decimals,
       this.units,
-      required this.description,
+      this.description,
       required this.max,
       this.value})
       : super(onValueChanged);
@@ -38,7 +38,10 @@ class _SliderInput extends State<SliderInput> {
       const SizedBox(
         height: 6,
       ),
-      _getSliderHeader(),
+      Visibility(
+        visible: (widget.description != null),
+        child: _getSliderHeader(),
+      ),
       _getSlider(),
     ]);
   }
@@ -46,7 +49,7 @@ class _SliderInput extends State<SliderInput> {
   Widget _getSliderHeader() => Padding(
       padding: const EdgeInsets.only(left: 12),
       child: Text(
-        widget.description,
+        widget.description ?? '',
         style: ThemeColors.sliderHeaderText,
       ));
 
@@ -63,7 +66,10 @@ class _SliderInput extends State<SliderInput> {
         },
       );
 
-  int _getDivisions() =>
-      widget.max.toInt() *
-      (widget.decimals != null ? widget.decimals! * 10 : 1);
+  int _getDivisions() {
+    if ((widget.decimals ?? 0) >= 0) {
+      return widget.max.toInt();
+    }
+    return widget.max.toInt() * widget.decimals! * 10;
+  }
 }
