@@ -12,12 +12,11 @@ class LightupMode {
 
   LightupMode(this.pods, this.numberOfDistractingPods, this.numberOfActivePods);
 
-  late PodsToActivate _podsToActivate;
+  late final PodsToActivate _podsToActivate = PodsToActivate();
 
   PodsToActivate getPods() {
     pods.shuffle();
 
-    _podsToActivate = PodsToActivate();
     _podsToActivate.podsToHit = pods.take(numberOfActivePods).toList();
     _podsToActivate.distractingPods =
         pods.skip(numberOfActivePods).take(numberOfDistractingPods).toList();

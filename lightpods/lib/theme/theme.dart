@@ -46,19 +46,6 @@ class ThemeColors {
   );
 }
 
-class PodColors {
-  static List<Color> palette = const [
-    Color.fromARGB(255, 255, 0, 0),
-    Color.fromARGB(255, 0, 0, 255),
-    Color.fromARGB(255, 255, 255, 0),
-    Color.fromARGB(255, 0, 255, 0),
-    Colors.orange,
-    Color.fromARGB(255, 255, 100, 200),
-    Color.fromARGB(255, 161, 2, 185),
-    Color.fromARGB(255, 2, 176, 233)
-  ];
-}
-
 ThemeData appTheme = ThemeData(
     scaffoldBackgroundColor: ThemeColors.darkPrimaryColor,
     brightness: Brightness.dark,

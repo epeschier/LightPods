@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/models/activity_enums.dart';
-import 'package:lightpods/partials/activity_setting/strike_out_setting.dart';
-import '../components/color_indicator.dart';
+import '../models/activity_enums.dart';
+import '../partials/activity_setting/strike_out_setting.dart';
 import '../components/number_ticker.dart';
 import '../models/activity_setting.dart';
 import '../partials/activity_setting/lights_out_setting.dart';
@@ -42,7 +41,10 @@ class _EditWorkoutState extends State<EditWorkout> {
                 onTap: () {
                   Navigator.pop(context, widget.activitySetting);
                 },
-                child: const Icon(Icons.save),
+                child: Icon(
+                  Icons.save,
+                  color: ThemeColors.accentColor,
+                ),
               ))
         ],
       ),
@@ -55,16 +57,20 @@ class _EditWorkoutState extends State<EditWorkout> {
 
     List<Widget> list = [
       _getNumberOfPlayers(setting.numberOfPlayers),
-      _getNumberOfPods(setting.numberOfPods),
-      _getActivePodsToLightUp(setting.numberOfSimultaneousActivePods),
-      _getNumberOfStations(setting.numberOfStations),
-      _getPlayerColors(
-          setting.numberOfPlayers, setting.numberOfColorsPerPlayer),
+      Visibility(
+          visible: setting.numberOfPlayers > 1,
+          child: _getNumberOfStations(setting.numberOfStations)),
       Visibility(
         visible: _showCompetitionMode,
         child: _getCompetitionMode(setting.competitionMode.index),
       ),
+      _getNumberOfPods(setting.numberOfPods),
+      _getActivePodsToLightUp(setting.numberOfSimultaneousActivePods),
+      _getNumberOfColors(setting.numberOfHitColors),
       _getNumberOfDistractingPods(setting.numberOfDistractingPods),
+      Visibility(
+          visible: setting.numberOfDistractingPods > 0,
+          child: _getNumberOfDistractingColors(setting.numberOfHitColors)),
       ActivityDurationSetting(value: setting.activityDuration),
       LightsOutWidget(
         value: setting.lightsOut,
@@ -136,59 +142,49 @@ class _EditWorkoutState extends State<EditWorkout> {
         ),
       );
 
-  Widget _getPlayerColors(int playerNumber, int numberOfColors) =>
-      ActivitySettingContainer(
+  Widget _getNumberOfColors(int numberOfColors) => ActivitySettingContainer(
         icon: Icons.palette,
-        text: 'Colors',
-        subText: 'Per Player',
+        text: 'Colors to hit',
         widget: NumberTicker(
-            value: numberOfColors,
-            minValue: 1,
-            maxValue: 4,
-            onValueChanged: (int value) {
-              setState(() {
-                widget.activitySetting.numberOfColorsPerPlayer = value;
-              });
-            }),
-        subWidget: _getActivityColors(
-            playerNumber, widget.activitySetting.numberOfColorsPerPlayer),
-      );
-
-  Widget _getActivityColors(int numberOfPlayers, int numberOfColors) {
-    List<Widget> colorRows = [];
-
-    for (int i = 0; i < numberOfPlayers; i++) {
-      colorRows.add(_getColorRow(i, numberOfColors));
-    }
-    return Column(
-      children: colorRows,
-    );
-  }
-
-  Widget _getColorRow(int playerNumber, int numberOfColors) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'Player ${playerNumber + 1}',
-            style: ThemeColors.headerText,
-          ),
-          ColorIndicator(
-            playerNumber: playerNumber,
-            numberOfColors: numberOfColors,
-          ),
-        ],
+          value: numberOfColors,
+          minValue: 1,
+          maxValue: 4,
+          onValueChanged: (int value) {
+            setState(() {
+              widget.activitySetting.numberOfHitColors = value;
+            });
+          },
+        ),
       );
 
   Widget _getNumberOfDistractingPods(int numberOfDistractingPods) =>
       ActivitySettingContainer(
         icon: Icons.alt_route,
         text: 'Distracting Pods',
+        subText: 'Number of distracting pods that will light up simultaneously',
         widget: NumberTicker(
           value: numberOfDistractingPods,
           minValue: 0,
           onValueChanged: (int value) {
-            widget.activitySetting.numberOfDistractingPods = value;
+            setState(() {
+              widget.activitySetting.numberOfDistractingPods = value;
+            });
+          },
+        ),
+      );
+
+  Widget _getNumberOfDistractingColors(int numberOfColors) =>
+      ActivitySettingContainer(
+        icon: Icons.palette,
+        text: 'Distracting Colors',
+        widget: NumberTicker(
+          value: numberOfColors,
+          minValue: 1,
+          maxValue: 4,
+          onValueChanged: (int value) {
+            setState(() {
+              widget.activitySetting.numberOfDistractingColors = value;
+            });
           },
         ),
       );

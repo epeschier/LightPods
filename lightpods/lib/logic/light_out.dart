@@ -19,7 +19,7 @@ class LightsOutTimeout extends LightsOut {
 
   @override
   void wait(Function callback) {
-    Timer(Duration(milliseconds: timeoutMs), () {
+    timer = Timer(Duration(milliseconds: timeoutMs), () {
       callback();
     });
   }

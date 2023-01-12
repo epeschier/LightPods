@@ -25,6 +25,18 @@ class _WorkoutPageState extends State<WorkoutPage> {
   final GlobalKey<ActivityTimerState> _activityTimerState =
       GlobalKey<ActivityTimerState>();
 
+  List<PodBase> _podList = [];
+  late List<PodButton> _buttons;
+  int _miss = 0;
+  int _hits = 0;
+  int _avg = 0;
+
+  @override
+  void initState() {
+    _buttons = _getDummyPodButtons(widget.setting);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +46,9 @@ class _WorkoutPageState extends State<WorkoutPage> {
         body: Column(children: [
           _getActivityTimer(),
           _infoCards(),
-          _getDummyPodButtons(widget.setting)
+          Row(
+            children: _buttons,
+          )
         ]));
   }
 
@@ -45,10 +59,6 @@ class _WorkoutPageState extends State<WorkoutPage> {
         tick: _onTick,
         key: _activityTimerState,
       );
-
-  int _miss = 0;
-  int _hits = 0;
-  int _avg = 0;
 
   Widget _infoCards() => Padding(
       padding: const EdgeInsets.only(top: 40),
@@ -116,10 +126,9 @@ class _WorkoutPageState extends State<WorkoutPage> {
     });
   }
 
-  final List<FakePod> _podList = [];
-
-  Widget _getDummyPodButtons(ActivitySetting setting) {
+  List<PodButton> _getDummyPodButtons(ActivitySetting setting) {
     List<PodButton> buttons = [];
+    _podList = [];
     for (int i = 0; i < setting.numberOfPods; i++) {
       var fakePod = FakePod(i.toString());
       _podList.add(fakePod);
@@ -128,12 +137,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
         pod: fakePod,
       ));
     }
-    return Row(
-      children: buttons,
-    );
+    return buttons;
   }
-
-  //late List<PodBase> _podList;
 
   Activity _createActivity() {
     //final PodService _podService = GetIt.I.get<PodService>();

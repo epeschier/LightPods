@@ -14,13 +14,14 @@ class FakePod extends PodBase {
 
   @override
   void lightOff() {
+    print("light off for: $_id");
     onColorUpdated?.call(Colors.grey);
   }
 
   @override
   void setLight(Color color) {
     onColorUpdated?.call(color);
-    print("lighton $color");
+    print("light on for: $_id - $color");
   }
 
   void initiateClickCallback() {

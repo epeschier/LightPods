@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/theme/theme.dart';
 
 class ColorIndicator extends StatefulWidget {
-  final int numberOfColors;
-  final int playerNumber;
+  final String text;
+  final List<Color> colors;
 
-  const ColorIndicator(
-      {super.key, required this.numberOfColors, required this.playerNumber});
+  const ColorIndicator({super.key, required this.colors, required this.text});
 
   @override
   State<ColorIndicator> createState() => _ColorIndicatorState();
 }
 
 class _ColorIndicatorState extends State<ColorIndicator> {
-  List<Widget> getColorBullets(int number) {
+  @override
+  Widget build(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Text(widget.text),
+      getColorBullets(widget.colors),
+    ]);
+  }
+
+  Widget getColorBullets(List<Color> colors) {
     List<Widget> list = [];
-    for (var i = 0; i < widget.numberOfColors; i++) {
-      list.add(_colorBullet(PodColors.palette[(widget.playerNumber * 4) + i]));
+    for (var color in colors) {
+      list.add(_colorBullet(color));
     }
-    return list;
+    return Row(children: list);
   }
 
   Widget _colorBullet(Color color) {
@@ -29,10 +35,5 @@ class _ColorIndicatorState extends State<ColorIndicator> {
           size: 24,
           color: color,
         ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(children: getColorBullets(widget.numberOfColors));
   }
 }

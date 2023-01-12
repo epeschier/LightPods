@@ -28,6 +28,7 @@ class ActivityPod {
   void off() {
     _pod.lightOff();
     _stopwatch.stop();
+    _isActive = false;
   }
 
   void _handleHit() {

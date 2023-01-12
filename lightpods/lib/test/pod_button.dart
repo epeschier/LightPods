@@ -16,12 +16,14 @@ class _PodButtonState extends State<PodButton> {
 
   @override
   void initState() {
-    widget.pod.onColorUpdated = (Color newColor) {
-      setState(() {
-        _color = newColor;
-      });
-    };
+    widget.pod.onColorUpdated = _updateColor;
     super.initState();
+  }
+
+  void _updateColor(Color color) {
+    setState(() {
+      _color = color;
+    });
   }
 
   @override

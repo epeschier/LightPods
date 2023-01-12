@@ -66,7 +66,7 @@ class ActivityInfo extends StatelessWidget {
                 _getInfoPart(
                     Icons.wb_twighlight, "${setting.numberOfPods} pods"),
                 _getInfoPart(
-                    Icons.palette, "${setting.numberOfColorsPerPlayer} color"),
+                    Icons.palette, "${setting.numberOfHitColors} color"),
                 _getInfoPart(
                     Icons.alt_route, "${setting.numberOfDistractingPods}"),
               ])),

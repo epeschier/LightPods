@@ -120,7 +120,7 @@ class _ActivityListPageState extends State<ActivityListPage> {
     setting.numberOfPods = 2;
     setting.numberOfDistractingPods = 0;
     setting.numberOfStations = 1;
-    setting.numberOfColorsPerPlayer = 1;
+    setting.numberOfHitColors = 1;
     setting.activityDuration = duration;
     setting.competitionMode = CompetitionType.regular;
     setting.lightsOut = lightsOut;

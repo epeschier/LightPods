@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/models/activity_enums.dart';
-import 'package:lightpods/models/activity_setting.dart';
+import 'package:lightpods/models/pod_colors.dart';
+import '../models/activity_setting.dart';
 import 'activity_lightup_mode.dart';
 import 'activity_pod.dart';
 import 'light_delay.dart';
@@ -20,6 +20,7 @@ class Activity {
   late LightsOut _lightsOut;
   late LightDelay _lightDelay;
   late LightupMode _lightupMode;
+  late PodColors _podColors;
 
   Activity(this.setting, this.activityPods) {
     _duration =
@@ -27,8 +28,9 @@ class Activity {
 
     _lightsOut = LightsOutFactory.getLightsOut(setting.lightsOut);
     _lightDelay = LightDelayFactory.getLightDelay(setting.lightDelayTime);
-    _lightupMode = LightupMode(
-        activityPods, setting.numberOfDistractingPods, setting.numberOfPods);
+    _lightupMode = LightupMode(activityPods, setting.numberOfDistractingPods,
+        setting.numberOfSimultaneousActivePods);
+    _podColors = PodColors();
   }
 
   late PodsToActivate _activatedPods;
@@ -46,7 +48,9 @@ class Activity {
 
   void tick() {
     _activityResult.elapsedTimeInSeconds++;
-    _checkForActivityEnd();
+    if (_duration.isDone(_activityResult)) {
+      stop();
+    }
   }
 
   void _startCycle() {
@@ -63,11 +67,12 @@ class Activity {
 
   void _turnOnPods(PodsToActivate pods) {
     for (var p in pods.podsToHit) {
-      p.activate(_getHitColor());
+      p.activate(_podColors.getRandomHitColor(setting.numberOfHitColors));
     }
 
     for (var p in pods.distractingPods) {
-      p.activate(_getDistractingColor());
+      p.activate(_podColors
+          .getRandomDistractingColor(setting.numberOfDistractingColors));
     }
   }
 
@@ -76,24 +81,25 @@ class Activity {
     _registerMissedPods(_activatedPods.podsToHit);
     _lightupMode.turnOffAllPods();
 
-    _checkForActivityEnd();
+    _checkStartNewCycle();
   }
 
   void _registerMissedPods(List<ActivityPod> pods) {
     for (var p in pods) {
       if (p.isActive) {
         _activityResult.misses++;
+        onResultChanged?.call(_activityResult);
       }
     }
   }
 
-// TODO: get random colors for hit and distraction.
-  Color _getHitColor() {
-    return Colors.red;
-  }
-
-  Color _getDistractingColor() {
-    return Colors.yellow;
+  void _checkStartNewCycle() {
+    if (_isStrikeOut() || _duration.isDone(_activityResult)) {
+      stop();
+      _lightupMode.turnOffAllPods();
+    } else {
+      _startCycle();
+    }
   }
 
   void _hitHandler(int reactionTime, ActivityPod pod) {
@@ -104,28 +110,19 @@ class Activity {
     } else {
       if (reactionTime > 0) {
         _activityResult.hitReactionTimeInMs.add(reactionTime);
+        _checkEndCycle();
       } else {
         _activityResult.misses++;
       }
     }
     onResultChanged?.call(_activityResult);
-    _checkEndCycle();
-    _checkForActivityEnd();
   }
 
   void _checkEndCycle() {
     if (_lightupMode.allPodsToHitAreHit()) {
       _lightsOut.abort();
       _lightupMode.turnOffAllPods();
-
-      _startCycle();
-    }
-  }
-
-  void _checkForActivityEnd() {
-    if (_isStrikeOut() || _duration.isDone(_activityResult)) {
-      stop();
-      _lightupMode.turnOffAllPods();
+      _checkStartNewCycle();
     }
   }
 

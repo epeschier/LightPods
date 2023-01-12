@@ -23,7 +23,8 @@ class ActivitySetting {
   late int numberOfPods = 2;
   late int numberOfSimultaneousActivePods = 1;
   late int numberOfPlayers = 1;
-  late int numberOfColorsPerPlayer = 1;
+  late int numberOfHitColors = 1;
+  late int numberOfDistractingColors = 0;
   late int numberOfDistractingPods = 0;
 
   late StrikeOut strikeOut = StrikeOut();
@@ -43,7 +44,8 @@ class ActivitySetting {
     numberOfPods = obj.numberOfPods;
     numberOfSimultaneousActivePods = obj.numberOfSimultaneousActivePods;
     numberOfPlayers = obj.numberOfPlayers;
-    numberOfColorsPerPlayer = obj.numberOfColorsPerPlayer;
+    numberOfHitColors = obj.numberOfHitColors;
+    numberOfDistractingColors = obj.numberOfDistractingColors;
     numberOfDistractingPods = obj.numberOfDistractingPods;
     strikeOut = StrikeOut().copyWith(obj.strikeOut);
     competitionMode = obj.competitionMode;
