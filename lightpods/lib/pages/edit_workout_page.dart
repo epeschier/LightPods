@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/list_divider.dart';
 import '../models/activity_enums.dart';
 import '../partials/activity_setting/strike_out_setting.dart';
 import '../components/number_ticker.dart';
@@ -57,6 +58,7 @@ class _EditWorkoutState extends State<EditWorkout> {
 
     List<Widget> list = [
       _getNumberOfPlayers(setting.numberOfPlayers),
+      ListDivider(),
       Visibility(
           visible: setting.numberOfPlayers > 1,
           child: _getNumberOfStations(setting.numberOfStations)),
@@ -65,19 +67,26 @@ class _EditWorkoutState extends State<EditWorkout> {
         child: _getCompetitionMode(setting.competitionMode.index),
       ),
       _getNumberOfPods(setting.numberOfPods),
+      ListDivider(),
       _getActivePodsToLightUp(setting.numberOfSimultaneousActivePods),
+      ListDivider(),
       _getNumberOfColors(setting.numberOfHitColors),
+      ListDivider(),
       _getNumberOfDistractingPods(setting.numberOfDistractingPods),
       Visibility(
           visible: setting.numberOfDistractingPods > 0,
           child: _getNumberOfDistractingColors(setting.numberOfHitColors)),
+      ListDivider(),
       ActivityDurationSetting(value: setting.activityDuration),
+      ListDivider(),
       LightsOutWidget(
         value: setting.lightsOut,
       ),
+      ListDivider(),
       LightDelayTimeWidget(
         value: setting.lightDelayTime,
       ),
+      ListDivider(),
       StrikeOutSetting(value: setting.strikeOut),
     ];
 

@@ -34,7 +34,7 @@ class _PodButtonState extends State<PodButton> {
       },
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
-        padding: const EdgeInsets.all(50),
+        padding: const EdgeInsets.all(40),
         backgroundColor: _color,
       ),
       child: null,

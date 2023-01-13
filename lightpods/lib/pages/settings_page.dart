@@ -4,6 +4,7 @@ import 'package:lightpods/components/color_indicator.dart';
 import 'package:lightpods/components/toggle_button.dart';
 import 'package:lightpods/theme/theme.dart';
 
+import '../components/list_divider.dart';
 import '../components/slider_input.dart';
 import '../components/toggle_options.dart';
 import '../models/pod_colors.dart';
@@ -45,13 +46,20 @@ class _SettingsPage extends State<SettingsPage> {
           _getContainer(
             ColorIndicator(colors: _podColors.getHitColors, text: 'Hit Colors'),
           ),
+          ListDivider(),
           _getContainer(
             ColorIndicator(
                 colors: _podColors.getDistractingColors,
                 text: 'Distracting Colors'),
           ),
+          ListDivider(),
           _getContainer(SliderInput(
-              description: 'Hit Sensitivity', value: 200, max: 65000)),
+            description: 'Hit Sensitivity',
+            value: 10,
+            max: 100,
+            decimals: 0,
+            showValue: true,
+          )),
           _getContainer(
             const ToggleOptions(
               values: ['Random', 'All at once'],
@@ -62,7 +70,6 @@ class _SettingsPage extends State<SettingsPage> {
       );
 
   Widget _getContainer(Widget w) => Container(
-        // height: 80,
         color: ThemeColors.backgroundColor,
         padding: const EdgeInsets.all(10),
         child: w,

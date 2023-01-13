@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lightpods/partials/workout/info_block.dart';
 import 'package:lightpods/test/pod_button.dart';
 import 'package:lightpods/models/activity_result.dart';
 import '../test/fake_pod.dart';
 import '../logic/pod/pod_base.dart';
 import '../logic/activity_factory.dart';
 import '../models/activity_setting.dart';
-import '../partials/activity_timer.dart';
+import '../partials/workout/activity_timer.dart';
 import '../logic/activity.dart';
 import '../services/bluetooth_device_service.dart';
 import '../services/pod_service.dart';
@@ -43,6 +44,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
         appBar: AppBar(
           title: Text(widget.setting.name),
         ),
+        floatingActionButton: _getInfoButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
         body: Column(children: [
           _getActivityTimer(),
           _infoCards(),
@@ -50,6 +53,41 @@ class _WorkoutPageState extends State<WorkoutPage> {
             children: _buttons,
           )
         ]));
+  }
+
+  FloatingActionButton _getInfoButton() => FloatingActionButton(
+      onPressed: _showInfo, child: const Icon(Icons.info_outline));
+
+  void _showInfo() {
+    showModalBottomSheet<void>(
+      backgroundColor: ThemeColors.darkPrimaryColor,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 200,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                InfoBlock(
+                  text: widget.setting.numberOfPods.toString(),
+                  description: 'Pods',
+                  icon: Icons.wb_twighlight,
+                ),
+                InfoBlock(
+                  text: '2 min',
+                  description: 'Duration',
+                  icon: Icons.timer,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   ActivityTimer _getActivityTimer() => ActivityTimer(
@@ -65,29 +103,11 @@ class _WorkoutPageState extends State<WorkoutPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _info(_miss.toString(), 'Miss'),
-          _info(_hits.toString(), 'Hits'),
-          _info(_avg.toString(), 'Avg. Reaction')
+          InfoBlock(text: _miss.toString(), description: 'Miss'),
+          InfoBlock(text: _hits.toString(), description: 'Hits'),
+          InfoBlock(text: _avg.toString(), description: 'Avg. Reaction')
         ],
       ));
-
-  Widget _info(String text, String subTitle) {
-    return Expanded(
-        child: Container(
-            margin: const EdgeInsets.all(8),
-            color: ThemeColors.primaryColor,
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(text, style: const TextStyle(fontSize: 30)),
-                Text(subTitle,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 12, color: ThemeColors.lightPrimaryColor)),
-              ],
-            )));
-  }
 
   late Activity _activity;
 

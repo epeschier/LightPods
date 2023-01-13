@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/pages/workout_page.dart';
+import '../components/list_container.dart';
 import '../models/activity_enums.dart';
 import '../models/activity_setting.dart';
 import '../models/duration_setting.dart';
-import '../models/light_delay_time_setting.dart';
-import '../models/lights_out_setting.dart';
 import '../theme/theme.dart';
 
 class ActivityInfo extends StatelessWidget {
@@ -15,13 +14,7 @@ class ActivityInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: ThemeColors.primaryColor,
-        borderRadius: BorderRadius.circular(6),
-      ),
+    return ListContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -59,31 +52,9 @@ class ActivityInfo extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Flexible(
-              flex: 50,
-              child: Column(children: [
-                _getInfoPart(Icons.person, "${setting.numberOfPlayers} player"),
-                _getInfoPart(
-                    Icons.wb_twighlight, "${setting.numberOfPods} pods"),
-                _getInfoPart(
-                    Icons.palette, "${setting.numberOfHitColors} color"),
-                _getInfoPart(
-                    Icons.alt_route, "${setting.numberOfDistractingPods}"),
-              ])),
-          Flexible(
-              flex: 50,
-              child: Column(children: [
-                _getInfoPart(Icons.schedule,
-                    _getActivityDurationText(setting.activityDuration)),
-                _getInfoPart(
-                    Icons.highlight, _getLightsOutText(setting.lightsOut)),
-                _getInfoPart(Icons.hourglass_empty,
-                    _getLightsDelaytimeText(setting.lightDelayTime)),
-                Visibility(
-                    visible: setting.strikeOut.value,
-                    child: _getInfoPart(Icons.logout,
-                        setting.strikeOut.count.toStringAsFixed(0))),
-              ]))
+          _getInfoPart(
+              "${setting.numberOfPlayers} player ${setting.numberOfPods} pods"),
+          _getInfoPart(_getActivityDurationText(setting.activityDuration)),
         ],
       ));
 
@@ -93,14 +64,10 @@ class ActivityInfo extends StatelessWidget {
     }));
   }
 
-  Widget _getInfoPart(IconData icon, String text) => Container(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Icon(icon),
-          Text(" : $text"),
-        ],
-      ));
+  Widget _getInfoPart(String text) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Text(text, style: ThemeColors.subText),
+      );
 
   String _getActivityDurationText(DurationSetting setting) {
     String text = '';
@@ -113,42 +80,6 @@ class ActivityInfo extends StatelessWidget {
       }
       text += '${setting.timeout.toStringAsFixed(0)} min';
     }
-    return text;
-  }
-
-  String _getLightsOutText(LightsOutSetting setting) {
-    String text = '';
-
-    if (setting.lightsOut != LightsOutType.timeout) {
-      text += 'hit';
-    }
-
-    if (setting.lightsOut != LightsOutType.hit) {
-      if (text.isNotEmpty) {
-        text += ' or ';
-      }
-      text += '${setting.timeout.toStringAsFixed(1)} s';
-    }
-
-    return text;
-  }
-
-  String _getLightsDelaytimeText(LightDelayTimeSetting setting) {
-    String text = '';
-
-    if (setting.delayTimeType == LightDelayTimeType.none) {
-      text = 'none';
-    }
-
-    if (setting.delayTimeType == LightDelayTimeType.fixed) {
-      text = '${setting.fixedTime.toStringAsFixed(1)} s';
-    }
-
-    if (setting.delayTimeType == LightDelayTimeType.random) {
-      text =
-          '${setting.randomTimeMin.toStringAsFixed(1)} - ${setting.randomTimeMax.toStringAsFixed(1)} s';
-    }
-
     return text;
   }
 }

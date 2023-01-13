@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/value_widget.dart';
-import '../theme/theme.dart';
+import 'header_with_value.dart';
 
 class SliderInput extends ValueWidget<double> {
   final String? description;
@@ -8,6 +8,7 @@ class SliderInput extends ValueWidget<double> {
   final double max;
   int? decimals;
   final double? value;
+  bool? showValue = false;
 
   SliderInput(
       {super.key,
@@ -16,6 +17,7 @@ class SliderInput extends ValueWidget<double> {
       this.units,
       this.description,
       required this.max,
+      this.showValue,
       this.value})
       : super(onValueChanged);
 
@@ -47,11 +49,12 @@ class _SliderInput extends State<SliderInput> {
   }
 
   Widget _getSliderHeader() => Padding(
-      padding: const EdgeInsets.only(left: 12),
-      child: Text(
-        widget.description ?? '',
-        style: ThemeColors.sliderHeaderText,
-      ));
+      padding: const EdgeInsets.only(left: 12, bottom: 8, top: 8),
+      child: HeaderWithValue(
+          text: widget.description!,
+          value: (widget.showValue ?? false)
+              ? _currentSliderValue.toStringAsFixed(widget.decimals ?? 0)
+              : null));
 
   Widget _getSlider() => Slider(
         value: _currentSliderValue,

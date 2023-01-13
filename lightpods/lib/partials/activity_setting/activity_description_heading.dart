@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../components/header_with_value.dart';
 import '../../theme/theme.dart';
 
 class ActivityDescriptionHeading extends StatelessWidget {
@@ -29,7 +30,7 @@ class ActivityDescriptionHeading extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _getHeaderWithValue(),
+            HeaderWithValue(text: text),
             Text(
               subText ?? '',
               style: ThemeColors.subText,
@@ -37,18 +38,4 @@ class ActivityDescriptionHeading extends StatelessWidget {
           ],
         ))
       ]);
-
-  Widget _getHeaderWithValue() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            text,
-            style: ThemeColors.headerText,
-          ),
-          Text(
-            value ?? '',
-            style: ThemeColors.headerValueText,
-          ),
-        ],
-      );
 }

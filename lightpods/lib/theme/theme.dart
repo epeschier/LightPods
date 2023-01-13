@@ -94,8 +94,10 @@ AppBarTheme appbarTheme =
     AppBarTheme(backgroundColor: ThemeColors.backgroundColor);
 
 SliderThemeData sliderTheme = SliderThemeData(
-    thumbColor: ThemeColors.accentColor,
-    activeTrackColor: ThemeColors.primaryColor,
-    inactiveTrackColor: ThemeColors.darkPrimaryColor,
-    activeTickMarkColor: ThemeColors.backgroundColor,
-    inactiveTickMarkColor: ThemeColors.backgroundColor);
+  thumbColor: ThemeColors.accentColor,
+  activeTrackColor: ThemeColors.primaryColor,
+  inactiveTrackColor: ThemeColors.darkPrimaryColor,
+  activeTickMarkColor: ThemeColors.backgroundColor,
+  inactiveTickMarkColor: ThemeColors.backgroundColor,
+  overlayShape: SliderComponentShape.noThumb,
+);

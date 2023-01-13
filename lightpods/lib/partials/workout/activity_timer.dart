@@ -43,6 +43,9 @@ class ActivityTimerState extends State<ActivityTimer> {
   Widget _getButtons() =>
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         RoundedIconButton(onClick: _reset, icon: Icons.refresh),
+        const SizedBox(
+          width: 20,
+        ),
         RoundedIconButton(onClick: _onStartStopPressed, icon: _getIcon()),
       ]);
 

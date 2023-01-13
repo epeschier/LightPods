@@ -29,11 +29,8 @@ class MultipleChoice extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: double.infinity,
-        decoration: BoxDecoration(
-          color: ThemeColors.backgroundColor,
-          borderRadius: BorderRadius.circular(6),
-        ),
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        color: ThemeColors.backgroundColor,
+        // margin: const EdgeInsets.only(bottom: 2),
         padding: const EdgeInsets.all(8.0),
         child: Column(children: _buildWidgetList()));
   }

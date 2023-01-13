@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/components/list_divider.dart';
 import '../models/activity_setting.dart';
 import '../models/duration_setting.dart';
 import '../models/light_delay_time_setting.dart';
@@ -36,7 +37,7 @@ class _ActivityListPageState extends State<ActivityListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Activities'),
+        title: const Text('Workouts'),
       ),
       body: _getActivityList(),
       floatingActionButton: _getActionButton(),
@@ -46,13 +47,18 @@ class _ActivityListPageState extends State<ActivityListPage> {
   Widget _getActivityList() {
     List<Widget> containers = <Widget>[];
 
-    for (var setting in _list) {
+    for (var i = 0; i < _list.length; i++) {
+      var setting = _list[i];
       containers.add(ActivityInfo(
         onEdit: () {
           _navigateToEditActivity(context, setting);
         },
         setting: setting,
       ));
+
+      if (i < _list.length - 1) {
+        containers.add(ListDivider());
+      }
     }
 
     return ListView(
