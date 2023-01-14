@@ -18,14 +18,13 @@ class InfoBlock extends StatelessWidget {
       height: 80,
       margin: const EdgeInsets.all(8),
       color: ThemeColors.primaryColor,
-      padding: const EdgeInsets.all(10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(text,
               style: const TextStyle(
                 fontSize: 30,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w400,
               )),
           _descriptionRow(icon, description),
         ],
@@ -41,6 +40,7 @@ class InfoBlock extends StatelessWidget {
               color: ThemeColors.lightPrimaryColor,
             ),
           ),
+          const SizedBox(width: 4),
           Text(text,
               style: TextStyle(
                   fontSize: 12, color: ThemeColors.lightPrimaryColor)),

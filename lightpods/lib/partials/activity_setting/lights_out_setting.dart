@@ -41,7 +41,6 @@ class _LightsOutWidgetState extends State<LightsOutWidget> {
                 value: widget.value.timeout,
                 max: 5,
                 decimals: 1,
-                units: 's',
                 onValueChanged: (double value) {
                   setState(() {
                     widget.value.timeout = value;
@@ -59,6 +58,6 @@ class _LightsOutWidgetState extends State<LightsOutWidget> {
   }
 
   String? _getValueText() => (_selectedIndex > 0)
-      ? '${widget.value.timeout.toStringAsFixed(1)} sec.'
+      ? '${widget.value.timeout.toStringAsFixed(1)} sec'
       : null;
 }

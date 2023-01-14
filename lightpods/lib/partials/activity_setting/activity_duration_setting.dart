@@ -47,8 +47,7 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
                 description: 'Hits',
                 onValueChanged: _onNumberOfHitsChanged,
                 value: widget.value.numberOfHits,
-                max: 100,
-                units: 'hits'),
+                max: 100),
           ),
           Visibility(
             visible: widget.value.durationType.index > 0,
@@ -56,8 +55,7 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
                 description: 'Timeout',
                 onValueChanged: _onTimeoutChanged,
                 value: widget.value.timeout,
-                max: 10,
-                units: 'min'),
+                max: 10),
           ),
         ],
       );
@@ -85,7 +83,7 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
     }
 
     if (widget.value.durationType != ActivityDurationType.numberOfHits) {
-      description += '${widget.value.timeout.toStringAsFixed(1)} sec.';
+      description += '${widget.value.timeout.toStringAsFixed(1)} min';
     }
 
     return description;

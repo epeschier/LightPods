@@ -52,7 +52,6 @@ class _LightDelayTimeWidgetState extends State<LightDelayTimeWidget> {
             RangeValues(widget.value.randomTimeMin, widget.value.randomTimeMax),
         max: 5,
         decimals: 1,
-        units: 's',
         onValueChanged: (RangeValues value) {
           setState(() {
             widget.value.randomTimeMin = value.start;
@@ -67,7 +66,6 @@ class _LightDelayTimeWidgetState extends State<LightDelayTimeWidget> {
         value: widget.value.fixedTime,
         max: 5,
         decimals: 1,
-        units: 's',
         onValueChanged: (double value) {
           setState(() {
             widget.value.fixedTime = value;
@@ -88,7 +86,7 @@ class _LightDelayTimeWidgetState extends State<LightDelayTimeWidget> {
   }
 
   String _getFixedValueText() =>
-      '${widget.value.fixedTime.toStringAsFixed(1)} sec.';
+      '${widget.value.fixedTime.toStringAsFixed(1)} sec';
   String _getRandomValueText() =>
-      '${widget.value.randomTimeMin.toStringAsFixed(1)}-${widget.value.randomTimeMax.toStringAsFixed(1)} sec.';
+      '${widget.value.randomTimeMin.toStringAsFixed(1)}-${widget.value.randomTimeMax.toStringAsFixed(1)} sec';
 }

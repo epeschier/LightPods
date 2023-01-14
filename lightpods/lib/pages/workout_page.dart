@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lightpods/partials/workout/info_block.dart';
+import 'package:lightpods/partials/workout/info_panel.dart';
 import 'package:lightpods/test/pod_button.dart';
 import 'package:lightpods/models/activity_result.dart';
 import '../test/fake_pod.dart';
@@ -65,27 +66,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       context: context,
       builder: (BuildContext context) {
-        return SizedBox(
-          height: 200,
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                InfoBlock(
-                  text: widget.setting.numberOfPods.toString(),
-                  description: 'Pods',
-                  icon: Icons.wb_twighlight,
-                ),
-                InfoBlock(
-                  text: '2 min',
-                  description: 'Duration',
-                  icon: Icons.timer,
-                ),
-              ],
-            ),
-          ),
-        );
+        return InfoPanel(setting: widget.setting);
       },
     );
   }

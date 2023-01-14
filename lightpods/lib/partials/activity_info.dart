@@ -15,48 +15,54 @@ class ActivityInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _getName(),
-          _getDescription(context),
+          _getNameAndDescription(context),
+          _getEditIcon(),
         ],
       ),
     );
   }
 
-  Widget _getName() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            setting.name,
-            style: ThemeColors.headerText,
-          ),
-          InkWell(
-            splashColor: ThemeColors.primaryColor,
-            onTap: () {
-              onEdit?.call();
-            },
-            child: Icon(
-              Icons.edit,
-              color: ThemeColors.accentColor,
-            ),
-          )
-        ],
+  Widget _getEditIcon() => InkWell(
+        splashColor: ThemeColors.primaryColor,
+        onTap: () {
+          onEdit?.call();
+        },
+        child: Icon(
+          Icons.edit,
+          color: ThemeColors.accentColor,
+        ),
       );
 
-  Widget _getDescription(BuildContext context) => InkWell(
+  Widget _getNameAndDescription(BuildContext context) => InkWell(
       onTap: () {
         _navigateToWorkout(context);
       },
-      child: Row(
+      child: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _getName(),
+              _getDescription(context),
+            ],
+          )));
+
+  Widget _getName() => Text(
+        setting.name,
+        style: ThemeColors.headerText,
+      );
+
+  Widget _getDescription(BuildContext context) => Row(
         mainAxisSize: MainAxisSize.max,
         children: [
           _getInfoPart(
-              "${setting.numberOfPlayers} player ${setting.numberOfPods} pods"),
+              "${setting.numberOfPlayers} player ${setting.numberOfPods} pods, "),
           _getInfoPart(_getActivityDurationText(setting.activityDuration)),
         ],
-      ));
+      );
 
   void _navigateToWorkout(BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {

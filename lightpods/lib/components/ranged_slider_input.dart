@@ -5,7 +5,7 @@ import '../theme/theme.dart';
 
 class RangedSliderInput extends ValueWidget<RangeValues> {
   final String description;
-  final String units;
+  final String? units;
   final double max;
   int? decimals;
   RangeValues valueRange;
@@ -15,7 +15,7 @@ class RangedSliderInput extends ValueWidget<RangeValues> {
       this.decimals,
       onValueChanged,
       required this.description,
-      required this.units,
+      this.units,
       required this.max,
       required this.valueRange})
       : super(onValueChanged);
@@ -37,7 +37,7 @@ class _RangedSliderInput extends State<RangedSliderInput> {
   }
 
   Widget _getSliderHeader() => Padding(
-      padding: EdgeInsets.only(left: 12),
+      padding: const EdgeInsets.only(left: 12),
       child: Text(
         widget.description,
         style: ThemeColors.sliderHeaderText,
@@ -46,7 +46,6 @@ class _RangedSliderInput extends State<RangedSliderInput> {
   Widget _getSlider() => RangeSlider(
       values: widget.valueRange,
       max: widget.max,
-      divisions: _getDivisions(),
       labels: RangeLabels(
         widget.valueRange.start.round().toString(),
         widget.valueRange.end.round().toString(),
@@ -57,8 +56,4 @@ class _RangedSliderInput extends State<RangedSliderInput> {
           widget.onValueChanged?.call(values);
         });
       });
-
-  int _getDivisions() =>
-      widget.max.toInt() *
-      (widget.decimals != null ? widget.decimals! * 10 : 1);
 }

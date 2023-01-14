@@ -30,7 +30,7 @@ class ActivityDescriptionHeading extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            HeaderWithValue(text: text),
+            HeaderWithValue(text: text, value: value),
             Text(
               subText ?? '',
               style: ThemeColors.subText,

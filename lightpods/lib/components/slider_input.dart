@@ -59,7 +59,6 @@ class _SliderInput extends State<SliderInput> {
   Widget _getSlider() => Slider(
         value: _currentSliderValue,
         max: widget.max,
-        divisions: _getDivisions(),
         label: _currentSliderValue.round().toString(),
         onChanged: (double value) {
           setState(() {
@@ -68,11 +67,4 @@ class _SliderInput extends State<SliderInput> {
           widget.onValueChanged?.call(value);
         },
       );
-
-  int _getDivisions() {
-    if ((widget.decimals ?? 0) >= 0) {
-      return widget.max.toInt();
-    }
-    return widget.max.toInt() * widget.decimals! * 10;
-  }
 }
