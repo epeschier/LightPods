@@ -24,7 +24,7 @@ class ActivitySetting {
   late int numberOfSimultaneousActivePods = 1;
   late int numberOfPlayers = 1;
   late int numberOfHitColors = 1;
-  late int numberOfDistractingColors = 0;
+  late int numberOfDistractingColors = 1;
   late int numberOfDistractingPods = 0;
 
   late StrikeOut strikeOut = StrikeOut();

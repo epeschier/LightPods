@@ -30,13 +30,13 @@ class PodColors {
 
   Color getDistractingColor(int index) => _hitColors[index];
 
-  Color getRandomHitColor(int max) {
-    var index = _random.nextInt(max);
-    return _hitColors[index];
-  }
+  Color getRandomHitColor(int max) => _getRandomItemFromList(max, getHitColors);
 
-  Color getRandomDistractingColor(int max) {
+  Color getRandomDistractingColor(int max) =>
+      _getRandomItemFromList(max, getDistractingColors);
+
+  Color _getRandomItemFromList(int max, List<Color> list) {
     var index = _random.nextInt(max);
-    return _hitColors[index + 4];
+    return list[index];
   }
 }

@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lightpods/models/pod_colors.dart';
@@ -45,34 +44,41 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.setting.name),
-          actions: [_getPodCount()],
-        ),
-        floatingActionButton: _getInfoButton(),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.miniCenterTop,
-        body: Column(children: [
-          _getActivityTimer(),
-          _infoCards(),
-          _getColors(
-              'Hit colors',
-              PodColors()
-                  .getNumHitColors(widget.setting.numberOfHitColors)
-                  .toList()),
-          Visibility(
-              visible: widget.setting.numberOfDistractingColors > 0,
-              child: _getColors(
-                  'Distracting colors',
+    return WillPopScope(
+        onWillPop: () async {
+          if (_activity.isRunning) {
+            return false;
+          }
+          return true;
+        },
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text(widget.setting.name),
+              actions: [_getPodCount()],
+            ),
+            floatingActionButton: _getInfoButton(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.miniCenterTop,
+            body: Column(children: [
+              _getActivityTimer(),
+              _infoCards(),
+              _getColors(
+                  'Hit colors',
                   PodColors()
-                      .getNumDistractingColors(
-                          widget.setting.numberOfDistractingColors)
-                      .toList())),
-          Row(
-            children: _buttons,
-          )
-        ]));
+                      .getNumHitColors(widget.setting.numberOfHitColors)
+                      .toList()),
+              Visibility(
+                  visible: widget.setting.numberOfDistractingColors > 0,
+                  child: _getColors(
+                      'Distracting colors',
+                      PodColors()
+                          .getNumDistractingColors(
+                              widget.setting.numberOfDistractingColors)
+                          .toList())),
+              Row(
+                children: _buttons,
+              )
+            ])));
   }
 
   Widget _getPodCount() {

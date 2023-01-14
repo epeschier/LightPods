@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/models/activity_enums.dart';
 import 'package:lightpods/models/pod_colors.dart';
 import '../models/activity_setting.dart';
 import 'activity_lightup_mode.dart';
@@ -28,12 +29,17 @@ class Activity {
 
     _lightsOut = LightsOutFactory.getLightsOut(setting.lightsOut);
     _lightDelay = LightDelayFactory.getLightDelay(setting.lightDelayTime);
-    _lightupMode = LightupMode(activityPods, setting.numberOfDistractingPods,
-        setting.numberOfSimultaneousActivePods);
+    _lightupMode = LightupMode(
+        activityPods,
+        setting.numberOfDistractingPods,
+        setting.numberOfSimultaneousActivePods,
+        setting.lightDelayTime.delayTimeType == LightDelayTimeType.none);
     _podColors = PodColors();
   }
 
   late PodsToActivate _activatedPods;
+
+  bool get isRunning => _isRunning;
 
   bool _isRunning = false;
 

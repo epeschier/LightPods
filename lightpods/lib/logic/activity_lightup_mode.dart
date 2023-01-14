@@ -10,18 +10,39 @@ class LightupMode {
   final int numberOfDistractingPods;
   final int numberOfActivePods;
 
-  LightupMode(this.pods, this.numberOfDistractingPods, this.numberOfActivePods);
+  /// When set to true the same pod is not returned twice.
+  final bool noDuplicate;
+
+  LightupMode(this.pods, this.numberOfDistractingPods, this.numberOfActivePods,
+      [this.noDuplicate = false]);
 
   late final PodsToActivate _podsToActivate = PodsToActivate();
 
   PodsToActivate getPods() {
-    pods.shuffle();
+    _podsToActivate.podsToHit =
+        _getRandomPods(numberOfActivePods, pods, _podsToActivate.podsToHit);
 
-    _podsToActivate.podsToHit = pods.take(numberOfActivePods).toList();
-    _podsToActivate.distractingPods =
-        pods.skip(numberOfActivePods).take(numberOfDistractingPods).toList();
+    var setPods = Set.from(pods);
+    var setPodsToHit = Set.from(_podsToActivate.podsToHit);
+    List<ActivityPod> distractingList =
+        List.from(setPods.difference(setPodsToHit));
+    _podsToActivate.distractingPods = _getRandomPods(numberOfDistractingPods,
+        distractingList, _podsToActivate.distractingPods);
 
     return _podsToActivate;
+  }
+
+  List<ActivityPod> _getRandomPods(
+      int numToGet, List<ActivityPod> list, List<ActivityPod> exclude) {
+    List<ActivityPod> availableHitPods = pods;
+    if (noDuplicate) {
+      var usedSet = Set.from(exclude);
+      var available = Set.from(list);
+      availableHitPods = List.from(available.difference(usedSet));
+    }
+    availableHitPods.shuffle();
+
+    return availableHitPods.take(numToGet).toList();
   }
 
   bool isDistractingPod(ActivityPod pod) =>
