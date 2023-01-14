@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lightpods/partials/pod_state.dart';
+import 'package:lightpods/pages/device_list/pod_state.dart';
 import 'package:lightpods/logic/pod/pod.dart';
+import 'package:lightpods/partials/pod_count.dart';
 import 'package:lightpods/services/bluetooth_device_service.dart';
 
-import '../test/fake_pod.dart';
+import '../../test/fake_pod.dart';
 
 class DeviceList extends StatefulWidget {
   const DeviceList({super.key});
@@ -25,6 +26,7 @@ class _DeviceList extends State<DeviceList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Device List'),
+        actions: [PodCount(count: devices.length)],
       ),
       body: _getDeviceList(devices),
       floatingActionButton: FloatingActionButton(

@@ -22,6 +22,10 @@ class PodColors {
   List<Color> get getHitColors => _hitColors;
   List<Color> get getDistractingColors => _distractingColors;
 
+  Iterable<Color> getNumHitColors(int num) => getHitColors.take(num);
+  Iterable<Color> getNumDistractingColors(int num) =>
+      getDistractingColors.take(num);
+
   Color getHitColor(int index) => _hitColors[index];
 
   Color getDistractingColor(int index) => _hitColors[index];

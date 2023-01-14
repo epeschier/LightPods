@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../components/list_divider.dart';
-import '../models/activity_enums.dart';
-import '../partials/activity_setting/strike_out_setting.dart';
-import '../components/number_ticker.dart';
-import '../models/activity_setting.dart';
-import '../partials/activity_setting/lights_out_setting.dart';
-import '../partials/multiple_choice.dart';
-import '../partials/activity_setting/activity_setting_container.dart';
-import '../partials/activity_setting/activity_duration_setting.dart';
-import '../partials/activity_setting/lights_delay_time_widget.dart';
-import '../theme/theme.dart';
+import '../../components/list_divider.dart';
+import '../../models/activity_enums.dart';
+import 'activity_setting/strike_out_setting.dart';
+import '../../components/number_ticker.dart';
+import '../../models/activity_setting.dart';
+import 'activity_setting/lights_out_setting.dart';
+import 'multiple_choice.dart';
+import 'activity_setting/activity_setting_container.dart';
+import 'activity_setting/activity_duration_setting.dart';
+import 'activity_setting/lights_delay_time_widget.dart';
+import '../../theme/theme.dart';
 
 class EditWorkout extends StatefulWidget {
   final ActivitySetting activitySetting;

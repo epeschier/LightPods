@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../models/activity_setting.dart';
-import '../../components/ranged_slider_input.dart';
-import '../../components/slider_input.dart';
-import '../../models/activity_enums.dart';
-import '../../models/light_delay_time_setting.dart';
+import '../../../models/activity_setting.dart';
+import '../../../components/ranged_slider_input.dart';
+import '../../../components/slider_input.dart';
+import '../../../models/activity_enums.dart';
+import '../../../models/light_delay_time_setting.dart';
 import '../multiple_choice.dart';
 
 class LightDelayTimeWidget extends StatefulWidget {

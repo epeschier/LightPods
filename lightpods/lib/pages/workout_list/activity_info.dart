@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/pages/workout_page.dart';
-import '../components/list_container.dart';
-import '../models/activity_enums.dart';
-import '../models/activity_setting.dart';
-import '../models/duration_setting.dart';
-import '../theme/theme.dart';
+import 'package:lightpods/pages/workout/workout_page.dart';
+import '../../components/list_container.dart';
+import '../../models/activity_enums.dart';
+import '../../models/activity_setting.dart';
+import '../../models/duration_setting.dart';
+import '../../theme/theme.dart';
 
 class ActivityInfo extends StatelessWidget {
   final ActivitySetting setting;

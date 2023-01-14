@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../components/toggle_options.dart';
-import '../theme/theme.dart';
+import '../../components/toggle_options.dart';
+import '../../theme/theme.dart';
 import 'activity_setting/activity_description_heading.dart';
 
 class MultipleChoice extends StatelessWidget {

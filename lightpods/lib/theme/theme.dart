@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ThemeColors {
+abstract class ThemeColors {
   static Color darkPrimaryColor = const Color(0xff455A64);
   static Color lightPrimaryColor = const Color(0xffCFD8DC);
   static Color primaryColor = const Color(0xff607D8B);
@@ -47,7 +47,7 @@ class ThemeColors {
 }
 
 ThemeData appTheme = ThemeData(
-    scaffoldBackgroundColor: ThemeColors.darkPrimaryColor,
+    scaffoldBackgroundColor: ThemeColors.backgroundColor,
     brightness: Brightness.dark,
     useMaterial3: false,
     bottomNavigationBarTheme: bottomNavigationBarTheme,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/slider_input.dart';
-import '../../models/activity_enums.dart';
-import '../../models/lights_out_setting.dart';
+import '../../../models/activity_enums.dart';
+import '../../../models/lights_out_setting.dart';
 import '../multiple_choice.dart';
 
 class LightsOutWidget extends StatefulWidget {

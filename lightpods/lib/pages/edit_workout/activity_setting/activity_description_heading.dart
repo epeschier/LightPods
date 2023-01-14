@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../components/header_with_value.dart';
-import '../../theme/theme.dart';
+import '../../../components/header_with_value.dart';
+import '../../../theme/theme.dart';
 
 class ActivityDescriptionHeading extends StatelessWidget {
   final IconData icon;

@@ -1,18 +1,22 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lightpods/partials/workout/info_block.dart';
-import 'package:lightpods/partials/workout/info_panel.dart';
+import 'package:lightpods/models/pod_colors.dart';
+import 'package:lightpods/pages/workout/info_block.dart';
+import 'package:lightpods/pages/workout/info_panel.dart';
+import 'package:lightpods/partials/pod_count.dart';
 import 'package:lightpods/test/pod_button.dart';
 import 'package:lightpods/models/activity_result.dart';
-import '../test/fake_pod.dart';
-import '../logic/pod/pod_base.dart';
-import '../logic/activity_factory.dart';
-import '../models/activity_setting.dart';
-import '../partials/workout/activity_timer.dart';
-import '../logic/activity.dart';
-import '../services/bluetooth_device_service.dart';
-import '../services/pod_service.dart';
-import '../theme/theme.dart';
+import '../../components/color_indicator.dart';
+import '../../test/fake_pod.dart';
+import '../../logic/pod/pod_base.dart';
+import '../../logic/activity_factory.dart';
+import '../../models/activity_setting.dart';
+import 'activity_timer.dart';
+import '../../logic/activity.dart';
+import '../../services/bluetooth_device_service.dart';
+import '../../services/pod_service.dart';
+import '../../theme/theme.dart';
 
 class WorkoutPage extends StatefulWidget {
   final ActivitySetting setting;
@@ -44,16 +48,36 @@ class _WorkoutPageState extends State<WorkoutPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.setting.name),
+          actions: [_getPodCount()],
         ),
         floatingActionButton: _getInfoButton(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterTop,
         body: Column(children: [
           _getActivityTimer(),
           _infoCards(),
+          _getColors(
+              'Hit colors',
+              PodColors()
+                  .getNumHitColors(widget.setting.numberOfHitColors)
+                  .toList()),
+          Visibility(
+              visible: widget.setting.numberOfDistractingColors > 0,
+              child: _getColors(
+                  'Distracting colors',
+                  PodColors()
+                      .getNumDistractingColors(
+                          widget.setting.numberOfDistractingColors)
+                      .toList())),
           Row(
             children: _buttons,
           )
         ]));
+  }
+
+  Widget _getPodCount() {
+    // TODO: get count from service.
+    return const PodCount(count: 4);
   }
 
   FloatingActionButton _getInfoButton() => FloatingActionButton(
@@ -89,6 +113,15 @@ class _WorkoutPageState extends State<WorkoutPage> {
           InfoBlock(text: _avg.toString(), description: 'Avg. Reaction')
         ],
       ));
+
+  Widget _getColors(String text, List<Color> colors) => Container(
+        //color: ThemeColors.primaryColor,
+        margin: const EdgeInsets.symmetric(horizontal: 30),
+        child: ColorIndicator(
+          colors: colors,
+          text: text,
+        ),
+      );
 
   late Activity _activity;
 

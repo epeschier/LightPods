@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import '../components/toggle_button.dart';
-import '../logic/pod/pod_base.dart';
-import '../services/pod_service.dart';
+import '../../components/toggle_button.dart';
+import '../../logic/pod/pod_base.dart';
+import '../../services/pod_service.dart';
 
 class PodState extends StatefulWidget {
   final PodBase pod;

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/list_divider.dart';
-import '../models/activity_setting.dart';
-import '../models/duration_setting.dart';
-import '../models/light_delay_time_setting.dart';
-import '../models/lights_out_setting.dart';
-import 'edit_workout_page.dart';
-import '../partials/activity_info.dart';
-import '../models/activity_enums.dart';
+import '../../models/activity_setting.dart';
+import '../../models/duration_setting.dart';
+import '../../models/light_delay_time_setting.dart';
+import '../../models/lights_out_setting.dart';
+import '../edit_workout/edit_workout_page.dart';
+import 'activity_info.dart';
+import '../../models/activity_enums.dart';
 
 class ActivityListPage extends StatefulWidget {
   const ActivityListPage({super.key});

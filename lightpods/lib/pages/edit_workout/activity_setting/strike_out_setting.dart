@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../components/slider_input.dart';
-import '../../models/activity_setting.dart';
+import '../../../components/slider_input.dart';
+import '../../../models/activity_setting.dart';
 import '../multiple_choice.dart';
 
 class StrikeOutSetting extends StatefulWidget {

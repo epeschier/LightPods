@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'activity_description_heading.dart';
 
-import '../../theme/theme.dart';
+import '../../../theme/theme.dart';
 
 class ActivitySettingContainer extends StatelessWidget {
   final IconData icon;
