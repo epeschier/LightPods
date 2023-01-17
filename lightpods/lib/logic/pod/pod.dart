@@ -27,11 +27,13 @@ class Pod extends PodBase {
   @override
   void connect() {
     _discoverServices();
+    super.connect();
   }
 
   @override
   void disconnect() {
     device.disconnect();
+    super.disconnect();
   }
 
   void _discoverServices() async {

@@ -30,7 +30,7 @@ class _StrikeOutSettingState extends State<StrikeOutSetting> {
         text: 'Strike out',
         subText:
             'The number of strikes (false hits) until the activity will stop',
-        valueDescription: _getValueText(),
+        valueDescription: widget.value.toString(),
         selectedItem: _selectedIndex,
         onItemSelected: _onMultipleChoiceChanged,
         values: const ['No', 'Yes'],
@@ -54,7 +54,4 @@ class _StrikeOutSettingState extends State<StrikeOutSetting> {
       _selectedIndex = index;
     });
   }
-
-  String? _getValueText() =>
-      (_selectedIndex > 0) ? widget.value.count.toStringAsFixed(0) : null;
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lightpods/components/color_indicator.dart';
-import 'package:lightpods/components/toggle_button.dart';
 import 'package:lightpods/theme/theme.dart';
 
 import '../components/list_divider.dart';
@@ -19,7 +18,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPage extends State<SettingsPage> {
   final _podService = GetIt.I.get<PodService>();
-  final PodColors _podColors = PodColors();
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +42,12 @@ class _SettingsPage extends State<SettingsPage> {
   Widget _getSettingsList() => ListView(
         children: [
           _getContainer(
-            ColorIndicator(colors: _podColors.getHitColors, text: 'Hit Colors'),
+            ColorIndicator(colors: PodColors.getHitColors, text: 'Hit Colors'),
           ),
           ListDivider(),
           _getContainer(
             ColorIndicator(
-                colors: _podColors.getDistractingColors,
+                colors: PodColors.getDistractingColors,
                 text: 'Distracting Colors'),
           ),
           ListDivider(),

@@ -44,11 +44,14 @@ class ActivitySettingList extends ChangeNotifier {
   }
 
   static Future<ActivitySettingList> load() async {
+    var list = ActivitySettingList();
     final prefs = await SharedPreferences.getInstance();
     var data = prefs.getString(storageKey);
+    if (data != null) {
+      var datamap = json.decode(data!);
+      list = ActivitySettingList.fromJson(datamap);
+    }
 
-    var datamap = json.decode(data!);
-    var list = ActivitySettingList.fromJson(datamap);
     return list;
   }
 }
@@ -121,6 +124,9 @@ class StrikeOut {
     count = obj.count;
     return this;
   }
+
+  @override
+  String toString() => (value) ? count.toStringAsFixed(0) : '';
 }
 
 /*

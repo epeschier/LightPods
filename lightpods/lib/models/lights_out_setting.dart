@@ -21,4 +21,18 @@ class LightsOutSetting {
 
     return this;
   }
+
+  @override
+  String toString() {
+    var text = '';
+    if (lightsOut != LightsOutType.timeout) {
+      text = 'hit';
+    }
+    if (lightsOut == LightsOutType.hitTimeout) {
+      text += ' / ';
+    }
+
+    text += (lightsOut.index > 0) ? '${timeout.toStringAsFixed(1)} s' : '';
+    return text;
+  }
 }

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/pages/edit_workout/activity_setting/distracting_color_chance.dart';
 import '../../components/list_divider.dart';
-import '../../components/slider_input.dart';
 import '../../models/activity_enums.dart';
-import 'activity_setting/strike_out_setting.dart';
 import '../../components/number_ticker.dart';
 import '../../models/activity_setting.dart';
 import 'activity_setting/lights_out_setting.dart';
 import 'multiple_choice.dart';
+import 'activity_setting/strike_out_setting.dart';
 import 'activity_setting/activity_setting_container.dart';
 import 'activity_setting/activity_duration_setting.dart';
 import 'activity_setting/lights_delay_time_widget.dart';

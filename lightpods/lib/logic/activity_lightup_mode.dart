@@ -1,3 +1,6 @@
+import 'dart:math';
+import 'package:lightpods/models/distracting_colors.dart';
+import 'package:lightpods/models/pod_colors.dart';
 import 'activity_pod.dart';
 
 class PodsToActivate {
@@ -7,29 +10,73 @@ class PodsToActivate {
 
 class LightupMode {
   final List<ActivityPod> pods;
-  final int numberOfDistractingPods;
-  final int numberOfActivePods;
+  final DistractingColors distractingColors;
+  final int numberOfSimultaneousActivePods;
+  final int numberOfHitColors;
 
   /// When set to true the same pod is not returned twice.
-  final bool noDuplicate;
+  late bool noDuplicate;
 
-  LightupMode(this.pods, this.numberOfDistractingPods, this.numberOfActivePods,
-      [this.noDuplicate = false]);
+  LightupMode(
+      {required this.pods,
+      required this.distractingColors,
+      required this.numberOfHitColors,
+      required this.numberOfSimultaneousActivePods,
+      this.noDuplicate = false});
 
-  late final PodsToActivate _podsToActivate = PodsToActivate();
+  late PodsToActivate _podsToActivate;
 
   PodsToActivate getPods() {
-    _podsToActivate.podsToHit =
-        _getRandomPods(numberOfActivePods, pods, _podsToActivate.podsToHit);
+    var numDistractingPods = _getNumberOfDistractingPods();
+    var numPodsToHit = numberOfSimultaneousActivePods - numDistractingPods;
 
-    var setPods = Set.from(pods);
-    var setPodsToHit = Set.from(_podsToActivate.podsToHit);
-    List<ActivityPod> distractingList =
-        List.from(setPods.difference(setPodsToHit));
-    _podsToActivate.distractingPods = _getRandomPods(numberOfDistractingPods,
-        distractingList, _podsToActivate.distractingPods);
+    _podsToActivate = _createPodsToActivate(numPodsToHit, numDistractingPods);
+
+    _setRandomColorsOnPodsToHit();
+    _setRandomColorsOnDistractingPods();
+
+    //var podsToChooseFrom = _getRandomPods(numberOfSimultaneousActivePods, pods);
+
+    // var setPods = Set.from(pods);
+    // var setPodsToHit = Set.from(_podsToActivate.podsToHit);
+    // List<ActivityPod> distractingList =
+    //     List.from(setPods.difference(setPodsToHit));
+    // _podsToActivate.distractingPods = _getRandomPods(
+    //     distractingColors, distractingList, _podsToActivate.distractingPods);
 
     return _podsToActivate;
+  }
+
+  int _getNumberOfDistractingPods() {
+    var numDistractingPods = 0;
+    if (distractingColors.numberOfDistractingColors > 0) {
+      var pct = Random().nextDouble();
+      numDistractingPods = (numberOfSimultaneousActivePods * pct).round();
+    }
+    return numDistractingPods;
+  }
+
+  PodsToActivate _createPodsToActivate(
+      int numPodsToHit, int numDistractingPods) {
+    pods.shuffle();
+    var podsToActivate = PodsToActivate()
+      ..podsToHit = pods.take(numPodsToHit).toList()
+      ..distractingPods =
+          pods.skip(numPodsToHit).take(numDistractingPods).toList();
+    return podsToActivate;
+  }
+
+  void _setRandomColorsOnDistractingPods() {
+    _podsToActivate.distractingPods.forEach((pod) {
+      pod.color = PodColors.getRandomDistractingColor(
+          distractingColors.numberOfDistractingColors);
+    });
+  }
+
+  void _setRandomColorsOnPodsToHit() {
+    _podsToActivate.podsToHit.forEach((pod) {
+      pod.color = PodColors.getRandomHitColor(numberOfHitColors);
+    });
   }
 
   List<ActivityPod> _getRandomPods(

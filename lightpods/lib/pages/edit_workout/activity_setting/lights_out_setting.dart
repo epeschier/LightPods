@@ -30,7 +30,7 @@ class _LightsOutWidgetState extends State<LightsOutWidget> {
   Widget _getLightsOut() => MultipleChoice(
         icon: Icons.highlight,
         text: 'Lights out',
-        valueDescription: _getValueText(),
+        valueDescription: widget.value.toString(),
         selectedItem: _selectedIndex,
         onItemSelected: _onMultipleChoiceChanged,
         subText: ActivityDescription.lightsOutExplanation[_selectedIndex],
@@ -39,6 +39,7 @@ class _LightsOutWidgetState extends State<LightsOutWidget> {
             ? SliderInput(
                 description: 'Lights out',
                 value: widget.value.timeout,
+                units: 's',
                 max: 5,
                 decimals: 1,
                 onValueChanged: (double value) {
@@ -56,8 +57,4 @@ class _LightsOutWidgetState extends State<LightsOutWidget> {
       _selectedIndex = index;
     });
   }
-
-  String? _getValueText() => (_selectedIndex > 0)
-      ? '${widget.value.timeout.toStringAsFixed(1)} sec'
-      : null;
 }

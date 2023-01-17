@@ -14,8 +14,14 @@ class ActivityPod {
 
   Function? onHitOrTimeout;
 
+  late Color color;
+
   final Stopwatch _stopwatch = Stopwatch();
   bool _isActive = false;
+
+  void activateWithStoredColor() {
+    activate(color);
+  }
 
   void activate(Color color) {
     print("activate $id");

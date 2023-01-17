@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import '../../components/toggle_button.dart';
 import '../../logic/pod/pod_base.dart';
 import '../../services/pod_service.dart';
+import 'pod_data.dart';
 
 class PodState extends StatefulWidget {
   final PodBase pod;
@@ -14,7 +15,6 @@ class PodState extends StatefulWidget {
 }
 
 class _PodStateState extends State<PodState> {
-  var _isConnected = false;
   final _podService = GetIt.I.get<PodService>();
 
   @override
@@ -36,7 +36,7 @@ class _PodStateState extends State<PodState> {
   ToggleButton _getLightToggle() => ToggleButton(
         icon: Icons.lightbulb,
         state: false,
-        enabled: _isConnected,
+        enabled: widget.pod.isConnected,
         onClick: _onClickLight,
       );
 
@@ -60,38 +60,14 @@ class _PodStateState extends State<PodState> {
   }
 
   void _onClickConnect(bool value) {
-    if (value) {
-      widget.pod.connect();
-      _podService.addPod(widget.pod);
-    } else {
-      widget.pod.disconnect();
-      _podService.removePod(widget.pod);
-    }
-
     setState(() {
-      _isConnected = value;
+      if (value) {
+        widget.pod.connect();
+        _podService.addPod(widget.pod);
+      } else {
+        widget.pod.disconnect();
+        _podService.removePod(widget.pod);
+      }
     });
-  }
-}
-
-class PodData extends StatelessWidget {
-  final PodBase pod;
-
-  const PodData({super.key, required this.pod});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          pod.name,
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        Text(pod.id),
-      ],
-    ));
   }
 }

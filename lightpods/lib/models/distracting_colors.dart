@@ -18,4 +18,7 @@ class DistractingColors {
 
     return this;
   }
+
+  @override
+  String toString() => "$numberOfDistractingColors / $chanceToAppear%";
 }

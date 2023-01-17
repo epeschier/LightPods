@@ -22,4 +22,22 @@ class DurationSetting {
 
     return this;
   }
+
+  @override
+  String toString() {
+    String description = '';
+    if (durationType != ActivityDurationType.timeout) {
+      description += '${numberOfHits.toInt()} hits';
+    }
+
+    if (durationType == ActivityDurationType.hitsAndTimeout) {
+      description += ' / ';
+    }
+
+    if (durationType != ActivityDurationType.numberOfHits) {
+      description += '${timeout.toStringAsFixed(1)} min';
+    }
+
+    return description;
+  }
 }

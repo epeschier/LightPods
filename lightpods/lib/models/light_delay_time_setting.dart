@@ -24,4 +24,18 @@ class LightDelayTimeSetting {
 
     return this;
   }
+
+  @override
+  String toString() {
+    if (delayTimeType == LightDelayTimeType.fixed) {
+      return _getFixedValueText();
+    } else if (delayTimeType == LightDelayTimeType.random) {
+      return _getRandomValueText();
+    }
+    return '';
+  }
+
+  String _getFixedValueText() => '${fixedTime.toStringAsFixed(1)} s';
+  String _getRandomValueText() =>
+      '${randomTimeMin.toStringAsFixed(1)}-${randomTimeMax.toStringAsFixed(1)} s';
 }

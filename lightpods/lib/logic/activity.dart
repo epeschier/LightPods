@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/models/activity_enums.dart';
-import 'package:lightpods/models/pod_colors.dart';
 import '../models/activity_setting.dart';
 import 'activity_lightup_mode.dart';
 import 'activity_pod.dart';
@@ -21,7 +20,6 @@ class Activity {
   late LightsOut _lightsOut;
   late LightDelay _lightDelay;
   late LightupMode _lightupMode;
-  late PodColors _podColors;
 
   Activity(this.setting, this.activityPods) {
     _duration =
@@ -30,11 +28,12 @@ class Activity {
     _lightsOut = LightsOutFactory.getLightsOut(setting.lightsOut);
     _lightDelay = LightDelayFactory.getLightDelay(setting.lightDelayTime);
     _lightupMode = LightupMode(
-        activityPods,
-        1, // TODO: distracting color %
-        setting.numberOfSimultaneousActivePods,
-        setting.lightDelayTime.delayTimeType == LightDelayTimeType.none);
-    _podColors = PodColors();
+        pods: activityPods,
+        distractingColors: setting.distractingColors,
+        numberOfSimultaneousActivePods: setting.numberOfSimultaneousActivePods,
+        numberOfHitColors: setting.numberOfHitColors,
+        noDuplicate:
+            setting.lightDelayTime.delayTimeType == LightDelayTimeType.none);
   }
 
   late PodsToActivate _activatedPods;
@@ -73,12 +72,11 @@ class Activity {
 
   void _turnOnPods(PodsToActivate pods) {
     for (var p in pods.podsToHit) {
-      p.activate(_podColors.getRandomHitColor(setting.numberOfHitColors));
+      p.activateWithStoredColor();
     }
 
     for (var p in pods.distractingPods) {
-      p.activate(_podColors
-          .getRandomDistractingColor(setting.numberOfDistractingColors));
+      p.activateWithStoredColor();
     }
   }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'color_bullets.dart';
+
 class ColorIndicator extends StatefulWidget {
   final String text;
   final List<Color> colors;
@@ -15,25 +17,7 @@ class _ColorIndicatorState extends State<ColorIndicator> {
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(widget.text),
-      getColorBullets(widget.colors),
+      ColorBullets(colors: widget.colors, size: 22),
     ]);
-  }
-
-  Widget getColorBullets(List<Color> colors) {
-    List<Widget> list = [];
-    for (var color in colors) {
-      list.add(_colorBullet(color));
-    }
-    return Row(children: list);
-  }
-
-  Widget _colorBullet(Color color) {
-    return Padding(
-        padding: const EdgeInsets.all(10),
-        child: Icon(
-          Icons.circle,
-          size: 24,
-          color: color,
-        ));
   }
 }

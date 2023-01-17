@@ -29,7 +29,7 @@ class _LightDelayTimeWidgetState extends State<LightDelayTimeWidget> {
   Widget _getLightsOut() => MultipleChoice(
         icon: Icons.hourglass_empty,
         text: 'Light Delay Time',
-        valueDescription: _getValueText(),
+        valueDescription: widget.value.toString(),
         selectedItem: widget.value.delayTimeType.index,
         onItemSelected: _onLightsDelayToggleClick,
         subText: ActivityDescription
@@ -64,6 +64,7 @@ class _LightDelayTimeWidgetState extends State<LightDelayTimeWidget> {
       return SliderInput(
         description: 'Timeout',
         value: widget.value.fixedTime,
+        units: 's',
         max: 5,
         decimals: 1,
         onValueChanged: (double value) {
@@ -75,18 +76,4 @@ class _LightDelayTimeWidgetState extends State<LightDelayTimeWidget> {
     }
     return null;
   }
-
-  String? _getValueText() {
-    if (widget.value.delayTimeType == LightDelayTimeType.fixed) {
-      return _getFixedValueText();
-    } else if (widget.value.delayTimeType == LightDelayTimeType.random) {
-      return _getRandomValueText();
-    }
-    return null;
-  }
-
-  String _getFixedValueText() =>
-      '${widget.value.fixedTime.toStringAsFixed(1)} sec';
-  String _getRandomValueText() =>
-      '${widget.value.randomTimeMin.toStringAsFixed(1)}-${widget.value.randomTimeMax.toStringAsFixed(1)} sec';
 }

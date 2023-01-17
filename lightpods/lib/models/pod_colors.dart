@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class PodColors {
+abstract class PodColors {
   static const List<Color> _hitColors = [
     Color.fromARGB(255, 255, 0, 0),
     Color.fromARGB(255, 0, 0, 255),
@@ -17,26 +17,25 @@ class PodColors {
     Color.fromARGB(255, 2, 176, 233)
   ];
 
-  final Random _random = Random();
+  static List<Color> get getHitColors => _hitColors;
+  static List<Color> get getDistractingColors => _distractingColors;
 
-  List<Color> get getHitColors => _hitColors;
-  List<Color> get getDistractingColors => _distractingColors;
-
-  Iterable<Color> getNumHitColors(int num) => getHitColors.take(num);
-  Iterable<Color> getNumDistractingColors(int num) =>
+  static Iterable<Color> getNumHitColors(int num) => getHitColors.take(num);
+  static Iterable<Color> getNumDistractingColors(int num) =>
       getDistractingColors.take(num);
 
-  Color getHitColor(int index) => _hitColors[index];
+  static Color getHitColor(int index) => _hitColors[index];
 
-  Color getDistractingColor(int index) => _hitColors[index];
+  static Color getDistractingColor(int index) => _hitColors[index];
 
-  Color getRandomHitColor(int max) => _getRandomItemFromList(max, getHitColors);
+  static Color getRandomHitColor(int max) =>
+      _getRandomItemFromList(max, getHitColors);
 
-  Color getRandomDistractingColor(int max) =>
+  static Color getRandomDistractingColor(int max) =>
       _getRandomItemFromList(max, getDistractingColors);
 
-  Color _getRandomItemFromList(int max, List<Color> list) {
-    var index = _random.nextInt(max);
+  static Color _getRandomItemFromList(int max, List<Color> list) {
+    var index = Random().nextInt(max);
     return list[index];
   }
 }

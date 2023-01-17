@@ -58,7 +58,7 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
                 units: 'min',
                 onValueChanged: _onTimeoutChanged,
                 value: widget.value.timeout,
-                max: 10),
+                max: 5),
           ),
         ],
       );
@@ -75,20 +75,5 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
     });
   }
 
-  String _getValueText() {
-    String description = '';
-    if (widget.value.durationType != ActivityDurationType.timeout) {
-      description += '${widget.value.numberOfHits.toInt()} hits';
-    }
-
-    if (widget.value.durationType == ActivityDurationType.hitsAndTimeout) {
-      description += ' / ';
-    }
-
-    if (widget.value.durationType != ActivityDurationType.numberOfHits) {
-      description += '${widget.value.timeout.toStringAsFixed(1)} min';
-    }
-
-    return description;
-  }
+  String _getValueText() => widget.value.toString();
 }
