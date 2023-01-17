@@ -38,6 +38,10 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   @override
   void initState() {
+    _activity = _createActivity();
+    _activity.onActivityEnded = _onActivityEnded;
+    _activity.onResultChanged = _onResultChanged;
+
     _buttons = _getDummyPodButtons(widget.setting);
     super.initState();
   }
@@ -131,16 +135,9 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   late Activity _activity;
 
-  void _onStart() {
-    _activity = _createActivity();
-    _activity.onActivityEnded = _onActivityEnded;
-    _activity.onResultChanged = _onResultChanged;
-    _activity.run();
-  }
+  void _onStart() => _activity.run();
 
-  void _onStop() {
-    _activity.stop();
-  }
+  void _onStop() => _activity.stop();
 
   void _onReset() {
     setState(() {
@@ -150,9 +147,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
     });
   }
 
-  void _onTick() {
-    _activity.tick();
-  }
+  void _onTick() => _activity.tick();
 
   void _onActivityEnded() {
     _activityTimerState.currentState!.stop();

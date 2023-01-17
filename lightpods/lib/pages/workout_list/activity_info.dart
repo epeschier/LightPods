@@ -18,7 +18,9 @@ class ActivityInfo extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _getNameAndDescription(context),
+          Expanded(
+            child: _getNameAndDescription(context),
+          ),
           _getEditIcon(),
         ],
       ),
@@ -84,7 +86,7 @@ class ActivityInfo extends StatelessWidget {
       if (text.isNotEmpty) {
         text += ' / ';
       }
-      text += '${setting.timeout.toStringAsFixed(0)} min';
+      text += '${setting.timeout.toStringAsFixed(1)} min';
     }
     return text;
   }

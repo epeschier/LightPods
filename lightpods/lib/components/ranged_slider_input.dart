@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:lightpods/components/value_widget.dart';
 
 import '../theme/theme.dart';
+import 'header_with_value.dart';
 
 class RangedSliderInput extends ValueWidget<RangeValues> {
   final String description;
   final String? units;
   final double max;
-  int? decimals;
+  int decimals;
+  bool showValue;
   RangeValues valueRange;
 
   RangedSliderInput(
       {super.key,
-      this.decimals,
+      this.decimals = 0,
       onValueChanged,
       required this.description,
       this.units,
+      this.showValue = true,
       required this.max,
       required this.valueRange})
       : super(onValueChanged);
@@ -37,23 +40,27 @@ class _RangedSliderInput extends State<RangedSliderInput> {
   }
 
   Widget _getSliderHeader() => Padding(
-      padding: const EdgeInsets.only(left: 12),
-      child: Text(
-        widget.description,
-        style: ThemeColors.sliderHeaderText,
-      ));
+      padding: const EdgeInsets.only(left: 8, bottom: 8, right: 8),
+      child: HeaderWithValue(
+          text: widget.description,
+          value: (widget.showValue) ? _getValueAsString() : null));
 
-  Widget _getSlider() => RangeSlider(
-      values: widget.valueRange,
-      max: widget.max,
-      labels: RangeLabels(
-        widget.valueRange.start.round().toString(),
-        widget.valueRange.end.round().toString(),
-      ),
-      onChanged: (RangeValues values) {
-        setState(() {
-          widget.valueRange = values;
-          widget.onValueChanged?.call(values);
-        });
-      });
+  String _getValueAsString() =>
+      "${widget.valueRange.start.toStringAsFixed(widget.decimals)}-${widget.valueRange.end.toStringAsFixed(widget.decimals)} ${widget.units ?? ''}";
+
+  Widget _getSlider() => Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: RangeSlider(
+          values: widget.valueRange,
+          max: widget.max,
+          labels: RangeLabels(
+            widget.valueRange.start.round().toString(),
+            widget.valueRange.end.round().toString(),
+          ),
+          onChanged: (RangeValues values) {
+            setState(() {
+              widget.valueRange = values;
+              widget.onValueChanged?.call(values);
+            });
+          }));
 }

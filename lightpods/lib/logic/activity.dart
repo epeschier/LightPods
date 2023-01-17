@@ -31,7 +31,7 @@ class Activity {
     _lightDelay = LightDelayFactory.getLightDelay(setting.lightDelayTime);
     _lightupMode = LightupMode(
         activityPods,
-        setting.numberOfDistractingPods,
+        1, // TODO: distracting color %
         setting.numberOfSimultaneousActivePods,
         setting.lightDelayTime.delayTimeType == LightDelayTimeType.none);
     _podColors = PodColors();

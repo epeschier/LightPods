@@ -8,7 +8,7 @@ class SliderInput extends ValueWidget<double> {
   final double max;
   int? decimals;
   final double? value;
-  bool? showValue = false;
+  bool showValue;
 
   SliderInput(
       {super.key,
@@ -17,7 +17,7 @@ class SliderInput extends ValueWidget<double> {
       this.units,
       this.description,
       required this.max,
-      this.showValue,
+      this.showValue = true,
       this.value})
       : super(onValueChanged);
 
@@ -49,11 +49,11 @@ class _SliderInput extends State<SliderInput> {
   }
 
   Widget _getSliderHeader() => Padding(
-      padding: const EdgeInsets.only(left: 12, bottom: 8, top: 8),
+      padding: const EdgeInsets.only(left: 12, bottom: 8, top: 8, right: 12),
       child: HeaderWithValue(
           text: widget.description!,
-          value: (widget.showValue ?? false)
-              ? _currentSliderValue.toStringAsFixed(widget.decimals ?? 0)
+          value: (widget.showValue)
+              ? "${_currentSliderValue.toStringAsFixed(widget.decimals ?? 0)} ${widget.units ?? ''}"
               : null));
 
   Widget _getSlider() => Slider(

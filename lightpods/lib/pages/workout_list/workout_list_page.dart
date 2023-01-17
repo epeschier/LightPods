@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/list_divider.dart';
+import 'package:lightpods/models/distracting_colors.dart';
 import '../../models/activity_setting.dart';
 import '../../models/duration_setting.dart';
 import '../../models/light_delay_time_setting.dart';
@@ -16,19 +17,13 @@ class ActivityListPage extends StatefulWidget {
 }
 
 class _ActivityListPageState extends State<ActivityListPage> {
-  List<ActivitySetting> _list = [];
+  late ActivitySettingList _workouts = ActivitySettingList();
 
   @override
   void initState() {
-    // TODO: get from stored activities
-    var setting = _getActivitySetting();
-    _list.add(setting);
-
-    var secondSetting = ActivitySetting().copyWith(setting);
-    secondSetting.name = "Workout 2";
-    secondSetting.numberOfPods = 4;
-
-    _list.add(secondSetting);
+    ActivitySettingList.load().then((value) => setState(() {
+          _workouts = value;
+        }));
 
     super.initState();
   }
@@ -47,8 +42,8 @@ class _ActivityListPageState extends State<ActivityListPage> {
   Widget _getActivityList() {
     List<Widget> containers = <Widget>[];
 
-    for (var i = 0; i < _list.length; i++) {
-      var setting = _list[i];
+    for (var i = 0; i < _workouts.list.length; i++) {
+      var setting = _workouts.list[i];
       containers.add(ActivityInfo(
         onEdit: () {
           _navigateToEditActivity(context, setting);
@@ -56,7 +51,7 @@ class _ActivityListPageState extends State<ActivityListPage> {
         setting: setting,
       ));
 
-      if (i < _list.length - 1) {
+      if (i < _workouts.list.length - 1) {
         containers.add(ListDivider());
       }
     }
@@ -92,46 +87,12 @@ class _ActivityListPageState extends State<ActivityListPage> {
   void _updateActivity(ActivitySetting activity) {
     setState(() {
       if (activity.id > 0) {
-        var item = _list.firstWhere((element) => element.id == activity.id);
+        var item = _workouts.getItem(activity.id);
         item.copyWith(activity);
       } else {
-        // TODO: use service for list and id.
-        activity.id = 10;
-        _list.add(activity);
+        _workouts.add(activity);
       }
+      _workouts.save().then((value) => print("save $value"));
     });
-  }
-
-// TEMP
-  ActivitySetting _getActivitySetting() {
-    var duration = DurationSetting();
-    duration.durationType = ActivityDurationType.hitsAndTimeout;
-    duration.numberOfHits = 10;
-    duration.timeout = 4;
-
-    var lightDelay = LightDelayTimeSetting();
-    lightDelay.fixedTime = 2;
-    lightDelay.delayTimeType = LightDelayTimeType.fixed;
-    lightDelay.randomTimeMin = 1;
-    lightDelay.randomTimeMax = 2;
-
-    var lightsOut = LightsOutSetting();
-    lightsOut.lightsOut = LightsOutType.timeout;
-    lightsOut.timeout = 2;
-
-    var setting = ActivitySetting();
-    setting.name = "My Workout";
-    setting.id = 1;
-    setting.numberOfPlayers = 1;
-    setting.numberOfPods = 2;
-    setting.numberOfDistractingPods = 0;
-    setting.numberOfStations = 1;
-    setting.numberOfHitColors = 1;
-    setting.activityDuration = duration;
-    setting.competitionMode = CompetitionType.regular;
-    setting.lightsOut = lightsOut;
-    setting.lightDelayTime = lightDelay;
-
-    return setting;
   }
 }

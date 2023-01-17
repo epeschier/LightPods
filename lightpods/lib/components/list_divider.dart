@@ -6,7 +6,7 @@ class ListDivider extends StatelessWidget {
   Widget build(BuildContext context) => _getDivider();
 
   Widget _getDivider() => Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
       color: ThemeColors.backgroundColor,
       child: Container(
         color: ThemeColors.secondaryTextColor,

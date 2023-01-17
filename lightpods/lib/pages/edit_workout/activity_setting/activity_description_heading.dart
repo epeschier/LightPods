@@ -20,7 +20,7 @@ class ActivityDescriptionHeading extends StatelessWidget {
   Widget build(BuildContext context) =>
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
-            padding: const EdgeInsets.only(right: 10, top: 2),
+            padding: const EdgeInsets.only(right: 12, top: 2),
             child: Icon(
               icon,
               size: 22,

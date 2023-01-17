@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/pages/edit_workout/activity_setting/distracting_color_chance.dart';
 import '../../components/list_divider.dart';
+import '../../components/slider_input.dart';
 import '../../models/activity_enums.dart';
 import 'activity_setting/strike_out_setting.dart';
 import '../../components/number_ticker.dart';
@@ -72,10 +74,7 @@ class _EditWorkoutState extends State<EditWorkout> {
       ListDivider(),
       _getNumberOfColors(setting.numberOfHitColors),
       ListDivider(),
-      _getNumberOfDistractingPods(setting.numberOfDistractingPods),
-      Visibility(
-          visible: setting.numberOfDistractingPods > 0,
-          child: _getNumberOfDistractingColors(setting.numberOfHitColors)),
+      DistactingColorChance(value: setting.distractingColors),
       ListDivider(),
       ActivityDurationSetting(value: setting.activityDuration),
       ListDivider(),
@@ -161,38 +160,6 @@ class _EditWorkoutState extends State<EditWorkout> {
           onValueChanged: (int value) {
             setState(() {
               widget.activitySetting.numberOfHitColors = value;
-            });
-          },
-        ),
-      );
-
-  Widget _getNumberOfDistractingPods(int numberOfDistractingPods) =>
-      ActivitySettingContainer(
-        icon: Icons.alt_route,
-        text: 'Distracting Pods',
-        subText: 'Number of distracting pods that will light up simultaneously',
-        widget: NumberTicker(
-          value: numberOfDistractingPods,
-          minValue: 0,
-          onValueChanged: (int value) {
-            setState(() {
-              widget.activitySetting.numberOfDistractingPods = value;
-            });
-          },
-        ),
-      );
-
-  Widget _getNumberOfDistractingColors(int numberOfColors) =>
-      ActivitySettingContainer(
-        icon: Icons.palette,
-        text: 'Distracting Colors',
-        widget: NumberTicker(
-          value: numberOfColors,
-          minValue: 1,
-          maxValue: 4,
-          onValueChanged: (int value) {
-            setState(() {
-              widget.activitySetting.numberOfDistractingColors = value;
             });
           },
         ),

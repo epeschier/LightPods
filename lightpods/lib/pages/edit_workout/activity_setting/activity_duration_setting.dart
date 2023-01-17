@@ -45,6 +45,7 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
             visible: widget.value.durationType != ActivityDurationType.timeout,
             child: SliderInput(
                 description: 'Hits',
+                units: 'hits',
                 onValueChanged: _onNumberOfHitsChanged,
                 value: widget.value.numberOfHits,
                 max: 100),
@@ -53,6 +54,8 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
             visible: widget.value.durationType.index > 0,
             child: SliderInput(
                 description: 'Timeout',
+                decimals: 1,
+                units: 'min',
                 onValueChanged: _onTimeoutChanged,
                 value: widget.value.timeout,
                 max: 10),

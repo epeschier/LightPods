@@ -3,7 +3,6 @@ import 'value_widget.dart';
 import 'round_button.dart';
 
 class NumberTicker extends ValueWidget<int> {
-  //StatefulWidget {
   final int? minValue;
   final int? maxValue;
   final int value;
