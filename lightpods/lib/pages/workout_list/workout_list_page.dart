@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/list_divider.dart';
 import '../../models/activity_setting.dart';
+import '../../models/activity_setting_list.dart';
 import '../edit_workout/edit_workout_page.dart';
 import 'activity_info.dart';
 

@@ -1,60 +1,13 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:lightpods/models/activity_enums.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'distracting_colors.dart';
 import 'duration_setting.dart';
 import 'light_delay_time_setting.dart';
 import 'lights_out_setting.dart';
+import 'strike_out.dart';
 
 part 'activity_setting.g.dart';
-
-@JsonSerializable(explicitToJson: true)
-class ActivitySettingList extends ChangeNotifier {
-  late List<ActivitySetting> list;
-
-  ActivitySettingList() {
-    list = [];
-  }
-
-  void add(ActivitySetting item) {
-    item.id = list.length + 1;
-    list.add(item);
-    notifyListeners();
-  }
-
-  ActivitySetting getItem(int id) =>
-      list.firstWhere((element) => element.id == id);
-
-  factory ActivitySettingList.fromJson(Map<String, dynamic> json) =>
-      _$ActivitySettingListFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ActivitySettingListToJson(this);
-
-  static const storageKey = 'activity_settings';
-
-  Future save() async {
-    final prefs = await SharedPreferences.getInstance();
-    var data = toJson();
-    String encodedMap = json.encode(data);
-    return prefs.setString(storageKey, encodedMap);
-  }
-
-  static Future<ActivitySettingList> load() async {
-    var list = ActivitySettingList();
-    final prefs = await SharedPreferences.getInstance();
-    var data = prefs.getString(storageKey);
-    if (data != null) {
-      var datamap = json.decode(data!);
-      list = ActivitySettingList.fromJson(datamap);
-    }
-
-    return list;
-  }
-}
 
 @JsonSerializable(explicitToJson: true)
 class ActivitySetting {
@@ -112,27 +65,6 @@ class ActivitySetting {
       distractingColors.numberOfDistractingColors = 0;
     }
   }
-}
-
-@JsonSerializable()
-class StrikeOut {
-  late bool value = false;
-  late int count = 1;
-
-  StrikeOut();
-
-  factory StrikeOut.fromJson(Map<String, dynamic> json) =>
-      _$StrikeOutFromJson(json);
-  Map<String, dynamic> toJson() => _$StrikeOutToJson(this);
-
-  StrikeOut copyWith(StrikeOut obj) {
-    value = obj.value;
-    count = obj.count;
-    return this;
-  }
-
-  @override
-  String toString() => (value) ? count.toStringAsFixed(0) : '';
 }
 
 /*

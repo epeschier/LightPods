@@ -6,18 +6,6 @@ part of 'activity_setting.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ActivitySettingList _$ActivitySettingListFromJson(Map<String, dynamic> json) =>
-    ActivitySettingList()
-      ..list = (json['list'] as List<dynamic>)
-          .map((e) => ActivitySetting.fromJson(e as Map<String, dynamic>))
-          .toList();
-
-Map<String, dynamic> _$ActivitySettingListToJson(
-        ActivitySettingList instance) =>
-    <String, dynamic>{
-      'list': instance.list.map((e) => e.toJson()).toList(),
-    };
-
 ActivitySetting _$ActivitySettingFromJson(Map<String, dynamic> json) =>
     ActivitySetting()
       ..name = json['name'] as String
@@ -64,12 +52,3 @@ const _$CompetitionTypeEnumMap = {
   CompetitionType.regular: 'regular',
   CompetitionType.firstToHit: 'firstToHit',
 };
-
-StrikeOut _$StrikeOutFromJson(Map<String, dynamic> json) => StrikeOut()
-  ..value = json['value'] as bool
-  ..count = json['count'] as int;
-
-Map<String, dynamic> _$StrikeOutToJson(StrikeOut instance) => <String, dynamic>{
-      'value': instance.value,
-      'count': instance.count,
-    };
