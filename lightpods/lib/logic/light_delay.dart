@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:lightpods/logic/callback_wait.dart';
 
 import '../models/activity_enums.dart';
-import '../models/activity_setting.dart';
 import '../models/light_delay_time_setting.dart';
 
 abstract class LightDelay extends CallbackWait {
@@ -22,11 +21,23 @@ class LightDelayFixed extends LightDelay {
 
   LightDelayFixed(this.delayTimeMs);
 
+  bool _isWaiting = false;
+
+  @override
+  void abort() {
+    _isWaiting = false;
+    super.abort();
+  }
+
   @override
   void wait(Function callback) {
-    timer = Timer(Duration(milliseconds: delayTimeMs), () {
-      callback();
-    });
+    if (!_isWaiting) {
+      _isWaiting = true;
+      timer = Timer(Duration(milliseconds: delayTimeMs), () {
+        _isWaiting = false;
+        callback();
+      });
+    }
   }
 }
 
@@ -40,14 +51,25 @@ class LightDelayRandom extends LightDelay {
   });
 
   final Random _random = Random();
+  bool _isWaiting = false;
+
+  @override
+  void abort() {
+    _isWaiting = false;
+    super.abort();
+  }
 
   @override
   void wait(Function callback) {
-    var time =
-        delayTimeMsMin + _random.nextInt(delayTimeMsMax - delayTimeMsMin);
-    timer = Timer(Duration(milliseconds: time), () {
-      callback();
-    });
+    if (!_isWaiting) {
+      _isWaiting = true;
+      var time =
+          delayTimeMsMin + _random.nextInt(delayTimeMsMax - delayTimeMsMin);
+      timer = Timer(Duration(milliseconds: time), () {
+        _isWaiting = false;
+        callback();
+      });
+    }
   }
 }
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 abstract class PodBase {
   Function? onHit;
+  Function? onConnectionChanged;
+
   String get id;
   String get name;
 
@@ -20,5 +22,6 @@ abstract class PodBase {
 
   void disconnect() {
     _connected = false;
+    print("##### $isConnected");
   }
 }

@@ -6,6 +6,7 @@ import 'package:lightpods/logic/pod/pod.dart';
 import 'package:lightpods/partials/pod_count.dart';
 import 'package:lightpods/services/bluetooth_device_service.dart';
 
+import '../../services/pod_service.dart';
 import '../../test/fake_pod.dart';
 
 class DeviceList extends StatefulWidget {
@@ -16,19 +17,18 @@ class DeviceList extends StatefulWidget {
 }
 
 class _DeviceList extends State<DeviceList> {
-  final _bluetoothDeviceService = GetIt.I.get<BluetoothDeviceService>();
+  final _podService = GetIt.I.get<PodService>();
+  final _bluetoothDeviceService = BluetoothDeviceService();
+  late List<BluetoothDevice> _devices;
 
   @override
   Widget build(BuildContext context) {
-    final List<BluetoothDevice> devices = _bluetoothDeviceService.devices;
-    _bluetoothDeviceService.addListener(() => setState(() {}));
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Device List'),
-        actions: [PodCount(count: devices.length)],
+        actions: [PodCount(count: _podService.numberOfConnectedPods)],
       ),
-      body: _getDeviceList(devices),
+      body: _getDeviceList(_devices),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.bluetooth_searching),
           onPressed: () {
@@ -42,19 +42,32 @@ class _DeviceList extends State<DeviceList> {
   void initState() {
     super.initState();
 
+    _bluetoothDeviceService.addListener(_updateDevices);
+    _devices = _bluetoothDeviceService.devices;
     //scanForDevices();
   }
 
   ListView _getDeviceList(List<BluetoothDevice> devices) {
     List<Widget> containers = <Widget>[];
 
-    for (BluetoothDevice device in devices) {
-      containers.add(PodState(pod: Pod(device: device)));
+    var podList = _podService.getPods();
+    for (var pod in podList) {
+      containers.add(PodState(pod: pod));
     }
     //containers.add(PodState(pod: FakePod('aa:bb')));
 
     return ListView(
       children: containers,
     );
+  }
+
+  void _updateDevices() {
+    print("_updateDevices: ${_devices.length}");
+    for (BluetoothDevice device in _devices) {
+      print("device: ${device.name}");
+      _podService.addPod(Pod(device));
+    }
+
+    setState(() {});
   }
 }

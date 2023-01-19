@@ -28,7 +28,9 @@ class _WorkoutPageState extends State<WorkoutPage> {
       GlobalKey<ActivityTimerState>();
 
   List<PodBase> _podList = [];
-  //late List<PodButton> _buttons;
+
+  late List<PodButton> _buttons;
+
   int _miss = 0;
   int _hits = 0;
   int _avg = 0;
@@ -62,11 +64,11 @@ class _WorkoutPageState extends State<WorkoutPage> {
             body: Column(children: [
               _getActivityTimer(),
               _infoCards(),
-              // Visibility(
-              //     visible: (_buttons != null),
-              //     child: Row(
-              //       children: _buttons,
-              //     ))
+              Visibility(
+                  visible: (_buttons != null),
+                  child: Row(
+                    children: _buttons,
+                  ))
             ])));
   }
 
@@ -134,6 +136,17 @@ class _WorkoutPageState extends State<WorkoutPage> {
     });
   }
 
+  Activity _createActivity() {
+    PodService podService = GetIt.I.get<PodService>();
+    //_podList = podService.getPods();
+
+    _buttons = _getDummyPodButtons(widget.setting);
+
+    Activity activity = ActivityFactory.create(widget.setting, _podList);
+
+    return activity;
+  }
+
   List<PodButton> _getDummyPodButtons(ActivitySetting setting) {
     List<PodButton> buttons = [];
     _podList = [];
@@ -146,16 +159,5 @@ class _WorkoutPageState extends State<WorkoutPage> {
       ));
     }
     return buttons;
-  }
-
-  Activity _createActivity() {
-    PodService podService = GetIt.I.get<PodService>();
-    _podList = podService.getPods();
-
-    //_buttons = _getDummyPodButtons(widget.setting);
-
-    Activity activity = ActivityFactory.create(widget.setting, _podList);
-
-    return activity;
   }
 }

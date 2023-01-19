@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import '../../components/toggle_button.dart';
 import '../../logic/pod/pod_base.dart';
-import '../../services/pod_service.dart';
 import 'pod_data.dart';
 
 class PodState extends StatefulWidget {
@@ -15,14 +13,20 @@ class PodState extends StatefulWidget {
 }
 
 class _PodStateState extends State<PodState> {
-  final _podService = GetIt.I.get<PodService>();
+  bool _canTurnOnLight = false;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     widget.pod.onHit = () {
       _onPodHit(context);
     };
+    print("##### ${widget.pod.name} ${widget.pod.isConnected}");
 
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
         color: const Color.fromARGB(255, 34, 44, 49),
         padding: const EdgeInsets.all(20),
@@ -36,13 +40,13 @@ class _PodStateState extends State<PodState> {
   ToggleButton _getLightToggle() => ToggleButton(
         icon: Icons.lightbulb,
         state: false,
-        enabled: widget.pod.isConnected,
+        enabled: _canTurnOnLight,
         onClick: _onClickLight,
       );
 
   ToggleButton _getBluetoothToggle() => ToggleButton(
         icon: Icons.bluetooth,
-        state: false,
+        state: widget.pod.isConnected,
         onClick: _onClickConnect,
       );
 
@@ -62,12 +66,18 @@ class _PodStateState extends State<PodState> {
   void _onClickConnect(bool value) {
     setState(() {
       if (value) {
+        widget.pod.onConnectionChanged = _updateConnectionState;
         widget.pod.connect();
-        _podService.addPod(widget.pod);
       } else {
         widget.pod.disconnect();
-        _podService.removePod(widget.pod);
       }
+    });
+  }
+
+  void _updateConnectionState(bool connected) {
+    setState(() {
+      print("### update state: $connected");
+      _canTurnOnLight = connected;
     });
   }
 }

@@ -5,9 +5,10 @@ import '../../../models/lights_out_setting.dart';
 import '../multiple_choice.dart';
 
 class LightsOutWidget extends StatefulWidget {
+  final Function? onChanged;
   final LightsOutSetting value;
 
-  const LightsOutWidget({super.key, required this.value});
+  const LightsOutWidget({super.key, required this.value, this.onChanged});
 
   @override
   State<LightsOutWidget> createState() => _LightsOutWidgetState();
@@ -56,5 +57,6 @@ class _LightsOutWidgetState extends State<LightsOutWidget> {
     setState(() {
       _selectedIndex = index;
     });
+    widget.onChanged?.call();
   }
 }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/models/activity_enums.dart';
+import '../models/activity_enums.dart';
 import '../models/activity_setting.dart';
 import 'activity_lightup_mode.dart';
 import 'activity_pod.dart';
 import 'light_delay.dart';
-import 'light_out.dart';
 import 'activity_duration.dart';
 import '../models/activity_result.dart';
 
@@ -17,7 +16,6 @@ class Activity {
   final ActivityResult _activityResult = ActivityResult();
 
   late ActivityDuration _duration;
-  late LightsOut _lightsOut;
   late LightDelay _lightDelay;
   late LightupMode _lightupMode;
 
@@ -25,7 +23,6 @@ class Activity {
     _duration =
         ActivityDurationFactory.getActivityDuration(setting.activityDuration);
 
-    _lightsOut = LightsOutFactory.getLightsOut(setting.lightsOut);
     _lightDelay = LightDelayFactory.getLightDelay(setting.lightDelayTime);
     _lightupMode = LightupMode(
         pods: activityPods,
@@ -46,7 +43,7 @@ class Activity {
     _isRunning = true;
     _activityResult.clear();
 
-    _lightupMode.installHitHandlers(_hitHandler);
+    _installHitHandlers();
 
     _startCycle();
   }
@@ -66,8 +63,6 @@ class Activity {
   void _onLightDelayDone() {
     _activatedPods = _lightupMode.getPods();
     _turnOnPods(_activatedPods);
-
-    _lightsOut.wait(_lightsOutHandler);
   }
 
   void _turnOnPods(PodsToActivate pods) {
@@ -80,53 +75,39 @@ class Activity {
     }
   }
 
-  void _lightsOutHandler() {
-    print("lights out after timeout");
-    _registerMissedPods(_activatedPods.podsToHit);
-    _lightupMode.turnOffAllPods();
-
-    _checkStartNewCycle();
-  }
-
-  void _registerMissedPods(List<ActivityPod> pods) {
-    for (var p in pods) {
-      if (p.isActive) {
-        _activityResult.misses++;
-        onResultChanged?.call(_activityResult);
-      }
-    }
-  }
-
-  void _checkStartNewCycle() {
-    if (_isStrikeOut() || _duration.isDone(_activityResult)) {
-      stop();
-      _lightupMode.turnOffAllPods();
-    } else {
-      _startCycle();
-    }
-  }
-
   void _hitHandler(int reactionTime, ActivityPod pod) {
-    print("hit: ${pod.id} in ${reactionTime}");
+    //print("hit: ${pod.id} in ${reactionTime}");
 
-    if (_lightupMode.isDistractingPod(pod)) {
-      _activityResult.misses++;
+    var isDistractingPod = _lightupMode.isDistractingPod(pod);
+    if (reactionTime < 0) {
+      if (!isDistractingPod) {
+        _activityResult.misses++;
+      }
     } else {
-      if (reactionTime > 0) {
+      // Reaction time >= 0
+      if (!isDistractingPod) {
         _activityResult.hitReactionTimeInMs.add(reactionTime);
-        _checkEndCycle();
       } else {
         _activityResult.misses++;
       }
     }
     onResultChanged?.call(_activityResult);
+
+    _checkStartNewCycle();
+  }
+
+  void _checkStartNewCycle() {
+    if (_isStrikeOut() || _duration.isDone(_activityResult)) {
+      stop();
+    } else {
+      _checkEndCycle();
+    }
   }
 
   void _checkEndCycle() {
-    if (_lightupMode.allPodsToHitAreHit()) {
-      _lightsOut.abort();
+    if (_lightupMode.allCorrectPodsToHitAreHit()) {
       _lightupMode.turnOffAllPods();
-      _checkStartNewCycle();
+      _startCycle();
     }
   }
 
@@ -136,15 +117,30 @@ class Activity {
 
   void stop() {
     if (_isRunning) {
-      print("activity ended");
-      _isRunning = false;
+      _endActivity();
+    }
+  }
 
-      _lightsOut.abort();
-      _lightDelay.abort();
-      _lightupMode.uninstallHitHandlers();
-      _lightupMode.turnOffAllPods();
+  void _endActivity() {
+    print("activity ended");
+    _isRunning = false;
 
-      onActivityEnded?.call();
+    _lightDelay.abort();
+    _uninstallHitHandlers();
+    _lightupMode.turnOffAllPods();
+
+    onActivityEnded?.call();
+  }
+
+  void _installHitHandlers() {
+    for (var p in activityPods) {
+      p.onHitOrTimeout = _hitHandler;
+    }
+  }
+
+  void _uninstallHitHandlers() {
+    for (var p in activityPods) {
+      p.onHitOrTimeout = null;
     }
   }
 }

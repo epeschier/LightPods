@@ -46,7 +46,10 @@ class InfoPanel extends StatelessWidget {
                 visible:
                     setting.distractingColors.numberOfDistractingColors > 0,
                 child: _getColorChip(
-                    Icons.alt_route, PodColors.getDistractingColors)),
+                    Icons.alt_route,
+                    PodColors.getNumDistractingColors(
+                            setting.numberOfDistractingColors)
+                        .toList())),
           ],
         ));
   }

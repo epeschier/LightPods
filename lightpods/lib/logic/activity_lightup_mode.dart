@@ -97,24 +97,12 @@ class LightupMode {
 
   bool isPodToHit(ActivityPod pod) => _podsToActivate.podsToHit.contains(pod);
 
-  bool allPodsToHitAreHit() =>
+  bool allCorrectPodsToHitAreHit() =>
       !_podsToActivate.podsToHit.any((element) => element.isActive);
 
   void turnOffAllPods() {
     for (var p in pods) {
       p.off();
-    }
-  }
-
-  void installHitHandlers(Function handler) {
-    for (var p in pods) {
-      p.onHitOrTimeout = handler;
-    }
-  }
-
-  void uninstallHitHandlers() {
-    for (var p in pods) {
-      p.onHitOrTimeout = null;
     }
   }
 }

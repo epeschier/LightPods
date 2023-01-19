@@ -43,7 +43,7 @@ class ActivityDescription {
   static const List<String> lightsOutExplanation = [
     'Tap out the Pods’ lights to turn them off',
     'The Pods’ lights turn off after the amount of time that you’ve set',
-    'Either you reach the Pod and tap-out the light or the time runs out and the next Pod lights up'
+    'Either you tap-out the light or the time runs out'
   ];
 
   static const List<String> lightDelayTimeExplanation = [

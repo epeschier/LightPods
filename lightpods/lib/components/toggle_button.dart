@@ -29,6 +29,13 @@ class _ToggleButton extends State<ToggleButton> {
   Color disabledColor = ThemeColors.primaryColor;
 
   bool _state = false;
+
+  @override
+  void initState() {
+    _state = widget.state;
+    super.initState();
+  }
+
   void _toggleState() {
     setState(() {
       _state = !_state;

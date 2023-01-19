@@ -14,6 +14,7 @@ class BluetoothDeviceService extends ChangeNotifier {
         .asStream()
         .listen((List<BluetoothDevice> devices) {
       for (BluetoothDevice device in devices) {
+        // TODO: check wat er gebeurt als disconnect
         _addDeviceTolist(device);
       }
     });

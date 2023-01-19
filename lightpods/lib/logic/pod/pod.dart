@@ -7,7 +7,9 @@ import 'pod_base.dart';
 class Pod extends PodBase {
   final BluetoothDevice device;
 
-  Pod({required this.device});
+  Pod(this.device) {
+    _listenForChanges();
+  }
 
   @override
   String get name =>
@@ -27,13 +29,12 @@ class Pod extends PodBase {
   @override
   void connect() {
     _discoverServices();
-    super.connect();
   }
 
   @override
   void disconnect() {
     device.disconnect();
-    super.disconnect();
+    //super.disconnect();
   }
 
   void _discoverServices() async {
@@ -86,11 +87,13 @@ class Pod extends PodBase {
   bool _isButtonCharacteristic(Guid uuid) =>
       uuid == Guid('00001524-1212-EFDE-1523-785FEABCD123');
 
+  static const Color _offColor = Colors.black;
+
   @override
   void setLight(Color color) {
     Uint8List bytes = _colorToBytes(color);
     _lightCharacteristic.write(bytes);
-    _isOn = (color != Colors.black);
+    _isOn = (color != _offColor);
   }
 
   Uint8List _colorToBytes(Color color) =>
@@ -99,7 +102,7 @@ class Pod extends PodBase {
   @override
   void lightOff() {
     if (_isOn) {
-      setLight(Colors.black);
+      setLight(_offColor);
     }
   }
 
@@ -133,6 +136,20 @@ class Pod extends PodBase {
       onHit?.call();
     });
     _buttonCharacteristic.setNotifyValue(true);
+  }
+
+  void _listenForChanges() {
+    device.state.listen((event) {
+      if (event == BluetoothDeviceState.disconnecting ||
+          event == BluetoothDeviceState.disconnected) {
+        super.disconnect();
+        onConnectionChanged?.call(false);
+      }
+      if (event == BluetoothDeviceState.connected) {
+        super.connect();
+        onConnectionChanged?.call(true);
+      }
+    });
   }
 
   int _numberFromUuid(String uuid) {

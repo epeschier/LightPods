@@ -73,13 +73,18 @@ class _EditWorkoutState extends State<EditWorkout> {
       ListDivider(),
       _getNumberOfColors(setting.numberOfHitColors),
       ListDivider(),
-      DistactingColorChance(value: setting.distractingColors),
-      ListDivider(),
-      ActivityDurationSetting(value: setting.activityDuration),
-      ListDivider(),
       LightsOutWidget(
+        onChanged: () => setState(() {}),
         value: setting.lightsOut,
       ),
+      ListDivider(),
+      Visibility(
+          visible: setting.lightsOut.lightsOut != LightsOutType.hit,
+          child: Column(children: [
+            DistactingColorChance(value: setting.distractingColors),
+            ListDivider()
+          ])),
+      ActivityDurationSetting(value: setting.activityDuration),
       ListDivider(),
       LightDelayTimeWidget(
         value: setting.lightDelayTime,

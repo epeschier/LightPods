@@ -106,6 +106,12 @@ class ActivitySetting {
 
     return this;
   }
+
+  void sanityCheck() {
+    if (lightsOut.lightsOut == LightsOutType.hit) {
+      distractingColors.numberOfDistractingColors = 0;
+    }
+  }
 }
 
 @JsonSerializable()

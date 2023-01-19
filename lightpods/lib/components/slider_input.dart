@@ -45,13 +45,16 @@ class _SliderInput extends State<SliderInput> {
         child: _getSliderHeader(),
       ),
       _getSlider(),
+      const SizedBox(
+        height: 6,
+      ),
     ]);
   }
 
   Widget _getSliderHeader() => Padding(
       padding: const EdgeInsets.only(left: 12, bottom: 8, top: 8, right: 12),
       child: HeaderWithValue(
-          text: widget.description!,
+          text: widget.description ?? '',
           value: (widget.showValue)
               ? "${_currentSliderValue.toStringAsFixed(widget.decimals ?? 0)} ${widget.units ?? ''}"
               : null));
