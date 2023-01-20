@@ -54,7 +54,7 @@ class _DeviceList extends State<DeviceList> {
     for (var pod in podList) {
       containers.add(PodState(pod: pod));
     }
-    //containers.add(PodState(pod: FakePod('aa:bb')));
+    //containers.add(PodState(pod: FakePod('017')));
 
     return ListView(
       children: containers,
@@ -62,12 +62,10 @@ class _DeviceList extends State<DeviceList> {
   }
 
   void _updateDevices() {
-    print("_updateDevices: ${_devices.length}");
-    for (BluetoothDevice device in _devices) {
-      print("device: ${device.name}");
-      _podService.addPod(Pod(device));
-    }
-
-    setState(() {});
+    setState(() {
+      for (BluetoothDevice device in _devices) {
+        _podService.addPod(Pod(device));
+      }
+    });
   }
 }

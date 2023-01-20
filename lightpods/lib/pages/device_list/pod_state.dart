@@ -21,6 +21,7 @@ class _PodStateState extends State<PodState> {
       _onPodHit(context);
     };
     print("##### ${widget.pod.name} ${widget.pod.isConnected}");
+    _canTurnOnLight = widget.pod.isConnected;
 
     super.initState();
   }

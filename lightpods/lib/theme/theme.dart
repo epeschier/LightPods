@@ -44,6 +44,20 @@ abstract class ThemeColors {
     letterSpacing: 0.5,
     fontSize: 12,
   );
+
+  static TextStyle podInfoHeaderText = TextStyle(
+    letterSpacing: 0.5,
+    color: lightPrimaryColor,
+    fontWeight: FontWeight.w600,
+    fontSize: 20,
+  );
+
+  static TextStyle podInfoSubText = TextStyle(
+    letterSpacing: 0.5,
+    color: primaryColor,
+    fontWeight: FontWeight.w300,
+    fontSize: 16,
+  );
 }
 
 ThemeData appTheme = ThemeData(

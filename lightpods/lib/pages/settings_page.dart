@@ -34,8 +34,15 @@ class _SettingsPage extends State<SettingsPage> {
     );
   }
 
+  int index = 0;
+
   void _sendSettings() {
-    // var pod = _podService.getPod('FB:8B:DA:BC:D9:84');
+    var pod = _podService.getPods()[0];
+    pod.setLight(PodColors.getDistractingColor(index));
+    index++;
+    if (index >= PodColors.getDistractingColors.length) {
+      index = 0;
+    }
     // pod.playEndGame(Colors.green);
   }
 

@@ -26,7 +26,7 @@ abstract class PodColors {
 
   static Color getHitColor(int index) => _hitColors[index];
 
-  static Color getDistractingColor(int index) => _hitColors[index];
+  static Color getDistractingColor(int index) => _distractingColors[index];
 
   static Color getRandomHitColor(int max) =>
       _getRandomItemFromList(max, getHitColors);

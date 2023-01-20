@@ -50,16 +50,24 @@ const int knockSensor = A0;  // the piezo is connected to analog pin 0
 const int threshold = 250;   // threshold value to decide when the detected sound is a knock or not
 
 int ledState = LOW;
-const unsigned long debounceTime = 500;
+const unsigned long debounceTime = 200;
 unsigned long time;
 
 bool playGameEnd = false;
 uint32_t gameEndColor;
 
+const double vRef = 3.3;
+const unsigned int numReadings = 1024;
+
+double batteryLevel;
+
 void setup() {
   Serial.begin(115200);
 
   initializeLed();
+  setStatusLeds();
+
+  batteryLevel = readBatteryLevel();
 
   setupBluetooth();
 
@@ -67,14 +75,26 @@ void setup() {
 }
 
 void initializeLed() {
-  Serial.println("Initialize LEDs");
+  printf("Initialize LEDs\n");
   pixels.begin();
   pixels.setBrightness(20);
   pixels.clear();
 
+  delay(500);
+}
+
+double readBatteryLevel() {
+  unsigned int adcCount = analogRead(PIN_VBAT);
+  double adcVoltage = (adcCount * vRef) / numReadings;
+  double vBat = adcVoltage * 1.4;
+  
+  return vBat;
+}
+
+void setStatusLeds() {
+  turnAllPixelsOff();
   pixels.setPixelColor(0, GREEN);
   pixels.show();
-  delay(500);
 }
 
 void loop() {
@@ -129,11 +149,11 @@ void notifyButtonPress() {
 }
 
 void setupBluetooth() {
-  Serial.println("Lightpod bluetooth BLE");
-  Serial.println("------------------\n");
+  printf("Lightpod bluetooth BLE\n");
+  printf("------------------\n");
 
   // Initialize Bluefruit with max concurrent connections as Peripheral = MAX_PRPH_CONNECTION, Central = 0
-  Serial.println("Initialise the Bluefruit nRF52 module");
+  printf("Initialize the Bluefruit nRF52 module\n");
   Bluefruit.begin(1, 0);
   Bluefruit.setName("Lightpod");
   Bluefruit.Periph.setConnectCallback(connect_callback);
@@ -148,7 +168,7 @@ void setupBluetooth() {
 }
 
 void configureLedCharacteristic() {
-  Serial.println("Configuring the LED Service");
+  printf("Configuring the LED Service\n");
   
   lbs.begin();
   // Properties = Read + Write
@@ -176,6 +196,7 @@ void decodePixelCommand(uint8_t* data, uint16_t len) {
   if (len == 4) {
     if (data[3] == 0) {
       setAllPixelsToColor(data[0], data[1], data[2]);
+      pixels.show();
     }
     else if (data[3] == 1) {
       pixels.setBrightness(data[0]);
@@ -194,14 +215,12 @@ void decodePixelCommand(uint8_t* data, uint16_t len) {
 
 void turnAllPixelsOff() {
   setAllPixelsToColor(0, 0, 0);
-  pixels.show();
 }
 
 void setAllPixelsToColor(uint8_t r, uint8_t g, uint8_t b) {
   for(int i = 0; i < pixels.numPixels(); i++) { 
     pixels.setPixelColor(i, pixels.Color(r, g, b));
   }
-  pixels.show();
 }
 
 void configureButtonCharacteristic() {
@@ -213,7 +232,7 @@ void configureButtonCharacteristic() {
 
 /*
 void configureBatteryCharacteristic() {
-  Serial.println("Configuring the Battery Service");
+  printf("Configuring the Battery Service\n");
   
   batteryLevelChar.begin();
   batteryLevelChar.setWriteCallback(getBatteryLevel_callback);
@@ -233,8 +252,7 @@ void connect_callback(uint16_t conn_handle)
   char central_name[32] = { 0 };
   connection->getPeerName(central_name, sizeof(central_name));
 
-  Serial.print("Connected to ");
-  Serial.println(central_name);
+  printf("Connected to %s\n", central_name);
 
   pixels.setPixelColor(1, BLUE);
   pixels.show();
@@ -250,16 +268,17 @@ void disconnect_callback(uint16_t conn_handle, uint8_t reason)
   (void) conn_handle;
   (void) reason;
 
-  Serial.print("Disconnected, reason = 0x"); 
+  Serial.println("Disconnected, reason = 0x"); 
   Serial.println(reason, HEX);
 
   playGameEnd = false;
-  turnAllPixelsOff();
+
+  setStatusLeds();
 }
 
 void startAdvertising(void)
 {
-  Serial.println("Setting up the advertising");
+  printf("Setting up the advertising\n");
 
   // Advertising packet
   Bluefruit.Advertising.addFlags(BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE);

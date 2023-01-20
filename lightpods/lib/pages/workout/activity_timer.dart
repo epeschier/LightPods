@@ -19,8 +19,6 @@ class ActivityTimer extends StatefulWidget {
   State<ActivityTimer> createState() => ActivityTimerState();
 }
 
-// TODO: Wakelock.enable();
-
 class ActivityTimerState extends State<ActivityTimer> {
   late Timer _timer;
   String _time = '00 : 00';
