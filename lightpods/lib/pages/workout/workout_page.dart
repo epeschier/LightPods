@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lightpods/pages/workout/clock/rotating_second.dart';
 import 'info_block.dart';
 import 'info_panel.dart';
 import 'package:lightpods/partials/pod_count.dart';
@@ -9,7 +10,7 @@ import '../../test/fake_pod.dart';
 import '../../logic/pod/pod_base.dart';
 import '../../logic/activity_factory.dart';
 import '../../models/activity_setting.dart';
-import 'activity_timer.dart';
+import 'clock/clock.dart';
 import '../../logic/activity.dart';
 import '../../services/pod_service.dart';
 import '../../theme/theme.dart';
@@ -24,8 +25,7 @@ class WorkoutPage extends StatefulWidget {
 }
 
 class _WorkoutPageState extends State<WorkoutPage> {
-  final GlobalKey<ActivityTimerState> _activityTimerState =
-      GlobalKey<ActivityTimerState>();
+  final GlobalKey<ClockState> _activityTimerState = GlobalKey<ClockState>();
 
   List<PodBase> _podList = [];
 
@@ -64,6 +64,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
             body: Column(children: [
               _getActivityTimer(),
               _infoCards(),
+
               // Visibility(
               //     visible: (_buttons != null),
               //     child: Row(
@@ -89,7 +90,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
     );
   }
 
-  ActivityTimer _getActivityTimer() => ActivityTimer(
+  Clock _getActivityTimer() => Clock(
         onStart: _onStart,
         onStop: _onStop,
         onReset: _onReset,
