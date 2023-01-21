@@ -16,8 +16,9 @@ class InfoBlock extends StatelessWidget {
   Widget _info(String text, String subTitle) => Container(
       width: 100,
       height: 80,
-      margin: const EdgeInsets.all(8),
-      color: ThemeColors.primaryColor,
+      decoration: BoxDecoration(
+          color: ThemeColors.darkPrimaryColor,
+          borderRadius: const BorderRadius.all(Radius.circular(6))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
