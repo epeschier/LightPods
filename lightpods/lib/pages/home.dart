@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentPage = 0;
-  List pages = const <Widget>[DeviceList(), ActivityListPage(), SettingsPage()];
+  List pages = const <Widget>[DeviceList(), WorkoutListPage(), SettingsPage()];
 
   void _updateValue(int value) {
     setState(() {

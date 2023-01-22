@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/theme/theme.dart';
 
+import '../../../helper.dart';
+
 class TimeDisplay extends StatelessWidget {
   final int value;
 
@@ -10,18 +12,10 @@ class TimeDisplay extends StatelessWidget {
   Widget build(BuildContext context) => _getTimeDisplay();
 
   Widget _getTimeDisplay() => Text(
-        _getTime(value),
+        Helper.getTimeMmSsMs(value / 10),
         style: TextStyle(
             fontSize: 70,
             letterSpacing: 1.5,
             color: ThemeColors.lightPrimaryColor),
       );
-
-  String _getTime(int value) {
-    var ms = value % 10;
-    var sec = (value / 10).truncate();
-    var mm = (sec / 60).round();
-    var ss = sec % 60;
-    return '${mm.toString().padLeft(2, '0')}:${ss.toString().padLeft(2, '0')}.${ms.toString()}';
-  }
 }

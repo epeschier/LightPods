@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lightpods/models/activity_enums.dart';
+import 'package:lightpods/models/duration_setting.dart';
 import 'package:lightpods/pages/workout/clock/rotating_second.dart';
 import 'info_block.dart';
-import 'info_panel.dart';
+import '../../partials/info_panel.dart';
 import 'package:lightpods/partials/pod_count.dart';
 import 'package:lightpods/test/pod_button.dart';
 import 'package:lightpods/models/activity_result.dart';
@@ -95,8 +97,15 @@ class _WorkoutPageState extends State<WorkoutPage> {
         onStop: _onStop,
         onReset: _onReset,
         tick: _onTick,
+        startValue: _getStartValue(widget.setting.activityDuration),
         key: _activityTimerState,
       );
+
+  double _getStartValue(DurationSetting activityDuration) {
+    return activityDuration.durationType == ActivityDurationType.timeout
+        ? activityDuration.timeout
+        : 0;
+  }
 
   Widget _infoCards() => Padding(
       padding: const EdgeInsets.only(top: 40),

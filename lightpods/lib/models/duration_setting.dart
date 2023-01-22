@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:lightpods/helper.dart';
 
 import 'activity_enums.dart';
 part 'duration_setting.g.dart';
@@ -35,7 +36,7 @@ class DurationSetting {
     }
 
     if (durationType != ActivityDurationType.numberOfHits) {
-      description += '${timeout.toStringAsFixed(1)} min';
+      description += Helper.getTimeMmSs(timeout);
     }
 
     return description;

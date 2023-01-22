@@ -7,7 +7,8 @@ import 'clock_seconds_painter.dart';
 
 class RotatingSecond extends StatefulWidget {
   final double size;
-  const RotatingSecond({super.key, required this.size});
+  late bool forward;
+  RotatingSecond({super.key, required this.size, this.forward = true});
 
   @override
   State<RotatingSecond> createState() => RotatingSecondState();
@@ -29,9 +30,13 @@ class RotatingSecondState extends State<RotatingSecond>
     _controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
-    _animation = Tween(begin: 0.0, end: 2 * pi).animate(
+    _animation = _getTween().animate(
         CurvedAnimation(parent: _controller, curve: Curves.easeInOutCubic));
   }
+
+  Tween<double> _getTween() => widget.forward
+      ? Tween(begin: 0.0, end: 2 * pi)
+      : Tween(begin: 2 * pi, end: 0.0);
 
   @override
   Widget build(BuildContext context) {

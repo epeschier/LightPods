@@ -5,14 +5,14 @@ import '../../models/activity_setting_list.dart';
 import '../edit_workout/edit_workout_page.dart';
 import 'activity_info.dart';
 
-class ActivityListPage extends StatefulWidget {
-  const ActivityListPage({super.key});
+class WorkoutListPage extends StatefulWidget {
+  const WorkoutListPage({super.key});
 
   @override
-  State<ActivityListPage> createState() => _ActivityListPageState();
+  State<WorkoutListPage> createState() => _WorkoutListPageState();
 }
 
-class _ActivityListPageState extends State<ActivityListPage> {
+class _WorkoutListPageState extends State<WorkoutListPage> {
   late ActivitySettingList _workouts = ActivitySettingList();
 
   @override
@@ -30,19 +30,19 @@ class _ActivityListPageState extends State<ActivityListPage> {
       appBar: AppBar(
         title: const Text('Workouts'),
       ),
-      body: _getActivityList(),
+      body: _getWorkoutList(),
       floatingActionButton: _getActionButton(),
     );
   }
 
-  Widget _getActivityList() {
+  Widget _getWorkoutList() {
     List<Widget> containers = <Widget>[];
 
     for (var i = 0; i < _workouts.list.length; i++) {
       var setting = _workouts.list[i];
       containers.add(ActivityInfo(
         onEdit: () {
-          _navigateToEditActivity(context, setting);
+          _navigateToEditWorkout(context, setting);
         },
         setting: setting,
       ));
@@ -61,11 +61,11 @@ class _ActivityListPageState extends State<ActivityListPage> {
       tooltip: "Create activity",
       onPressed: () {
         var activity = ActivitySetting();
-        _navigateToEditActivity(context, activity);
+        _navigateToEditWorkout(context, activity);
       },
       child: const Icon(Icons.add));
 
-  void _navigateToEditActivity(
+  void _navigateToEditWorkout(
       BuildContext context, ActivitySetting setting) async {
     var data = await Navigator.push(
       context,
@@ -89,7 +89,7 @@ class _ActivityListPageState extends State<ActivityListPage> {
       } else {
         _workouts.add(activity);
       }
-      _workouts.save().then((value) => print("save $value"));
+      _workouts.save();
     });
   }
 }

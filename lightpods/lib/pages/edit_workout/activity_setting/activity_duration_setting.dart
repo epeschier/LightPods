@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/components/slider_input.dart';
+import 'package:lightpods/helper.dart';
 import 'package:lightpods/pages/edit_workout/multiple_choice.dart';
 import '../../../models/activity_enums.dart';
 import '../../../models/duration_setting.dart';
@@ -23,7 +24,6 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
   Widget _getActivityDuration() => MultipleChoice(
         icon: Icons.schedule,
         text: 'Activity Duration',
-        valueDescription: _getValueText(),
         selectedItem: widget.value.durationType.index,
         onItemSelected: _onLightsOutExplanationToggleClick,
         subText: ActivityDescription
@@ -54,11 +54,10 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
             visible: widget.value.durationType.index > 0,
             child: SliderInput(
                 description: 'Timeout',
-                decimals: 1,
-                units: 'min',
+                stringFunction: _getTimeValue,
                 onValueChanged: _onTimeoutChanged,
                 value: widget.value.timeout,
-                max: 5),
+                max: 120),
           ),
         ],
       );
@@ -71,9 +70,9 @@ class _ActivityDurationSettingState extends State<ActivityDurationSetting> {
 
   void _onTimeoutChanged(double value) {
     setState(() {
-      widget.value.timeout = value;
+      widget.value.timeout = Helper.roundDouble(value, 0);
     });
   }
 
-  String _getValueText() => widget.value.toString();
+  String _getTimeValue(double value) => Helper.getTimeMmSs(value);
 }

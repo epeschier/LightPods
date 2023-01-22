@@ -11,30 +11,42 @@ class Clock extends StatefulWidget {
   final Function onStop;
   final Function? onReset;
   late Function? tick;
+  double startValue;
 
   Clock(
       {super.key,
       required this.onStart,
       required this.onStop,
       this.tick,
-      this.onReset});
+      this.onReset,
+      this.startValue = 0});
 
   @override
   State<Clock> createState() => ClockState();
 }
 
 class ClockState extends State<Clock> {
-  late Timer _timer;
+  late Timer? _timer;
   bool _running = false;
-  int _value = 0;
+  late int _value;
+  late int _countDirection = 1;
 
   final GlobalKey<RotatingSecondState> _rotatingSecond =
       GlobalKey<RotatingSecondState>();
 
   @override
+  void initState() {
+    _value = _getStartValue();
+    _countDirection = _value == 0 ? 1 : -1;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(children: [_getTimer(), _getButtons()]);
   }
+
+  int _getStartValue() => (widget.startValue * 10).toInt();
 
   Widget _getTimer() => Padding(
       padding: const EdgeInsets.only(top: 40, bottom: 20),
@@ -43,6 +55,7 @@ class ClockState extends State<Clock> {
         children: [
           RotatingSecond(
             size: 300.0,
+            forward: widget.startValue == 0,
             key: _rotatingSecond,
           ),
           TimeDisplay(value: _value)
@@ -95,11 +108,15 @@ class ClockState extends State<Clock> {
 
   void _tick(_) {
     setState(() {
-      _value++;
+      _value += _countDirection;
     });
 
     if (_value % 10 == 0) {
       widget.tick?.call();
+    }
+
+    if (_countDirection == -1 && _value <= 0) {
+      stop();
     }
   }
 
@@ -107,23 +124,16 @@ class ClockState extends State<Clock> {
     setState(() {
       _running = false;
     });
-    _timer.cancel();
+    _timer?.cancel();
     widget.onStop();
     _rotatingSecond.currentState?.stop();
   }
 
   void _reset() {
-    _value = 0;
     setState(() {
-      _value = 0;
+      _value = _getStartValue();
     });
     widget.onReset?.call();
     _rotatingSecond.currentState?.reset();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
   }
 }

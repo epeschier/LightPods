@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/partials/info_panel.dart';
 import 'package:lightpods/pages/workout/workout_page.dart';
 import '../../components/list_container.dart';
-import '../../models/activity_enums.dart';
 import '../../models/activity_setting.dart';
-import '../../models/duration_setting.dart';
 import '../../theme/theme.dart';
 
 class ActivityInfo extends StatelessWidget {
@@ -16,7 +15,8 @@ class ActivityInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListContainer(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: _getNameAndDescription(context),
@@ -48,7 +48,10 @@ class ActivityInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _getName(),
-              _getDescription(context),
+              InfoPanel(
+                  setting: setting,
+                  iconSize: 16,
+                  chipBackColor: ThemeColors.darkPrimaryColor),
             ],
           )));
 
@@ -57,37 +60,9 @@ class ActivityInfo extends StatelessWidget {
         style: ThemeColors.headerText,
       );
 
-  Widget _getDescription(BuildContext context) => Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          _getInfoPart(
-              "${setting.numberOfPlayers} player ${setting.numberOfPods} pods, "),
-          _getInfoPart(_getActivityDurationText(setting.activityDuration)),
-        ],
-      );
-
   void _navigateToWorkout(BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return WorkoutPage(setting: setting);
     }));
-  }
-
-  Widget _getInfoPart(String text) => Container(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Text(text, style: ThemeColors.subText),
-      );
-
-  String _getActivityDurationText(DurationSetting setting) {
-    String text = '';
-    if (setting.durationType != ActivityDurationType.timeout) {
-      text += '${setting.numberOfHits.toStringAsFixed(0)} hits';
-    }
-    if (setting.durationType != ActivityDurationType.numberOfHits) {
-      if (text.isNotEmpty) {
-        text += ' / ';
-      }
-      text += '${setting.timeout.toStringAsFixed(1)} min';
-    }
-    return text;
   }
 }
