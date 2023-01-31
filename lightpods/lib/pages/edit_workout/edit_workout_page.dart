@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lightpods/pages/edit_workout/activity_setting/distracting_color_chance.dart';
+import 'package:lightpods/pages/edit_workout/activity_setting/player_color_setting.dart';
+
 import '../../components/list_divider.dart';
 import '../../models/activity_enums.dart';
 import '../../components/number_ticker.dart';
 import '../../models/activity_setting.dart';
+import '../../models/pod_colors.dart';
 import 'activity_setting/lights_out_setting.dart';
 import 'multiple_choice.dart';
 import 'activity_setting/strike_out_setting.dart';
@@ -59,6 +62,26 @@ class _EditWorkoutState extends State<EditWorkout> {
 
     List<Widget> list = [
       _getNumberOfPlayers(setting.numberOfPlayers),
+      PlayerColorSetting(
+          icon: Icons.person,
+          colors: PodColorService.hitColors,
+          selectedColorIndex:
+              widget.activitySetting.playerHitColors[0].selectedColorIndex,
+          text: "Player 1",
+          subText: "Active colors",
+          onValueChanged: (List<int> value) => widget
+              .activitySetting.playerHitColors[0].selectedColorIndex = value),
+      Visibility(
+          visible: setting.numberOfPlayers > 1,
+          child: PlayerColorSetting(
+              icon: Icons.group,
+              colors: PodColorService.hitColors,
+              selectedColorIndex:
+                  widget.activitySetting.playerHitColors[1].selectedColorIndex,
+              text: "Player 2",
+              subText: "Active colors",
+              onValueChanged: (List<int> value) => widget.activitySetting
+                  .playerHitColors[1].selectedColorIndex = value)),
       ListDivider(),
       Visibility(
           visible: setting.numberOfPlayers > 1,
@@ -70,8 +93,6 @@ class _EditWorkoutState extends State<EditWorkout> {
       _getNumberOfPods(setting.numberOfPods),
       ListDivider(),
       _getActivePodsToLightUp(setting.numberOfSimultaneousActivePods),
-      ListDivider(),
-      _getNumberOfColors(setting.numberOfHitColors),
       ListDivider(),
       LightsOutWidget(
         onChanged: () => setState(() {}),
@@ -123,9 +144,9 @@ class _EditWorkoutState extends State<EditWorkout> {
   }
 
   Widget _getNumberOfPlayers(int numberOfPlayers) => ActivitySettingContainer(
-        icon: Icons.person,
+        icon: Icons.groups,
         text: 'Players',
-        subText: 'per Station',
+        subText: 'per station',
         widget: NumberTicker(
           value: numberOfPlayers,
           minValue: 1,
@@ -150,21 +171,6 @@ class _EditWorkoutState extends State<EditWorkout> {
           minValue: 1,
           onValueChanged: (int value) {
             widget.activitySetting.numberOfPods = value;
-          },
-        ),
-      );
-
-  Widget _getNumberOfColors(int numberOfColors) => ActivitySettingContainer(
-        icon: Icons.palette,
-        text: 'Colors to hit',
-        widget: NumberTicker(
-          value: numberOfColors,
-          minValue: 1,
-          maxValue: 4,
-          onValueChanged: (int value) {
-            setState(() {
-              widget.activitySetting.numberOfHitColors = value;
-            });
           },
         ),
       );

@@ -43,7 +43,7 @@ class ActivitySettingList extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     var data = prefs.getString(storageKey);
     if (data != null) {
-      var datamap = json.decode(data!);
+      var datamap = json.decode(data);
       list = ActivitySettingList.fromJson(datamap);
     }
 

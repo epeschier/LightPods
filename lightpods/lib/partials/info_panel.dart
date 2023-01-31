@@ -39,22 +39,23 @@ class InfoPanel extends StatelessWidget {
           spacing: 6.0,
           runSpacing: 6.0,
           children: <Widget>[
-            _getPlayerInfoChip(),
             _getPodInfoChip(),
+            _getPlayerInfoChip(),
+            _getHitColorsInfoChip(Icons.person, 0),
+            _getHitColorsInfoChip(Icons.group, 1),
+            _getDistractingColors(),
             _getSimultaneousPidsInfoChip(),
             _getDistractingColorsInfoChip(),
             _getActivityDurationInfoChip(),
             _getLightsOutInfoChip(),
             _getLightDelayTimeInfoChip(),
             _getStrikeOutInfoChip(),
-            _getNumberOfHitColorsInfoChip(),
-            _getDistractingColors(),
           ],
         ));
   }
 
   Widget _getPlayerInfoChip() =>
-      _getInfoChip(Icons.person, setting.numberOfPlayers.toString());
+      _getInfoChip(Icons.groups, setting.numberOfPlayers.toString());
 
   Widget _getPodInfoChip() =>
       _getInfoChip(Icons.wb_twighlight, setting.numberOfPods.toString());
@@ -63,7 +64,7 @@ class InfoPanel extends StatelessWidget {
       Icons.share, setting.numberOfSimultaneousActivePods.toString());
 
   Widget _getDistractingColorsInfoChip() => Visibility(
-      visible: (setting.distractingColors.numberOfDistractingColors > 0),
+      visible: (setting.distractingColors.size() > 0),
       child:
           _getInfoChip(Icons.alt_route, setting.distractingColors.toString()));
 
@@ -80,14 +81,20 @@ class InfoPanel extends StatelessWidget {
       visible: setting.strikeOut.value,
       child: _getInfoChip(Icons.logout, setting.strikeOut.toString()));
 
-  Widget _getNumberOfHitColorsInfoChip() => _getColorChip(Icons.palette,
-      PodColors.getNumHitColors(setting.numberOfHitColors).toList());
+  Widget _getHitColorsInfoChip(IconData icon, int player) => _getColorChip(
+      icon,
+      PodColorService.hitColors
+          .getColorsFromIndexes(
+              setting.playerHitColors[player].selectedColorIndex)
+          .toList());
 
   Widget _getDistractingColors() => Visibility(
-      visible: setting.distractingColors.numberOfDistractingColors > 0,
+      visible: setting.distractingColors.size() > 0,
       child: _getColorChip(
           Icons.alt_route,
-          PodColors.getNumDistractingColors(setting.numberOfDistractingColors)
+          PodColorService.distractingColors
+              .getColorsFromIndexes(
+                  setting.distractingColors.selectedColorIndex)
               .toList()));
 
   Widget _getInfoChip(

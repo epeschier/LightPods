@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lightpods/models/activity_enums.dart';
 import 'package:lightpods/models/duration_setting.dart';
+import 'package:lightpods/models/pod_colors.dart';
 import 'package:lightpods/pages/workout/clock/rotating_second.dart';
+import 'package:lightpods/pages/workout/player_score.dart';
 import 'info_block.dart';
 import '../../partials/info_panel.dart';
 import 'package:lightpods/partials/pod_count.dart';
@@ -66,7 +68,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
             body: Column(children: [
               _getActivityTimer(),
               _infoCards(),
-
+              _playerScoreCards(),
               // Visibility(
               //     visible: (_buttons != null),
               //     child: Row(
@@ -115,6 +117,23 @@ class _WorkoutPageState extends State<WorkoutPage> {
           InfoBlock(text: _miss.toString(), description: 'Miss'),
           InfoBlock(text: _hits.toString(), description: 'Hits'),
           InfoBlock(text: _avg.toString(), description: 'Avg. Reaction')
+        ],
+      ));
+
+  Widget _playerScoreCards() => Padding(
+      padding: const EdgeInsets.only(top: 40),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          PlayerScore(
+            playerName: "P1",
+            score: 1,
+            colors: PodColorService.hitColors.getNumColors(1).toList(),
+          ),
+          PlayerScore(
+              playerName: "P2",
+              score: 2,
+              colors: PodColorService.hitColors.getNumColors(2).toList()),
         ],
       ));
 

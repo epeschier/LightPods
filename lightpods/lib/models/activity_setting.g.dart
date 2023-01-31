@@ -15,8 +15,10 @@ ActivitySetting _$ActivitySettingFromJson(Map<String, dynamic> json) =>
       ..numberOfSimultaneousActivePods =
           json['numberOfSimultaneousActivePods'] as int
       ..numberOfPlayers = json['numberOfPlayers'] as int
-      ..numberOfHitColors = json['numberOfHitColors'] as int
-      ..numberOfDistractingColors = json['numberOfDistractingColors'] as int
+      ..playerHitColors = (json['playerHitColors'] as List<dynamic>?)
+              ?.map((e) => PlayerColor.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          []
       ..strikeOut =
           StrikeOut.fromJson(json['strikeOut'] as Map<String, dynamic>)
       ..competitionMode =
@@ -38,8 +40,8 @@ Map<String, dynamic> _$ActivitySettingToJson(ActivitySetting instance) =>
       'numberOfPods': instance.numberOfPods,
       'numberOfSimultaneousActivePods': instance.numberOfSimultaneousActivePods,
       'numberOfPlayers': instance.numberOfPlayers,
-      'numberOfHitColors': instance.numberOfHitColors,
-      'numberOfDistractingColors': instance.numberOfDistractingColors,
+      'playerHitColors':
+          instance.playerHitColors.map((e) => e.toJson()).toList(),
       'strikeOut': instance.strikeOut.toJson(),
       'competitionMode': _$CompetitionTypeEnumMap[instance.competitionMode]!,
       'activityDuration': instance.activityDuration.toJson(),

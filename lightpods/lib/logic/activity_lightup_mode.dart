@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:lightpods/models/distracting_colors.dart';
 import 'package:lightpods/models/pod_colors.dart';
+import '../models/player_color.dart';
 import 'activity_pod.dart';
 
 class PodsToActivate {
@@ -12,7 +13,7 @@ class LightupMode {
   final List<ActivityPod> pods;
   final DistractingColors distractingColors;
   final int numberOfSimultaneousActivePods;
-  final int numberOfHitColors;
+  final PlayerColor hitColors;
 
   /// When set to true the same pod is not returned twice.
   late bool noDuplicate;
@@ -20,7 +21,7 @@ class LightupMode {
   LightupMode(
       {required this.pods,
       required this.distractingColors,
-      required this.numberOfHitColors,
+      required this.hitColors,
       required this.numberOfSimultaneousActivePods,
       this.noDuplicate = false});
 
@@ -49,7 +50,7 @@ class LightupMode {
 
   int _getNumberOfDistractingPods() {
     var numDistractingPods = 0;
-    if (distractingColors.numberOfDistractingColors > 0) {
+    if (distractingColors.size() > 0) {
       var pct = Random().nextDouble();
       numDistractingPods = (numberOfSimultaneousActivePods * pct).round();
     }
@@ -68,14 +69,14 @@ class LightupMode {
 
   void _setRandomColorsOnDistractingPods() {
     _podsToActivate.distractingPods.forEach((pod) {
-      pod.color = PodColors.getRandomDistractingColor(
-          distractingColors.numberOfDistractingColors);
+      pod.color = PodColorService.distractingColors
+          .getRandomColorFromIndexList(distractingColors.selectedColorIndex);
     });
   }
 
   void _setRandomColorsOnPodsToHit() {
     _podsToActivate.podsToHit.forEach((pod) {
-      pod.color = PodColors.getRandomHitColor(numberOfHitColors);
+      pod.color = hitColors.getRandomColor();
     });
   }
 

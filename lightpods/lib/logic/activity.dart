@@ -28,7 +28,7 @@ class Activity {
         pods: activityPods,
         distractingColors: setting.distractingColors,
         numberOfSimultaneousActivePods: setting.numberOfSimultaneousActivePods,
-        numberOfHitColors: setting.numberOfHitColors,
+        hitColors: setting.playerHitColors![0],
         noDuplicate:
             setting.lightDelayTime.delayTimeType == LightDelayTimeType.none);
   }
@@ -75,6 +75,7 @@ class Activity {
     }
   }
 
+// TODO: change for 2 player
   void _hitHandler(int reactionTime, ActivityPod pod) {
     //print("hit: ${pod.id} in ${reactionTime}");
 
@@ -96,6 +97,7 @@ class Activity {
     _checkStartNewCycle();
   }
 
+// TODO: change for 2 player
   void _checkStartNewCycle() {
     if (_isStrikeOut() || _duration.isDone(_activityResult)) {
       stop();
@@ -104,6 +106,7 @@ class Activity {
     }
   }
 
+// TODO: change for 2 player
   void _checkEndCycle() {
     if (_lightupMode.allCorrectPodsToHitAreHit()) {
       _lightupMode.turnOffAllPods();

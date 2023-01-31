@@ -5,8 +5,15 @@ import 'color_bullets.dart';
 class ColorIndicator extends StatefulWidget {
   final String text;
   final List<Color> colors;
+  double? size;
+  Function? onColorClick;
 
-  const ColorIndicator({super.key, required this.colors, required this.text});
+  ColorIndicator(
+      {super.key,
+      required this.colors,
+      required this.text,
+      this.size = 22,
+      this.onColorClick});
 
   @override
   State<ColorIndicator> createState() => _ColorIndicatorState();
@@ -17,7 +24,11 @@ class _ColorIndicatorState extends State<ColorIndicator> {
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(widget.text),
-      ColorBullets(colors: widget.colors, size: 22),
+      ColorBullets(
+        colors: widget.colors,
+        size: widget.size,
+        onColorClick: widget.onColorClick,
+      ),
     ]);
   }
 }

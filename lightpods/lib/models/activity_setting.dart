@@ -5,6 +5,7 @@ import 'distracting_colors.dart';
 import 'duration_setting.dart';
 import 'light_delay_time_setting.dart';
 import 'lights_out_setting.dart';
+import 'player_color.dart';
 import 'strike_out.dart';
 
 part 'activity_setting.g.dart';
@@ -16,11 +17,12 @@ class ActivitySetting {
   late int id = -1;
 
   late int numberOfStations = 1;
-  late int numberOfPods = 2;
+  late int numberOfPods = 4;
   late int numberOfSimultaneousActivePods = 1;
   late int numberOfPlayers = 1;
-  late int numberOfHitColors = 1;
-  late int numberOfDistractingColors = 1;
+
+  @JsonKey(defaultValue: [])
+  late List<PlayerColor> playerHitColors = [PlayerColor(), PlayerColor()];
 
   late StrikeOut strikeOut = StrikeOut();
 
@@ -48,8 +50,17 @@ class ActivitySetting {
     numberOfPods = obj.numberOfPods;
     numberOfSimultaneousActivePods = obj.numberOfSimultaneousActivePods;
     numberOfPlayers = obj.numberOfPlayers;
-    numberOfHitColors = obj.numberOfHitColors;
-    numberOfDistractingColors = obj.numberOfDistractingColors;
+
+    if (playerHitColors.length < 2) {
+      playerHitColors = [PlayerColor(), PlayerColor()];
+    }
+
+    playerHitColors = obj.playerHitColors
+        .map(
+          (e) => PlayerColor().copyWith(e),
+        )
+        .toList();
+
     strikeOut = StrikeOut().copyWith(obj.strikeOut);
     competitionMode = obj.competitionMode;
     activityDuration = DurationSetting().copyWith(obj.activityDuration);
@@ -62,7 +73,7 @@ class ActivitySetting {
 
   void sanityCheck() {
     if (lightsOut.lightsOut == LightsOutType.hit) {
-      distractingColors.numberOfDistractingColors = 0;
+      distractingColors.clear();
     }
   }
 }

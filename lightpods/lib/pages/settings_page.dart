@@ -38,9 +38,9 @@ class _SettingsPage extends State<SettingsPage> {
 
   void _sendSettings() {
     var pod = _podService.getPods()[0];
-    pod.setLight(PodColors.getDistractingColor(index));
+    pod.setLight(PodColorService.distractingColors.getColor(index));
     index++;
-    if (index >= PodColors.getDistractingColors.length) {
+    if (index >= PodColorService.distractingColors.getColors.length) {
       index = 0;
     }
     // pod.playEndGame(Colors.green);
@@ -49,12 +49,14 @@ class _SettingsPage extends State<SettingsPage> {
   Widget _getSettingsList() => ListView(
         children: [
           _getContainer(
-            ColorIndicator(colors: PodColors.getHitColors, text: 'Hit Colors'),
+            ColorIndicator(
+                colors: PodColorService.hitColors.getColors,
+                text: 'Hit Colors'),
           ),
           ListDivider(),
           _getContainer(
             ColorIndicator(
-                colors: PodColors.getDistractingColors,
+                colors: PodColorService.distractingColors.getColors,
                 text: 'Distracting Colors'),
           ),
           ListDivider(),

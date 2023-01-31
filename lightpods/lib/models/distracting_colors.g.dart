@@ -8,11 +8,14 @@ part of 'distracting_colors.dart';
 
 DistractingColors _$DistractingColorsFromJson(Map<String, dynamic> json) =>
     DistractingColors()
-      ..numberOfDistractingColors = json['numberOfDistractingColors'] as int
+      ..selectedColorIndex = (json['selectedColorIndex'] as List<dynamic>?)
+              ?.map((e) => e as int)
+              .toList() ??
+          []
       ..chanceToAppear = json['chanceToAppear'] as int;
 
 Map<String, dynamic> _$DistractingColorsToJson(DistractingColors instance) =>
     <String, dynamic>{
-      'numberOfDistractingColors': instance.numberOfDistractingColors,
+      'selectedColorIndex': instance.selectedColorIndex,
       'chanceToAppear': instance.chanceToAppear,
     };

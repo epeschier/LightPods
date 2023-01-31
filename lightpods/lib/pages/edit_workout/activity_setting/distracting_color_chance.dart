@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
-import '../../../components/number_ticker.dart';
+import 'player_color_setting.dart';
 import '../../../components/slider_input.dart';
 import '../../../models/distracting_colors.dart';
-import 'activity_setting_container.dart';
+import '../../../models/pod_colors.dart';
 
 class DistactingColorChance extends StatefulWidget {
   final DistractingColors value;
@@ -15,31 +14,38 @@ class DistactingColorChance extends StatefulWidget {
 }
 
 class _DistactingColorChanceState extends State<DistactingColorChance> {
+  bool _showChanceSlider = false;
+
+  @override
+  void initState() {
+    _showChanceSlider = widget.value.size() > 0;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return _getNumberOfDistractingColors();
   }
 
-  Widget _getNumberOfDistractingColors() => ActivitySettingContainer(
-        icon: Icons.alt_route,
-        text: 'Distracting Colors',
-        subText: 'Hitting these colors will result in a penalty',
-        widget: NumberTicker(
-          value: widget.value.numberOfDistractingColors,
-          minValue: 0,
-          maxValue: 4,
-          onValueChanged: (int value) {
-            setState(() {
-              widget.value.numberOfDistractingColors = value;
-            });
-          },
-        ),
-        subWidget: Visibility(
-            visible: widget.value.numberOfDistractingColors > 0,
-            child: _getSubwidget()),
-      );
+  Widget _getNumberOfDistractingColors() => Column(children: [
+        PlayerColorSetting(
+            icon: Icons.alt_route,
+            colors: PodColorService.distractingColors,
+            subText: 'Hitting these colors will result in a penalty',
+            text: 'Distracting colors',
+            selectedColorIndex: widget.value.selectedColorIndex,
+            onValueChanged: _updateValue),
+        Visibility(visible: _showChanceSlider, child: _getAppearance()),
+      ]);
 
-  Widget _getSubwidget() {
+  void _updateValue(List<int> value) {
+    setState(() {
+      _showChanceSlider = value.isNotEmpty;
+      widget.value.selectedColorIndex = value;
+    });
+  }
+
+  Widget _getAppearance() {
     return SliderInput(
       description: 'Chance to appear',
       value: widget.value.chanceToAppear.toDouble(),
@@ -52,6 +58,5 @@ class _DistactingColorChanceState extends State<DistactingColorChance> {
         });
       },
     );
-    ;
   }
 }

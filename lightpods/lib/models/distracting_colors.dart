@@ -3,22 +3,26 @@ part 'distracting_colors.g.dart';
 
 @JsonSerializable()
 class DistractingColors {
-  int numberOfDistractingColors = 0;
+  @JsonKey(defaultValue: [])
+  List<int> selectedColorIndex = [];
   int chanceToAppear = 0;
 
   DistractingColors();
+
+  void clear() => selectedColorIndex = [];
+  int size() => selectedColorIndex.length;
 
   factory DistractingColors.fromJson(Map<String, dynamic> json) =>
       _$DistractingColorsFromJson(json);
   Map<String, dynamic> toJson() => _$DistractingColorsToJson(this);
 
   DistractingColors copyWith(DistractingColors obj) {
-    numberOfDistractingColors = obj.numberOfDistractingColors;
+    selectedColorIndex = obj.selectedColorIndex;
     chanceToAppear = obj.chanceToAppear;
 
     return this;
   }
 
   @override
-  String toString() => "$numberOfDistractingColors / $chanceToAppear%";
+  String toString() => "${selectedColorIndex.length} / $chanceToAppear%";
 }
