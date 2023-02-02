@@ -28,7 +28,8 @@ class LightupMode {
   late PodsToActivate _podsToActivate;
 
   PodsToActivate getPods() {
-    var numDistractingPods = _getNumberOfDistractingPods();
+    var numDistractingPods =
+        _getNumberOfDistractingPods(numberOfSimultaneousActivePods);
     var numPodsToHit = numberOfSimultaneousActivePods - numDistractingPods;
 
     _podsToActivate = _createPodsToActivate(numPodsToHit, numDistractingPods);
@@ -36,25 +37,26 @@ class LightupMode {
     _setRandomColorsOnPodsToHit();
     _setRandomColorsOnDistractingPods();
 
-    //var podsToChooseFrom = _getRandomPods(numberOfSimultaneousActivePods, pods);
-
-    // var setPods = Set.from(pods);
-    // var setPodsToHit = Set.from(_podsToActivate.podsToHit);
-    // List<ActivityPod> distractingList =
-    //     List.from(setPods.difference(setPodsToHit));
-    // _podsToActivate.distractingPods = _getRandomPods(
-    //     distractingColors, distractingList, _podsToActivate.distractingPods);
-
     return _podsToActivate;
   }
 
-  int _getNumberOfDistractingPods() {
+  int _getNumberOfDistractingPods(int totalNumberOfPods) {
+    if (distractingColors.size() == 0) {
+      return 0;
+    }
+
     var numDistractingPods = 0;
-    if (distractingColors.size() > 0) {
-      var pct = Random().nextDouble();
-      numDistractingPods = (numberOfSimultaneousActivePods * pct).round();
+    for (var i = 0; i < totalNumberOfPods; i++) {
+      if (_showDistractingPod()) {
+        numDistractingPods++;
+      }
     }
     return numDistractingPods;
+  }
+
+  bool _showDistractingPod() {
+    var pct = Random().nextInt(100);
+    return (pct < distractingColors.chanceToAppear);
   }
 
   PodsToActivate _createPodsToActivate(
@@ -78,19 +80,6 @@ class LightupMode {
     _podsToActivate.podsToHit.forEach((pod) {
       pod.color = hitColors.getRandomColor();
     });
-  }
-
-  List<ActivityPod> _getRandomPods(
-      int numToGet, List<ActivityPod> list, List<ActivityPod> exclude) {
-    List<ActivityPod> availableHitPods = pods;
-    if (noDuplicate) {
-      var usedSet = Set.from(exclude);
-      var available = Set.from(list);
-      availableHitPods = List.from(available.difference(usedSet));
-    }
-    availableHitPods.shuffle();
-
-    return availableHitPods.take(numToGet).toList();
   }
 
   bool isDistractingPod(ActivityPod pod) =>

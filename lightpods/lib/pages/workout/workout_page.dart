@@ -33,7 +33,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   List<PodBase> _podList = [];
 
-  //late List<PodButton> _buttons;
+  late List<PodButton> _buttons;
 
   int _miss = 0;
   int _hits = 0;
@@ -68,12 +68,12 @@ class _WorkoutPageState extends State<WorkoutPage> {
             body: Column(children: [
               _getActivityTimer(),
               _infoCards(),
-              _playerScoreCards(),
-              // Visibility(
-              //     visible: (_buttons != null),
-              //     child: Row(
-              //       children: _buttons,
-              //     ))
+//              _playerScoreCards(),
+              Visibility(
+                  visible: (_buttons != null),
+                  child: Row(
+                    children: _buttons,
+                  ))
             ])));
   }
 
@@ -169,7 +169,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
     PodService podService = GetIt.I.get<PodService>();
     _podList = podService.getPods();
 
-    //_buttons = _getDummyPodButtons(widget.setting);
+    _buttons = _getDummyPodButtons(widget.setting);
 
     Activity activity = ActivityFactory.create(widget.setting, _podList);
 

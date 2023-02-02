@@ -42,7 +42,10 @@ class InfoPanel extends StatelessWidget {
             _getPodInfoChip(),
             _getPlayerInfoChip(),
             _getHitColorsInfoChip(Icons.person, 0),
-            _getHitColorsInfoChip(Icons.group, 1),
+            Visibility(
+              visible: setting.numberOfPlayers > 1,
+              child: _getHitColorsInfoChip(Icons.group, 1),
+            ),
             _getDistractingColors(),
             _getSimultaneousPidsInfoChip(),
             _getDistractingColorsInfoChip(),

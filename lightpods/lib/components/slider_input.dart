@@ -68,7 +68,6 @@ class _SliderInput extends State<SliderInput> {
         onChanged: (double value) {
           setState(() {
             _currentSliderValue = Helper.roundDouble(value, widget.decimals);
-            print(_currentSliderValue);
           });
           widget.onValueChanged?.call(value);
         },

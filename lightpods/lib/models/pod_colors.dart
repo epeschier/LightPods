@@ -41,7 +41,7 @@ class PodColors {
 
   Color getRandomColorFromIndexList(List<int> selectedColorIndex) {
     var index = Random().nextInt(selectedColorIndex.length);
-    return getColor(index);
+    return getColor(selectedColorIndex[index]);
   }
 
   Color _getRandomItemFromList(int max, List<Color> list) {

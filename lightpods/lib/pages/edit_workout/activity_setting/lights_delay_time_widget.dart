@@ -29,7 +29,7 @@ class _LightDelayTimeWidgetState extends State<LightDelayTimeWidget> {
   Widget _getLightsOut() => MultipleChoice(
         icon: Icons.hourglass_empty,
         text: 'Light Delay Time',
-        valueDescription: widget.value.toString(),
+        //valueDescription: widget.value.toString(),
         selectedItem: widget.value.delayTimeType.index,
         onItemSelected: _onLightsDelayToggleClick,
         subText: ActivityDescription
