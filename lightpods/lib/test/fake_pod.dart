@@ -15,11 +15,13 @@ class FakePod extends PodBase {
   @override
   void lightOff() {
     onColorUpdated?.call(Colors.grey);
+    super.lightOff();
   }
 
   @override
   void setLight(Color color) {
     onColorUpdated?.call(color);
+    super.setLight(color);
   }
 
   void initiateClickCallback() {

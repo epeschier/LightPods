@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lightpods/models/activity_enums.dart';
 import 'package:lightpods/models/duration_setting.dart';
-import 'package:lightpods/models/pod_colors.dart';
-import 'package:lightpods/pages/workout/clock/rotating_second.dart';
-import 'package:lightpods/pages/workout/player_score.dart';
+import 'package:lightpods/pages/workout/player_score_card.dart';
 import 'info_block.dart';
 import '../../partials/info_panel.dart';
 import 'package:lightpods/partials/pod_count.dart';
@@ -34,10 +32,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
   List<PodBase> _podList = [];
 
   late List<PodButton> _buttons;
-
-  int _miss = 0;
-  int _hits = 0;
-  int _avg = 0;
+  late ActivityResult _result = ActivityResult();
 
   @override
   void initState() {
@@ -68,7 +63,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
             body: Column(children: [
               _getActivityTimer(),
               _infoCards(),
-//              _playerScoreCards(),
+              _playerScoreCards(),
               Visibility(
                   visible: (_buttons != null),
                   child: Row(
@@ -114,9 +109,11 @@ class _WorkoutPageState extends State<WorkoutPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          InfoBlock(text: _miss.toString(), description: 'Miss'),
-          InfoBlock(text: _hits.toString(), description: 'Hits'),
-          InfoBlock(text: _avg.toString(), description: 'Avg. Reaction')
+          InfoBlock(text: _result.misses.toString(), description: 'Miss'),
+          InfoBlock(text: _result.hits.toString(), description: 'Hits'),
+          InfoBlock(
+              text: _result.getAverageReationTime().toString(),
+              description: 'Avg. Reaction')
         ],
       ));
 
@@ -125,15 +122,15 @@ class _WorkoutPageState extends State<WorkoutPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          PlayerScore(
+          PlayerScoreCard(
             playerName: "P1",
-            score: 1,
-            colors: PodColorService.hitColors.getNumColors(1).toList(),
+            score: _result,
+            colors: widget.setting.playerHitColors[0].getColors(),
           ),
-          PlayerScore(
+          PlayerScoreCard(
               playerName: "P2",
-              score: 2,
-              colors: PodColorService.hitColors.getNumColors(2).toList()),
+              score: _result,
+              colors: widget.setting.playerHitColors[1].getColors()),
         ],
       ));
 
@@ -145,9 +142,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   void _onReset() {
     setState(() {
-      _miss = 0;
-      _hits = 0;
-      _avg = 0;
+      _result.clear();
     });
   }
 
@@ -159,9 +154,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   void _onResultChanged(ActivityResult result) {
     setState(() {
-      _miss = result.misses;
-      _hits = result.hits;
-      _avg = result.getAverageReationTime();
+      _result = result;
     });
   }
 

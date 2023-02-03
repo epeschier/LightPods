@@ -24,7 +24,6 @@ class ActivitySettingContainer extends StatelessWidget {
         width: double.infinity,
         color: ThemeColors.backgroundColor,
         padding: const EdgeInsets.all(8.0),
-        //margin: const EdgeInsets.only(bottom: 2),
         child: Column(children: _buildWidgetList()));
   }
 

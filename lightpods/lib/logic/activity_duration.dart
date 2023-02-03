@@ -4,7 +4,7 @@ import 'package:lightpods/models/activity_result.dart';
 import '../models/duration_setting.dart';
 
 abstract class ActivityDuration {
-  bool isDone(ActivityResult activityResult);
+  bool isDone(ActivityResult activityResult, int elapsedTimeInSeconds);
 }
 
 class ActivityDurationHits extends ActivityDuration {
@@ -12,7 +12,8 @@ class ActivityDurationHits extends ActivityDuration {
   ActivityDurationHits(this.maxHits);
 
   @override
-  bool isDone(ActivityResult activityResult) => activityResult.hits >= maxHits;
+  bool isDone(ActivityResult activityResult, int elapsedTimeInSeconds) =>
+      activityResult.hits >= maxHits;
 }
 
 class ActivityDurationTimeout extends ActivityDuration {
@@ -20,8 +21,8 @@ class ActivityDurationTimeout extends ActivityDuration {
   ActivityDurationTimeout(this.maxDurationSec);
 
   @override
-  bool isDone(ActivityResult activityResult) =>
-      activityResult.elapsedTimeInSeconds >= maxDurationSec * 60;
+  bool isDone(ActivityResult activityResult, int elapsedTimeInSeconds) =>
+      elapsedTimeInSeconds >= maxDurationSec * 60;
 }
 
 class ActivityDurationHitsOrTimeout extends ActivityDuration {
@@ -37,9 +38,9 @@ class ActivityDurationHitsOrTimeout extends ActivityDuration {
   }
 
   @override
-  bool isDone(ActivityResult activityResult) =>
-      _activityDurationHits.isDone(activityResult) ||
-      _activityDurationTimeout.isDone(activityResult);
+  bool isDone(ActivityResult activityResult, int elapsedTimeInSeconds) =>
+      _activityDurationHits.isDone(activityResult, elapsedTimeInSeconds) ||
+      _activityDurationTimeout.isDone(activityResult, elapsedTimeInSeconds);
 }
 
 abstract class ActivityDurationFactory {

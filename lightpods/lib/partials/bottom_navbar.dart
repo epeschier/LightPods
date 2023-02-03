@@ -20,7 +20,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
+    return _getContainerWithShadow(BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       iconSize: 30,
       currentIndex: _index,
@@ -39,6 +39,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
           label: 'Settings',
         ),
       ],
-    );
+    ));
   }
+
+  Widget _getContainerWithShadow(Widget child) => Container(
+      decoration: const BoxDecoration(
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: Colors.black54,
+              blurRadius: 15.0,
+              offset: Offset(0.0, 0.75))
+        ],
+      ),
+      child: child);
 }

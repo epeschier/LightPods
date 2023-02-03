@@ -15,7 +15,7 @@ class ActivityPod {
 
   String get id => _pod.id;
 
-  bool get isActive => _isActive;
+  bool get isActive => _pod.isOn;
 
   Function? onHitOrTimeout;
 
@@ -24,7 +24,6 @@ class ActivityPod {
   late Color color;
 
   final Stopwatch _stopwatch = Stopwatch();
-  bool _isActive = false;
 
   void activateWithStoredColor() {
     activate(color);
@@ -32,7 +31,6 @@ class ActivityPod {
 
   void activate(Color color) {
     print("activate $id");
-    _isActive = true;
     _pod.setLight(color);
     _stopwatch.reset();
     _stopwatch.start();
@@ -43,7 +41,6 @@ class ActivityPod {
     _pod.lightOff();
     _stopwatch.stop();
     _cancelTimer();
-    _isActive = false;
   }
 
   void _activateTimer(int timeoutMs) {
@@ -69,10 +66,9 @@ class ActivityPod {
     _cancelTimer();
 
     if (_registerHits()) {
-      if (_isActive) {
+      if (isActive) {
         _turnOffAndCallback(_stopwatch.elapsedMilliseconds);
       } else {
-        _isActive = false;
         onHitOrTimeout?.call(-1, this);
       }
     }
@@ -80,7 +76,22 @@ class ActivityPod {
 
   void _turnOffAndCallback(int reactionTime) {
     off();
-    _isActive = false;
     onHitOrTimeout?.call(reactionTime, this);
+  }
+
+  late Timer _blinkTimer;
+  void blink(int intervalMs, Color color) {
+    _blinkTimer = Timer.periodic(Duration(milliseconds: intervalMs), (timer) {
+      if (_pod.isOn) {
+        _pod.lightOff();
+      } else {
+        _pod.setLight(color);
+      }
+    });
+  }
+
+  void stopBlink() {
+    _blinkTimer.cancel();
+    _pod.lightOff();
   }
 }

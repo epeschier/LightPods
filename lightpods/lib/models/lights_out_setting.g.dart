@@ -9,12 +9,14 @@ part of 'lights_out_setting.dart';
 LightsOutSetting _$LightsOutSettingFromJson(Map<String, dynamic> json) =>
     LightsOutSetting()
       ..lightsOut = $enumDecode(_$LightsOutTypeEnumMap, json['lightsOut'])
-      ..timeout = (json['timeout'] as num).toDouble();
+      ..timeout = (json['timeout'] as num).toDouble()
+      ..lightsOutOnMiss = json['lightsOutOnMiss'] as bool? ?? false;
 
 Map<String, dynamic> _$LightsOutSettingToJson(LightsOutSetting instance) =>
     <String, dynamic>{
       'lightsOut': _$LightsOutTypeEnumMap[instance.lightsOut]!,
       'timeout': instance.timeout,
+      'lightsOutOnMiss': instance.lightsOutOnMiss,
     };
 
 const _$LightsOutTypeEnumMap = {

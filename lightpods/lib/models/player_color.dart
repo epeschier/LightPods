@@ -17,6 +17,10 @@ class PlayerColor {
     return PodColorService.hitColors.getColor(selectedColorIndex[index]);
   }
 
+  List<Color> getColors() => PodColorService.hitColors
+      .getColorsFromIndexes(selectedColorIndex)
+      .toList();
+
   factory PlayerColor.fromJson(Map<String, dynamic> json) =>
       _$PlayerColorFromJson(json);
 

@@ -10,8 +10,12 @@ abstract class PodBase {
   bool _connected = false;
   bool get isConnected => _connected;
 
-  void setLight(Color color);
-  void lightOff();
+  bool _state = false;
+  bool get isOn => _state;
+
+  void setLight(Color color) => _state = true;
+  void lightOff() => _state = false;
+
   void setBrightness(int value);
   void setSensitivity(int value);
   void playEndGame(Color color);
@@ -22,6 +26,6 @@ abstract class PodBase {
 
   void disconnect() {
     _connected = false;
-    print("##### $isConnected");
+    print("##### $id connected: $isConnected");
   }
 }

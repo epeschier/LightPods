@@ -88,7 +88,7 @@ class LightupMode {
   bool isPodToHit(ActivityPod pod) => _podsToActivate.podsToHit.contains(pod);
 
   bool allCorrectPodsToHitAreHit() =>
-      !_podsToActivate.podsToHit.any((element) => element.isActive);
+      !_podsToActivate.podsToHit.any((pod) => pod.isActive);
 
   void turnOffAllPods() {
     for (var p in pods) {

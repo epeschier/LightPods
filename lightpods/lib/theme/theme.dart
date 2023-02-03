@@ -68,6 +68,7 @@ ThemeData appTheme = ThemeData(
     toggleButtonsTheme: toggleButtonsThemeData,
     floatingActionButtonTheme: floatingActionButtonThemeData,
     sliderTheme: sliderTheme,
+    switchTheme: switchTheme,
     appBarTheme: appbarTheme);
 
 BottomNavigationBarThemeData bottomNavigationBarTheme =
@@ -114,4 +115,13 @@ SliderThemeData sliderTheme = SliderThemeData(
   activeTickMarkColor: ThemeColors.backgroundColor,
   inactiveTickMarkColor: ThemeColors.backgroundColor,
   overlayShape: SliderComponentShape.noThumb,
+);
+
+SwitchThemeData switchTheme = SwitchThemeData(
+  thumbColor: MaterialStateProperty.resolveWith<Color>(
+      (Set<MaterialState> states) => states.contains(MaterialState.selected)
+          ? ThemeColors.accentColor
+          : ThemeColors.lightPrimaryColor),
+  trackColor: MaterialStateProperty.resolveWith<Color>(
+      (Set<MaterialState> states) => ThemeColors.primaryColor),
 );

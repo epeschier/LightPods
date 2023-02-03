@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:lightpods/components/color_indicator.dart';
+import 'package:lightpods/models/activity_result.dart';
 
 import '../../components/color_bullets.dart';
 import '../../theme/theme.dart';
 
-class PlayerScore extends StatelessWidget {
+class PlayerScoreCard extends StatelessWidget {
   final String playerName;
-  final int score;
+  final ActivityResult score;
   final List<Color> colors;
 
-  const PlayerScore(
+  const PlayerScoreCard(
       {super.key,
       required this.playerName,
       required this.score,
@@ -26,9 +26,9 @@ class PlayerScore extends StatelessWidget {
         children: [
           _getPlayerAndColor(text),
           const SizedBox(height: 10),
-          _getDetailText("Hits: $score"),
+          _getDetailText("Hits: ${score.hits}"),
           const SizedBox(height: 4),
-          _getDetailText("Avg. reaction: $score"),
+          _getDetailText("Avg. reaction: ${score.getAverageReationTime()}"),
         ],
       ));
 

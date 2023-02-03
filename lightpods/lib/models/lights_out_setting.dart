@@ -9,6 +9,9 @@ class LightsOutSetting {
   late LightsOutType lightsOut = LightsOutType.hit;
   late double timeout = 2;
 
+  @JsonKey(defaultValue: false)
+  late bool lightsOutOnMiss = false;
+
   LightsOutSetting();
 
   factory LightsOutSetting.fromJson(Map<String, dynamic> json) =>
@@ -18,6 +21,7 @@ class LightsOutSetting {
   LightsOutSetting copyWith(LightsOutSetting value) {
     lightsOut = value.lightsOut;
     timeout = value.timeout;
+    lightsOutOnMiss = value.lightsOutOnMiss;
 
     return this;
   }

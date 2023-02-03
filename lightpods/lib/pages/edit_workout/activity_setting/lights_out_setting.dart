@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lightpods/components/list_container.dart';
 import 'package:lightpods/components/slider_input.dart';
 import '../../../models/activity_enums.dart';
 import '../../../models/lights_out_setting.dart';
+import '../../../theme/theme.dart';
 import '../multiple_choice.dart';
 
 class LightsOutWidget extends StatefulWidget {
@@ -36,8 +38,22 @@ class _LightsOutWidgetState extends State<LightsOutWidget> {
         onItemSelected: _onMultipleChoiceChanged,
         subText: ActivityDescription.lightsOutExplanation[_selectedIndex],
         values: const ['Hit', 'Timeout', 'Both'],
-        subWidget: (_selectedIndex > 0)
-            ? SliderInput(
+        subWidget: _getSubWidget(),
+      );
+
+  void _onMultipleChoiceChanged(int index) {
+    widget.value.lightsOut = LightsOutType.values[index];
+    setState(() {
+      _selectedIndex = index;
+    });
+    widget.onChanged?.call();
+  }
+
+  Widget _getSubWidget() => Column(
+        children: [
+          Visibility(
+              visible: (_selectedIndex > 0),
+              child: SliderInput(
                 description: 'Lights out',
                 value: widget.value.timeout,
                 units: 's',
@@ -48,15 +64,22 @@ class _LightsOutWidgetState extends State<LightsOutWidget> {
                     widget.value.timeout = value;
                   });
                 },
-              )
-            : null,
+              )),
+          _getLightsOutOnMiss()
+        ],
       );
 
-  void _onMultipleChoiceChanged(int index) {
-    widget.value.lightsOut = LightsOutType.values[index];
-    setState(() {
-      _selectedIndex = index;
-    });
-    widget.onChanged?.call();
-  }
+  Widget _getLightsOutOnMiss() => ListContainer(
+          child: Row(children: [
+        Expanded(
+            child: Text("Lights out on miss", style: ThemeColors.headerText)),
+        Switch(
+          value: widget.value.lightsOutOnMiss,
+          onChanged: (bool value) {
+            setState(() {
+              widget.value.lightsOutOnMiss = value;
+            });
+          },
+        )
+      ]));
 }

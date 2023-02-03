@@ -18,6 +18,8 @@ class StrikeOut {
     return this;
   }
 
+  bool isStrikeout(int numberOfMisses) => value && numberOfMisses >= count;
+
   @override
   String toString() => (value) ? count.toStringAsFixed(0) : '';
 }

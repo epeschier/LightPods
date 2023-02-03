@@ -18,10 +18,6 @@ class Pod extends PodBase {
   @override
   String get id => device.id.toString();
 
-  bool _isOn = false;
-
-  bool get isOn => _isOn;
-
   late List<BluetoothService> _services;
   late BluetoothCharacteristic _lightCharacteristic;
   late BluetoothCharacteristic _buttonCharacteristic;
@@ -93,7 +89,7 @@ class Pod extends PodBase {
   void setLight(Color color) {
     Uint8List bytes = _colorToBytes(color);
     _lightCharacteristic.write(bytes);
-    _isOn = (color != _offColor);
+    super.setLight(color);
   }
 
   Uint8List _colorToBytes(Color color) =>
@@ -101,8 +97,9 @@ class Pod extends PodBase {
 
   @override
   void lightOff() {
-    if (_isOn) {
+    if (isOn) {
       setLight(_offColor);
+      super.lightOff();
     }
   }
 
